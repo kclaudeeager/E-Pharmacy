@@ -26,12 +26,15 @@ hash_password() {
     return 0
 }
 
+ # Task 1 assigned to Takudzwa
 check_existing_username(){
     username=$1
     ## verify if a username is already included in the credentials file
+   
 }
 
 ## function to add new credentials to the file
+## Assigned to Julius
 register_credentials() {
     # arg1 is the username
     # arg2 is the password
@@ -58,6 +61,7 @@ register_credentials() {
 }
 
 # Function to verify credentials
+# Assigned to Claude
 verify_credentials() {
     ## arg1 is username
     ## arg2 is password
@@ -75,6 +79,7 @@ verify_credentials() {
     ### else, print "invalid password" and fail.
 }
 
+## Assigned to Dieudonne
 logout() {
     #TODO: check that the .logged_in file is not empty
     # if the file exists and is not empty, read its content to retrieve the username
@@ -83,6 +88,7 @@ logout() {
     # then delete the existing .logged_in file and update the credentials file by changing the last field to 0
 }
 
+# Assigned to Claude
 ## Create the menu for the application
 # at the start, we need an option to login, self-register (role defaults to normal)
 # and exit the application.
@@ -94,5 +100,8 @@ logout() {
 # Main script execution starts here
 echo "Welcome to the authentication system."
 
+
+
+#Assigned to Julius
 #### BONUS
 #1. Implement a function to delete an account from the file
