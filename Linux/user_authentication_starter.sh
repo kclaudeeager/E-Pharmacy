@@ -2,7 +2,7 @@
 ## to be updated to match your settings
 PROJECT_HOME="."
 credentials_file="$PROJECT_HOME/data/credentials.txt"
-
+logged_in_user=""
 # Function to prompt for credentials
 get_credentials() {
     read -p 'Username: ' user
@@ -94,6 +94,7 @@ verify_credentials() {
         local user_hashed_password=`hash_password $password $salt`
         if [ "$user_hashed_password" = "$hashed_password" ]; then
             login_successful="true"
+            logged_in_user="$userName:$hashed_password:$salt:$fullname:$role"
             break
         else
             print_error "Invalid password\n"
@@ -104,13 +105,15 @@ verify_credentials() {
    
    
     if [ "$login_successful" = "true" ]; then
-        echo "Login successfully!"
+       
         os=$(uname)
         if [[ "$os" == "Darwin" ]]; then
         sed -i "" "/^$username:/ s/:$status\$/:1/" "$credentials_file"
         else
             sed -i "/^$username:/ s/:$status\$/:1/" "$credentials_file"
         fi
+        echo "Login successfully!"
+        return 0
     fi
     
 }
@@ -137,9 +140,49 @@ logout() {
 
 # Main script execution starts here
 echo "Welcome to the authentication system."
+while true; do
+    echo "choose an option:"
+    echo "1. to login"
+    echo "2. to register"
+    echo "3. to close the application"
 
-get_credentials
-verify_credentials "$user" "$pass"
+    read -p "Enter your choice: " choice
+
+    case "$choice" in
+        1)
+            get_credentials
+            verify_credentials "$user" "$pass"
+            if [ "$logged_in_user" != "" ]; then
+                echo "Enter 4 to logout"
+                IFS=":" read -r username password salt fullname role <<< "$logged_in_user"
+                if [ "$role" = "admin" ]; then 
+                echo "Enter 5 to create a user"
+                fi
+                read -p "Enter your choice: " input
+                if [ "$input" = 4 ]; then
+                    logout
+                elif [ "$input" = 5 ]; then
+                     echo "Admin is about to create a user"
+                else
+                 print_error "Invalid choice"
+                fi
+            fi
+            ;;
+        2)
+            register_credentials
+            ;;
+        3)
+            echo "Exiting application..."
+            exit 0
+            ;;
+    
+        *)
+            echo "Invalid choice. Please select a valid option."
+            ;;
+    esac
+done
+
+
 
 
 
