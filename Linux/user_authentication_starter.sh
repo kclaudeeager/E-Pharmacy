@@ -69,14 +69,47 @@ verify_credentials() {
     password=$2
     ## retrieve the stored hash, and the salt from the credentials file
     # if there is no line, then return 1 and output "Invalid username"
+    if [! -s "$credentials_file"]; 
+        then
+            echo "Credentials file is empty."
+            exit 1
+    fi
+
 
     ## compute the hash based on the provided password
     
     ## compare to the stored hash
     ### if the hashes match, update the credentials file, override the .logged_in file with the
     ### username of the logged in user
-
     ### else, print "invalid password" and fail.
+
+    found ="no"
+    login_successful="false"
+    while IFS=: read -r userName hashed_password salt fullname role status; do
+        if ["$userName" = "$username"]; then
+            found="yes"
+            providedUserHashedPassword = `hash_password $password $salt`
+
+            if ["$providedUserHashedPassword" = "$hashed_password"]; then
+               login_successful="true"
+               break
+            else
+                echo "Invalid password"
+                exit 0
+            fi
+        fi
+    done < "$credentials_file"
+    if ["$found" = "no"]; then
+        echo "Invalid username"
+        exit 1
+    fi
+    if [ "$login_successful" = "true" ]; then
+        echo "Login successfully!"
+        sed -i "/^$username:/ s/:$status\$/:1/" "$credentials_file"
+    fi
+    
+
+   
 }
 
 ## Assigned to Dieudonne
