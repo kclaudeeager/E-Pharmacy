@@ -62,6 +62,9 @@ register_credentials() {
 
 # Function to verify credentials
 # Assigned to Claude
+print_error() {
+    echo -e "\033[1;31mError: $@\033[0m"
+}
 verify_credentials() {
     ## arg1 is username
     ## arg2 is password
@@ -69,13 +72,10 @@ verify_credentials() {
     password=$2
     ## retrieve the stored hash, and the salt from the credentials file
     # if there is no line, then return 1 and output "Invalid username"
-    if [! -s "$credentials_file"]; 
-        then
-            echo "Credentials file is empty."
-            exit 1
-    fi
-
-
+   if [ ! -s "$credentials_file" ]; then
+    print_error "Credentials file is empty."
+    exit 1
+   fi
     ## compute the hash based on the provided password
     
     ## compare to the stored hash
@@ -83,33 +83,36 @@ verify_credentials() {
     ### username of the logged in user
     ### else, print "invalid password" and fail.
 
-    found ="no"
-    login_successful="false"
+  
+    let login_successful="false"
     while IFS=: read -r userName hashed_password salt fullname role status; do
-        if ["$userName" = "$username"]; then
-            found="yes"
-            providedUserHashedPassword = `hash_password $password $salt`
-
-            if ["$providedUserHashedPassword" = "$hashed_password"]; then
-               login_successful="true"
-               break
-            else
-                echo "Invalid password"
-                exit 0
-            fi
+        if [ "$userName" != "$username" ]; then
+            print_error "Invalid username \n"
+            return 1
         fi
+       
+        local user_hashed_password=`hash_password $password $salt`
+        if [ "$user_hashed_password" = "$hashed_password" ]; then
+            login_successful="true"
+            break
+        else
+            print_error "Invalid password\n"
+            return 1
+        fi
+        
     done < "$credentials_file"
-    if ["$found" = "no"]; then
-        echo "Invalid username"
-        exit 1
-    fi
+   
+   
     if [ "$login_successful" = "true" ]; then
         echo "Login successfully!"
-        sed -i "/^$username:/ s/:$status\$/:1/" "$credentials_file"
+        os=$(uname)
+        if [[ "$os" == "Darwin" ]]; then
+        sed -i "" "/^$username:/ s/:$status\$/:1/" "$credentials_file"
+        else
+            sed -i "/^$username:/ s/:$status\$/:1/" "$credentials_file"
+        fi
     fi
     
-
-   
 }
 
 ## Assigned to Dieudonne
@@ -119,6 +122,7 @@ logout() {
     # of the currently logged in user
 
     # then delete the existing .logged_in file and update the credentials file by changing the last field to 0
+   echo "Logging out"
 }
 
 # Assigned to Claude
@@ -132,6 +136,9 @@ logout() {
 
 # Main script execution starts here
 echo "Welcome to the authentication system."
+
+get_credentials
+verify_credentials "$user" "$pass"
 
 
 
