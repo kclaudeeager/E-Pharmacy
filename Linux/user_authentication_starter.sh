@@ -115,6 +115,7 @@ verify_credentials() {
     
 }
 
+
 ## Assigned to Dieudonne
 logout() {
     #TODO: check that the .logged_in file is not empty
