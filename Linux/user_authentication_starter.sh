@@ -80,13 +80,13 @@ verify_credentials() {
 }
 
 ## Assigned to Dieudonne
-logout() {
-    #TODO: check that the .logged_in file is not empty
-    # if the file exists and is not empty, read its content to retrieve the username
-    # of the currently logged in user
+# logout() {
+#     #TODO: check that the .logged_in file is not empty
+#     # if the file exists and is not empty, read its content to retrieve the username
+#     # of the currently logged in user
 
-    # then delete the existing .logged_in file and update the credentials file by changing the last field to 0
-}
+#     # then delete the existing .logged_in file and update the credentials file by changing the last field to 0
+# }
 
 # Assigned to Claude
 ## Create the menu for the application
@@ -105,3 +105,4 @@ echo "Welcome to the authentication system."
 #Assigned to Julius
 #### BONUS
 #1. Implement a function to delete an account from the file
+register_credentials
