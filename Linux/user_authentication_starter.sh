@@ -2,6 +2,7 @@
 ## to be updated to match your settings
 PROJECT_HOME="."
 credentials_file="$PROJECT_HOME/data/credentials.txt"
+IFS=' '
 logged_in_user=""
 # Function to prompt for credentials
 get_credentials() {
@@ -29,8 +30,24 @@ hash_password() {
  # Task 1 assigned to Takudzwa
 check_existing_username(){
     username=$1
+    # fileDB
+    fileDB=()
+    # check if the DB file exists
+    if [ -s  "$credentials_file" ]; then
+        echo "Entered here"
+        while read -r -a line; do  
+            formattedline=${line##*( )}
+            formattedline=${formattedline%%*( )}
+            fileDB+=("$formattedline")
+        done < "$credentials_file"
+        for i in ${fileDB[@]}; do
+            echo "entry - $i"
+        done
+    else
+        echo "File doen't exist"
+    fi
+    echo "$username from register"
     ## verify if a username is already included in the credentials file
-   
 }
 
 ## function to add new credentials to the file
@@ -40,12 +57,16 @@ register_credentials() {
     # arg2 is the password
     # arg3 is the fullname of the user
     # arg4 (optional) is the role. Defaults to "normal"
-
-    username=$1
-    password=$2
-    fullname=$3
+    read -p "Enter username: " username
+    read -s -p "Enter your password: " password
+    echo ""
+    read -p "Enter your fullname: " fullname
+    # username=$1
+    # password=$2
+    # fullname=$3
+    # echo "$password"
     ## call the function to check if the username exists
-    check_existing_username $username
+    check_existing_username $username 
     #TODO: if it exists, safely fails from the function.
     
     ## retrieve the role. Defaults to "normal" if the 4th argument is not passed
@@ -53,9 +74,9 @@ register_credentials() {
     ## check if the role is valid. Should be either normal, salesperson, or admin
 
     ## first generate a salt
-    salt=`generate_salt`
+    # salt=`generate_salt` --
     ## then hash the password with the salt
-    hashed_pwd=`hash_password $password $salt`
+    # hashed_pwd=`hash_password $password $salt`--
     ## append the line in the specified format to the credentials file (see below)
     ## username:hash:salt:fullname:role:is_logged_in
 }
