@@ -171,6 +171,35 @@ logout() {
     echo "Logged out successfully"
 }
 
+readUserInput(){
+     username=$1
+    echo "Choose the role to assing to the user $username:"
+    echo "1. normal"
+    echo "2. Salesperson"
+    echo "3. Pharmacist"
+    echo "4. admin"
+    printf "Enter your choice :"
+    read -r user_input
+    #read -p "Enter your choice: " user_input
+    echo 
+    #  if [ "$opt"!="" ]; then
+    #     echo "Hello"
+    # fi
+}
+updateRole(){
+    user=$1
+    use_role=$2
+    status=$3
+    os=$(uname)
+    if [[ "$os" == "Darwin" ]]; then
+    sed -i "" "/^$user:/ s/:$role:$status\$/:$use_role:$status/" "$credentials_file"
+
+    else
+    sed -i  "/^$user:/ s/:$role:$status\$/:$use_role:$status/" "$credentials_file"
+    fi
+    echo "user account updated successfully"
+}
+
 # Assigned to Claude
 ## Create the menu for the application
 # at the start, we need an option to login, self-register (role defaults to normal)
@@ -187,28 +216,84 @@ while true; do
     echo "1. to login"
     echo "2. to register"
     echo "3. to close the application"
-
     read -p "Enter your choice: " choice
 
     case "$choice" in
         1)
             get_credentials
             verify_credentials "$user" "$pass"
-            if [ "$logged_in_user" != "" ]; then
-                    echo "Enter 4 to logout"
+            while [ "$logged_in_user" != "" ]; do
+
+                echo "Enter 4 to logout"
                 IFS=":" read -r username password salt fullname role <<< "$logged_in_user"
                 if [ "$role" = "admin" ]; then 
                     echo "Enter 5 to create a user"
+                    echo "Enter 6 to delete a user account"
                 fi
                     read -p "Enter your choice: " input
                 if [ "$input" = 4 ]; then
                     logout
                 elif [ "$input" = 5 ]; then
-                     echo "Admin is about to create a user"
+                    read -p "Enter username to create the account: " user
+                    user_validated="false"
+                    validated_user_role_and_status=""
+                    while IFS=: read -r userName hashed_password salt fullname role status; do
+                        if [ "$userName" = "$user" ]; then
+                            user_validated="true"
+                            validated_user_role_and_status="$role:$status"
+                            break
+                        fi
+                    done < "$credentials_file"
+                   
+                    if [ "$user_validated" = "false" ]; then
+                       print_error "User $user not found"
+                    else
+                         choice_choosen="false"
+                          echo "$validated_user_role_and_status is found"
+                         if [ "$validated_user_role_and_status" != "" ]; then
+                             IFS=":" read -r role status <<< "$validated_user_role_and_status"
+                             echo "$role:$status"
+                             while [ "$choice_choosen" = "false" ]; do
+                                readUserInput "$user"
+                                choice_choosen="false"
+                                user_role="$user_input"
+                                    case "$user_role" in
+                                        1)
+                                         updateRole "$user" "normal" "$status"
+                                      
+                                        choice_choosen="true"
+                                    ;;
+                                    2)
+                                     updateRole "$user" "salesperson" "$status"
+                                      choice_choosen="true"
+                                     ;;
+                                     3)
+                                      updateRole "$user" "pharmacist" "$status"
+                                       choice_choosen="true"
+                                     ;;
+                                4)
+                                updateRole "$user" "admin" "$status"
+                                 choice_choosen="true"
+                                     ;;
+                                    *) 
+                                    print_error "Invalid role"
+                                    ;;
+                                    esac
+                                done
+                            fi
+                    fi
+                elif [ "$input" = 6 ]; then
+                 read -p "Enter username to delet the account: " user
+                 if grep -q "^$user:" "$credentials_file"; then
+                    sed -i "" "/^$user:/d" "$credentials_file"
+                 else
+                    print_error "Username does not exist"
+                 fi
+
                 else
                  print_error "Invalid choice"
                 fi
-            fi
+            done
             ;;
         2)
             register_credentials
@@ -231,3 +316,4 @@ done
 #Assigned to Julius
 #### BONUS
 #1. Implement a function to delete an account from the file
+
