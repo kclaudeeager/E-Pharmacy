@@ -24,10 +24,16 @@ public:
         // TODO add code to add product and
         // store the product to products.json file by using Product class and FileHandler class
         prod.createProduct();
+
         cout << "Product here: " << endl
              << prod.toJson();
         FileHandler fHandler;
         fHandler.saveToJsonFile(prod);
+
+        cout<<"Product here: "<<endl<<prod.toJson();
+         FileHandler fHandler;
+         fHandler.saveToJsonFile(prod);
+
     }
 
     // TODO Add code for Updating a product
