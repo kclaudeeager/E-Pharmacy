@@ -126,8 +126,8 @@ verify_credentials() {
 #     # of the currently logged in user
 
     # then delete the existing .logged_in file and update the credentials file by changing the last field to 0
-   echo "Logging out"
-}
+#    echo "Logging out"
+# }
 
 # Assigned to Claude
 ## Create the menu for the application
