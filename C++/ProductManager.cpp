@@ -4,32 +4,35 @@ class ProductManager
 {
 private:
     Product prod;
+
 public:
-    int getMenu(){
+    int getMenu()
+    {
 
         // TODO Add code to display Menu
-        // Menu should have 
+        // Menu should have
         // Add Product
-        //Search Product By Name
-        //Search Product By Category
-        //Search Product By Brand
+        // Search Product By Name
+        // Search Product By Category
+        // Search Product By Brand
         // Update Product
         // Delete Product
     }
 
-    void addProduct(){
-        // TODO add code to add product and 
+    void addProduct()
+    {
+        // TODO add code to add product and
         // store the product to products.json file by using Product class and FileHandler class
         prod.createProduct();
-        cout<<"Product here: "<<endl<<prod.toJson();
-         FileHandler fHandler;
-         fHandler.saveToJsonFile(prod);
+        cout << "Product here: " << endl
+             << prod.toJson();
+        FileHandler fHandler;
+        fHandler.saveToJsonFile(prod);
     }
 
     // TODO Add code for Updating a product
 
     // TODO Add code for deleting a product
-    
 };
 
 int main()
@@ -41,5 +44,3 @@ int main()
     prodManager.addProduct();
     return 0;
 }
-
-

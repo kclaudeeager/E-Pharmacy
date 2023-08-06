@@ -152,14 +152,24 @@ verify_credentials() {
 }
 
 ## Assigned to Dieudonne
-# logout() {
-#     #TODO: check that the .logged_in file is not empty
-#     # if the file exists and is not empty, read its content to retrieve the username
-#     # of the currently logged in user
-
-#     then delete the existing .logged_in file and update the credentials file by changing the last field to 0
-#    echo "Logging out"
-# }
+logout() {
+    #TODO: check that the .logged_in file is not empty
+    # if the file exists and is not empty, read its content to retrieve the username
+    echo "Logging out"
+    # of the currently logged in user
+    if [ "$logged_in_user" != "" ]; then
+        IFS=":" read -r username password salt fullname role <<< "$logged_in_user"
+    # then delete the existing .logged_in file and update the credentials file by changing the last field to 0
+        os=$(uname)
+        if [[ "$os" == "Darwin" ]]; then
+            sed -i "" "/^$username:/ s/:$status\$/:0/" "$credentials_file"
+        else
+            sed -i "/^$username:/ s/:$status\$/:0/" "$credentials_file"
+        fi
+    fi
+    logged_in_user=""
+    echo "Logged out successfully"
+}
 
 # Assigned to Claude
 ## Create the menu for the application
