@@ -29,8 +29,27 @@ hash_password() {
  # Task 1 assigned to Takudzwa
 check_existing_username(){
     username=$1
+    # fileDB
+    fileDB=()
+    # check if the DB file exists
+    if [ -s  "$credentials_file" ]; then
+        IFS=''
+        while read -r line; do
+            file_lines+=("$line")
+        done < "$credentials_file"
+        for i in ${file_lines[@]}; do
+            delimiter=":"
+            first_part=$(echo "$i" | cut -d "$delimiter" -f 1)
+            if  [ "$first_part" = "$username" ]; then
+                echo "true"
+                break
+            fi
+        done
+    else
+        echo "File doen't exist"
+    fi
+    # echo "$username from register"
     ## verify if a username is already included in the credentials file
-   
 }
 
 ## function to add new credentials to the file
@@ -40,24 +59,33 @@ register_credentials() {
     # arg2 is the password
     # arg3 is the fullname of the user
     # arg4 (optional) is the role. Defaults to "normal"
-
-    username=$1
-    password=$2
-    fullname=$3
+    read -p "Enter username: " username
+    read -s -p "Enter your password: " password
+    echo ""
+    read -p "Enter your fullname: " fullname
+    role="normal"
+    # username=$1
+    # password=$2
+    # fullname=$3
+    # echo "$password"
     ## call the function to check if the username exists
-    check_existing_username $username
+    status=$(check_existing_username $username) 
     #TODO: if it exists, safely fails from the function.
-    
-    ## retrieve the role. Defaults to "normal" if the 4th argument is not passed
-
-    ## check if the role is valid. Should be either normal, salesperson, or admin
-
-    ## first generate a salt
-    salt=`generate_salt`
-    ## then hash the password with the salt
-    hashed_pwd=`hash_password $password $salt`
-    ## append the line in the specified format to the credentials file (see below)
-    ## username:hash:salt:fullname:role:is_logged_in
+    if [ "$status" = "true" ]; then
+        echo "A user with the username '$username' already exist"
+        return 1
+    fi
+        ## retrieve the role. Defaults to "normal" if the 4th argument is not passed
+        ## check if the role is valid. Should be either normal, salesperson, or admin
+        ## first generate a salt
+        salt=`generate_salt` 
+        ## then hash the password with the salt
+        hashed_pwd=`hash_password $password $salt`
+        userData="$username:$hashed_pwd:$salt:$fullname:$role:0"    
+        echo "$userData" >> "$credentials_file"
+        ## append the line in the specified format to the credentials file (see below)
+        ## username:hash:salt:fullname:role:is_logged_in
+        # echo "doesn't"
 }
 
 # Function to verify credentials
@@ -70,6 +98,7 @@ verify_credentials() {
     ## arg2 is password
     username=$1
     password=$2
+    echo "$username"
     ## retrieve the stored hash, and the salt from the credentials file
     # if there is no line, then return 1 and output "Invalid username"
    if [ ! -s "$credentials_file" ]; then
@@ -86,6 +115,7 @@ verify_credentials() {
   
     let login_successful="false"
     while IFS=: read -r userName hashed_password salt fullname role status; do
+        echo "$userName ---"
         if [ "$userName" != "$username" ]; then
             print_error "Invalid username \n"
             return 1
@@ -118,16 +148,15 @@ verify_credentials() {
     
 }
 
-
 ## Assigned to Dieudonne
-logout() {
-    #TODO: check that the .logged_in file is not empty
-    # if the file exists and is not empty, read its content to retrieve the username
-    # of the currently logged in user
+# logout() {
+#     #TODO: check that the .logged_in file is not empty
+#     # if the file exists and is not empty, read its content to retrieve the username
+#     # of the currently logged in user
 
-    # then delete the existing .logged_in file and update the credentials file by changing the last field to 0
-   echo "Logging out"
-}
+#     then delete the existing .logged_in file and update the credentials file by changing the last field to 0
+#    echo "Logging out"
+# }
 
 # Assigned to Claude
 ## Create the menu for the application
@@ -153,12 +182,12 @@ while true; do
             get_credentials
             verify_credentials "$user" "$pass"
             if [ "$logged_in_user" != "" ]; then
-                echo "Enter 4 to logout"
+                    echo "Enter 4 to logout"
                 IFS=":" read -r username password salt fullname role <<< "$logged_in_user"
                 if [ "$role" = "admin" ]; then 
-                echo "Enter 5 to create a user"
+                    echo "Enter 5 to create a user"
                 fi
-                read -p "Enter your choice: " input
+                    read -p "Enter your choice: " input
                 if [ "$input" = 4 ]; then
                     logout
                 elif [ "$input" = 5 ]; then
