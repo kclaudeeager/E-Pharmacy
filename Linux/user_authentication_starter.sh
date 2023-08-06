@@ -2,7 +2,7 @@
 ## to be updated to match your settings
 PROJECT_HOME="."
 credentials_file="$PROJECT_HOME/data/credentials.txt"
-
+logged_in_user=""
 # Function to prompt for credentials
 get_credentials() {
     read -p 'Username: ' user
@@ -62,6 +62,9 @@ register_credentials() {
 
 # Function to verify credentials
 # Assigned to Claude
+print_error() {
+    echo -e "\033[1;31mError: $@\033[0m"
+}
 verify_credentials() {
     ## arg1 is username
     ## arg2 is password
@@ -69,15 +72,52 @@ verify_credentials() {
     password=$2
     ## retrieve the stored hash, and the salt from the credentials file
     # if there is no line, then return 1 and output "Invalid username"
-
+   if [ ! -s "$credentials_file" ]; then
+    print_error "Credentials file is empty."
+    exit 1
+   fi
     ## compute the hash based on the provided password
     
     ## compare to the stored hash
     ### if the hashes match, update the credentials file, override the .logged_in file with the
     ### username of the logged in user
-
     ### else, print "invalid password" and fail.
+
+  
+    let login_successful="false"
+    while IFS=: read -r userName hashed_password salt fullname role status; do
+        if [ "$userName" != "$username" ]; then
+            print_error "Invalid username \n"
+            return 1
+        fi
+       
+        local user_hashed_password=`hash_password $password $salt`
+        if [ "$user_hashed_password" = "$hashed_password" ]; then
+            login_successful="true"
+            logged_in_user="$userName:$hashed_password:$salt:$fullname:$role"
+            break
+        else
+            print_error "Invalid password\n"
+            return 1
+        fi
+        
+    done < "$credentials_file"
+   
+   
+    if [ "$login_successful" = "true" ]; then
+       
+        os=$(uname)
+        if [[ "$os" == "Darwin" ]]; then
+        sed -i "" "/^$username:/ s/:$status\$/:1/" "$credentials_file"
+        else
+            sed -i "/^$username:/ s/:$status\$/:1/" "$credentials_file"
+        fi
+        echo "Login successfully!"
+        return 0
+    fi
+    
 }
+
 
 ## Assigned to Dieudonne
 logout() {
@@ -86,6 +126,7 @@ logout() {
     # of the currently logged in user
 
     # then delete the existing .logged_in file and update the credentials file by changing the last field to 0
+   echo "Logging out"
 }
 
 # Assigned to Claude
@@ -99,6 +140,49 @@ logout() {
 
 # Main script execution starts here
 echo "Welcome to the authentication system."
+while true; do
+    echo "choose an option:"
+    echo "1. to login"
+    echo "2. to register"
+    echo "3. to close the application"
+
+    read -p "Enter your choice: " choice
+
+    case "$choice" in
+        1)
+            get_credentials
+            verify_credentials "$user" "$pass"
+            if [ "$logged_in_user" != "" ]; then
+                echo "Enter 4 to logout"
+                IFS=":" read -r username password salt fullname role <<< "$logged_in_user"
+                if [ "$role" = "admin" ]; then 
+                echo "Enter 5 to create a user"
+                fi
+                read -p "Enter your choice: " input
+                if [ "$input" = 4 ]; then
+                    logout
+                elif [ "$input" = 5 ]; then
+                     echo "Admin is about to create a user"
+                else
+                 print_error "Invalid choice"
+                fi
+            fi
+            ;;
+        2)
+            register_credentials
+            ;;
+        3)
+            echo "Exiting application..."
+            exit 0
+            ;;
+    
+        *)
+            echo "Invalid choice. Please select a valid option."
+            ;;
+    esac
+done
+
+
 
 
 
