@@ -35,7 +35,7 @@ class Product{
         return brand;
     }
 
-    string getDecrisption(){
+    string getDecription(){
         //TODO Add code that return the Product Description
         return description;
     }
@@ -87,19 +87,18 @@ class Product{
         return uniqueCode;
     };
 
-    string promptTextField(string promptText){
+    static string promptTextField(string promptText){
 
         // TODO Add code to prompt user for input for any Product string field
         // method takes text to display e.g: "Enter Product Name:"
         // it prompts a user and return user input in form of text. Text can be made by multiple words.
         cout<<promptText<<endl;
         string inputText;
-        getline(cin,inputText,' ');
-
+        getline(cin >> std::ws, inputText);
         return inputText;
     }
 
-    float promptNumberField(string promptText){
+    static float promptNumberField(string promptText){
         // TODO Add code to prompt user for input for any Product Numeric field
         // method takes text to display e.g: "Enter Product Name:"
         // it prompts a user and return user input in form of text. Text can be made by multiple words.
@@ -111,7 +110,7 @@ class Product{
         return inputFloat;
     }
 
-    bool promptRequirePrescription()
+    static bool promptRequirePrescription()
     {
         // TODO Add code to prompt user for choosing if Product requires prescription.
         // User can type 1 or 0. 
@@ -155,12 +154,11 @@ class Product{
         description =  promptTextField("enter product description");
         category =  promptTextField("enter product category");
         dosageInstruction = promptTextField("enter product dosage instractions");
-        quantity = promptNumberField("Enter the quantity");
+        quantity = int(promptNumberField("Enter the quantity"));
         price = promptNumberField("Enter the price");
         requires_prescription = promptRequirePrescription();
         code = generateUniqueCode();
-        return;
-    };
+   };
 
     string toJson()
     {
@@ -208,7 +206,7 @@ class Product{
         brand = keyValuePairs["\"brand\""];
         description = keyValuePairs["\"description\""];
         dosageInstruction = keyValuePairs["\"dosage_instruction\""];
-        price = std::stod(keyValuePairs["\"price\""]);
+        price = float(stod(keyValuePairs["\"price\""]));
         quantity = std::stoi(keyValuePairs["\"quantity\""]);
         category = keyValuePairs["\"category\""];
         requires_prescription = std::stoi(keyValuePairs["\"requires_prescription\""]);
