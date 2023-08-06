@@ -115,21 +115,19 @@ verify_credentials() {
   
     let login_successful="false"
     while IFS=: read -r userName hashed_password salt fullname role status; do
-        echo "$userName ---"
-        if [ "$userName" != "$username" ]; then
-            print_error "Invalid username \n"
-            return 1
+        if [ "$userName" == "$username" ]; then
+    
+            local user_hashed_password=`hash_password $password $salt`
+            if [ "$user_hashed_password" = "$hashed_password" ]; then
+                login_successful="true"
+                logged_in_user="$userName:$hashed_password:$salt:$fullname:$role"
+                break
+            else
+                print_error "Invalid password\n"
+                return 1
+            fi
         fi
        
-        local user_hashed_password=`hash_password $password $salt`
-        if [ "$user_hashed_password" = "$hashed_password" ]; then
-            login_successful="true"
-            logged_in_user="$userName:$hashed_password:$salt:$fullname:$role"
-            break
-        else
-            print_error "Invalid password\n"
-            return 1
-        fi
         
     done < "$credentials_file"
    
@@ -145,6 +143,11 @@ verify_credentials() {
         echo "Login successfully!"
         return 0
     fi
+    
+    print_error "Invalid username \n"
+    return 1
+        
+
     
 }
 
