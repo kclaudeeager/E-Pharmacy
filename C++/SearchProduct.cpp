@@ -17,12 +17,23 @@ public:
         return lowercase_text;
     }
 
+
+
     vector<Product> searchByName(string name){
 
         // TODO
         //Add code to search by name. Searching is not case sensitive it means 
         //for input like: "name" products with names like "Name 1", "Product name" needs to included in the found results.
-    
+        vector<Product> foundProducts;
+        vector<Product> allProducts=fHandler.readJsonFile();
+
+        for(auto product:allProducts){
+            cout<<"Product is: "<<product.getName()<<endl;
+            if(product.getName()==name){
+                foundProducts.push_back(product);
+            }
+        }
+        return foundProducts;
     };
 
     vector<Product> searchByCategory(string categ){
