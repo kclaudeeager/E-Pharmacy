@@ -39,6 +39,11 @@ public:
 
     }
 
+   void searchProduct(string by,string searchText){
+         if(by=="name"){
+
+         }
+     }
     // TODO Add code for Updating a product
 
     // TODO Add code for deleting a product
@@ -63,7 +68,13 @@ int main()
                 prodManager.addProduct();
                 break;
             case 2:
-                cout<<"Search Product By Name";
+                 {string productName;
+                cout<<"Search Product By Name: ";
+
+                getline(cin,productName);
+                SearchProduct search;
+                search. searchByName(productName);
+               }
                 break;
             case 3:
                 cout<<"Search Product By Category";
