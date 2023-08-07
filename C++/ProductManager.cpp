@@ -39,10 +39,24 @@ public:
 
     }
 
-   void searchProduct(string by,string searchText){
-         if(by=="name"){
 
+   void searchProduct(string by){
+       string searchText=  prod.promptTextField("Enter product's "+by);
+       SearchProduct search;
+       vector<Product> products;
+         if(by=="name"){
+          products= search. searchByName(searchText);
          }
+         else if(by=="category"){
+             products= search.searchByCategory(searchText);
+         }
+         else if(by=="brand"){
+             products= search. searchByBrand(searchText);
+         }
+         else{
+             cout<<"Choice not provided"<<endl;
+         }
+       search.showSearchResult(products);
      }
     // TODO Add code for Updating a product
 
@@ -68,19 +82,13 @@ int main()
                 prodManager.addProduct();
                 break;
             case 2:
-                 {string productName;
-                cout<<"Search Product By Name: ";
-
-                getline(cin,productName);
-                SearchProduct search;
-                search. searchByName(productName);
-               }
+                prodManager.searchProduct("name");
                 break;
             case 3:
-                cout<<"Search Product By Category";
+                prodManager.searchProduct("category");
                 break;
             case 4:
-                cout<<"Search Product By Brand";
+                prodManager.searchProduct("brand");
                 break;
             case 5:
                 cout<<"Update Product";
