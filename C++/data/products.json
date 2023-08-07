@@ -1,4 +1,5 @@
 [
 {"code":"","name":"parastamol","brand":"GI","description":"Best one","dosage_instruction":"1/1/1","price":200.000000,"quantity":50,"category":"pain killer","requires_prescription":0},
-{"code":"9jE93kndW1Z","name":"none","brand":"none","description":"shit","dosage_instruction":"no way","price":450.000000,"quantity":12,"category":"hum","requires_prescription":1}
+{"code":"","name":"none","brand":"none","description":"shit","dosage_instruction":"no way","price":450.000000,"quantity":12,"category":"hum","requires_prescription":1},
+{"code":"xKrmtZDY0g9","name":"test","brand":"test brand","description":"not now","dosage_instruction":"1/2/3","price":67.000000,"quantity":45,"category":"drug","requires_prescription":1}
 ]
