@@ -20,6 +20,7 @@ public:
         int chosen=-1;
         while(chosen<0 || chosen>6){
              cout<<"Select your option"<<endl<< "1:Add product \n 2:Search product by name\n 3:Search Product By Category \n 4:Search Product By Brand\n 5:Update Product \n 6:Delete Product\n and 0 to quit\n";
+             cout<<"Enter your choice: ";
              cin>>chosen;
              if(chosen<0 || chosen>6)
                  cout<<"Invalid choice. please choose between 1..6 \n";
