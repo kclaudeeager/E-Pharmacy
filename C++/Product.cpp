@@ -3,6 +3,7 @@
 #include <chrono>
 #include <random>
 #include <sstream>
+#include <iomanip>
 
 
 using namespace std;
@@ -170,14 +171,14 @@ class Product{
       //{"code":"tgtwdNbCnwx","name":"name 1","brand":"br 2","description":"df","dosage_instruction":"dfg","price":123.000000,"quantity":13,"category":"des","requires_prescription":1}
         productInJsonStream << "{\"code\":\"" << code << "\",";
         productInJsonStream << "\"name\":\"" << name << "\",";
-        productInJsonStream << "\"brand\":\"" + brand + "\",\"";
-        productInJsonStream << "\"description\":\"" + description + "\",\"";
-        productInJsonStream << "\"dosage_instruction\":\"" + dosageInstruction + "\",\"";
-        productInJsonStream << "\"price\":" + to_string(price) + ",\"";
-        productInJsonStream << "\"quantity\":" + to_string(quantity) + ",\"";
-        productInJsonStream << "\"category\":\"" + category + "\",\"";
-        productInJsonStream << "\"requires_prescription\":" + to_string(requires_prescription) << "}";
-       
+        productInJsonStream << "\"brand\":\"" << brand << "\",";
+        productInJsonStream << "\"description\":\"" << description << "\",";
+        productInJsonStream << "\"dosage_instruction\":\"" << dosageInstruction << "\",";
+        productInJsonStream << "\"price\":" << fixed << setprecision(6) << price << ",";
+        productInJsonStream << "\"quantity\":" << quantity << ",";
+        productInJsonStream << "\"category\":\"" << category << "\",";
+        productInJsonStream << "\"requires_prescription\":" << requires_prescription << "}";
+
         return productInJsonStream.str();
     };
 
@@ -206,9 +207,9 @@ class Product{
         brand = keyValuePairs["\"brand\""];
         description = keyValuePairs["\"description\""];
         dosageInstruction = keyValuePairs["\"dosage_instruction\""];
-        price = float(stod(keyValuePairs["\"price\""]));
-        quantity = std::stoi(keyValuePairs["\"quantity\""]);
+        price = stof(keyValuePairs["\"price\""]);
+        quantity = stoi(keyValuePairs["\"quantity\""]);
         category = keyValuePairs["\"category\""];
-        requires_prescription = std::stoi(keyValuePairs["\"requires_prescription\""]);
+        requires_prescription = stoi(keyValuePairs["\"requires_prescription\""]);
     };
 };
