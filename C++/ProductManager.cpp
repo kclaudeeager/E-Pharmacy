@@ -58,7 +58,14 @@ public:
        search.showSearchResult(products);
      }
     // TODO Add code for Updating a product
+    void deleteProduct(){
+        string productName;
+        cout<<"Enter the name product you want to delete: ";
+        cin>>productName;
+        FileHandler file;
+        file.removeProduct(productName);
 
+    }
     // TODO Add code for deleting a product
 };
 
@@ -93,15 +100,13 @@ int main()
                 cout<<"Update Product";
                 break;
             case 6:
-                cout<<"Delete Product";
+                prodManager.deleteProduct();
                 break;
             default:
                 cout<<"choice not available now!";
                 break;
-
         }
     }
-
 
     return 0;
 }
