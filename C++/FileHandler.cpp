@@ -90,8 +90,20 @@ class FileHandler{
             jsonFile<< pList.at(i).toJson()<<endl;
         }
     }
-    jsonFile<<"]"<<endl;      
-
-
+    jsonFile<<"]"<<endl;
+    }
+    void removeProduct(string name) {
+        vector<Product> list = readJsonFile();
+        int ret = remove(filename.c_str());
+        if (ret != 0) {
+            std::cout << "Error deleting file: " << strerror(errno) << "\n";
+            return;
+        }
+        for (auto product: list) {
+            if (product.getName() == name) {
+                break;
+            }
+            saveToJsonFile(product);
+        }
     }
 };
