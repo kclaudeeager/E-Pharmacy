@@ -2,5 +2,8 @@
 {"code":"","name":"parastamol","brand":"GI","description":"Best one","dosage_instruction":"1/1/1","price":200.000000,"quantity":50,"category":"pain killer","requires_prescription":0},
 {"code":"","name":"none","brand":"none","description":"shit","dosage_instruction":"no way","price":450.000000,"quantity":12,"category":"hum","requires_prescription":1},
 {"code":"","name":"test","brand":"test brand","description":"not now","dosage_instruction":"1/2/3","price":67.000000,"quantity":45,"category":"drug","requires_prescription":1},
-{"code":"","name":"ppp","brand":"bbbb","description":"dddd","dosage_instruction":"jkhsh","price":560.000000,"quantity":45,"category":"ccc","requires_prescription":1}
+{"code":"","name":"ppp","brand":"bbbb","description":"dddd","dosage_instruction":"jkhsh","price":560.000000,"quantity":45,"category":"ccc","requires_prescription":1},
+{"code":"","name":"test prod","brand":"bbra","description":"mmmm","dosage_instruction":"kjfdhs4","price":569.000000,"quantity":23,"category":"ccafsga","requires_prescription":1},
+{"code":"4ZFFODkYCxg","name":"testing","brand":"bbra","description":"ahjkhgaag","dosage_instruction":"12345dg","price":456.000000,"quantity":34,"category":"sdfkgjgs","requires_prescription":1},
+{"code":"H2h2ZozXyjH","name":"new  product","brand":"brand name","description":"desc","dosage_instruction":"1/2/3/","price":45.000000,"quantity":12,"category":"category","requires_prescription":1}
 ]

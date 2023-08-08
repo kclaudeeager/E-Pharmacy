@@ -65,6 +65,9 @@ class Product{
         //TODO Add code that return Product Requires Prescription status
         return requires_prescription;
     }
+    string getCode(){
+        return code;
+    }
 
 
     string generateUniqueCode()
@@ -191,7 +194,9 @@ class Product{
         //{"code":"tgtwdNbCnwx","name":"name 1","brand":"br 2","description":"df","dosage_instruction":"dfg","price":123.000000,"quantity":13,"category":"des","requires_prescription":1}
         // You need to extract value for each field and update private attributes declared above.
         unordered_map<string,string> keyValuePairs;
-        istringstream iss(txt);
+
+       string temp=txt.substr(1,txt.length()-2);
+        istringstream iss(temp);
         string key, value;
 
         while (getline(iss, key, ':') && getline(iss, value, ',')) {
@@ -202,6 +207,7 @@ class Product{
             }
             keyValuePairs[key] = value;
         }
+
         code = keyValuePairs["\"code\""];
         name = keyValuePairs["\"name\""];
         brand = keyValuePairs["\"brand\""];
