@@ -35,7 +35,7 @@ public:
         return foundProducts;
     };
     bool searchFound(string ar1,string arg2){
-        return to_lowercase(ar1)== to_lowercase(arg2);
+        return to_lowercase(ar1).find( to_lowercase(arg2)) != std::string::npos;
     }
     vector<Product> searchByCategory(string categ){
 

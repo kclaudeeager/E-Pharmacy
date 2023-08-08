@@ -30,21 +30,13 @@ hash_password() {
 check_existing_username(){
     username=$1
     # fileDB
-    fileDB=()
+
     # check if the DB file exists
     if [ -s  "$credentials_file" ]; then
-        IFS=''
-        while read -r line; do
-            file_lines+=("$line")
-        done < "$credentials_file"
-        for i in ${file_lines[@]}; do
-            delimiter=":"
-            first_part=$(echo "$i" | cut -d "$delimiter" -f 1)
-            if  [ "$first_part" = "$username" ]; then
-                echo "true"
-                break
-            fi
-        done
+        if grep -q "^$username:" "$credentials_file"; then
+            echo "true"
+        fi
+
     else
         echo "File doen't exist"
     fi
@@ -72,7 +64,7 @@ register_credentials() {
     status=$(check_existing_username $username) 
     #TODO: if it exists, safely fails from the function.
     if [ "$status" = "true" ]; then
-        echo "A user with the username '$username' already exist"
+        print_error "A user with the username '$username' already exist"
         return 1
     fi
         ## retrieve the role. Defaults to "normal" if the 4th argument is not passed
@@ -93,6 +85,7 @@ register_credentials() {
 print_error() {
     echo -e "\033[1;31mError: $@\033[0m"
 }
+
 verify_credentials() {
     ## arg1 is username
     ## arg2 is password
@@ -114,9 +107,13 @@ verify_credentials() {
 
   
     let login_successful="false"
+     status=$(check_existing_username $username) 
+     if [ "$status" != "true" ]; then
+     print_error "Invalid username \n"
+     return 1
+     fi
     while IFS=: read -r userName hashed_password salt fullname role status; do
         if [ "$userName" == "$username" ]; then
-    
             local user_hashed_password=`hash_password $password $salt`
             if [ "$user_hashed_password" = "$hashed_password" ]; then
                 login_successful="true"
@@ -127,10 +124,9 @@ verify_credentials() {
                 return 1
             fi
         fi
-       
+    
         
     done < "$credentials_file"
-   
    
     if [ "$login_successful" = "true" ]; then
        
@@ -143,11 +139,6 @@ verify_credentials() {
         echo "Login successfully!"
         return 0
     fi
-    
-    print_error "Invalid username \n"
-    return 1
-        
-
     
 }
 
@@ -172,7 +163,7 @@ logout() {
 }
 
 readUserInput(){
-     username=$1
+    username=$1
     echo "Choose the role to assing to the user $username:"
     echo "1. normal"
     echo "2. Salesperson"
