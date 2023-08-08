@@ -2,6 +2,7 @@
 ## to be updated to match your settings
 PROJECT_HOME="."
 credentials_file="$PROJECT_HOME/data/credentials.txt"
+archive_file="$PROJECT_HOME/data/archive.txt"
 logged_in_user=""
 # Function to prompt for credentials
 get_credentials() {
@@ -38,7 +39,7 @@ check_existing_username(){
         fi
 
     else
-        echo "File doen't exist"
+        print_error "File doen't exist"
     fi
     # echo "$username from register"
     ## verify if a username is already included in the credentials file
@@ -171,16 +172,21 @@ readUserInput(){
     echo "4. admin"
     printf "Enter your choice :"
     read -r user_input
-    #read -p "Enter your choice: " user_input
     echo 
-    #  if [ "$opt"!="" ]; then
-    #     echo "Hello"
-    # fi
+  
 }
 updateRole(){
     user=$1
     use_role=$2
     status=$3
+    local check=""
+    check=$(check_if_user_is_admin "$role" "modify")
+     if [ "$check" != "" ]; then
+         echo $check
+    fi
+     if [ "$check" != "" ]; then
+     return 1
+     fi
     os=$(uname)
     if [[ "$os" == "Darwin" ]]; then
     sed -i "" "/^$user:/ s/:$role:$status\$/:$use_role:$status/" "$credentials_file"
@@ -189,6 +195,27 @@ updateRole(){
     sed -i  "/^$user:/ s/:$role:$status\$/:$use_role:$status/" "$credentials_file"
     fi
     echo "user account updated successfully"
+}
+check_if_user_is_admin(){
+    role=$1
+    action=$2
+     if [ "$role" = "admin" ]; then
+        print_error "Permission denied. you are not allowed to $action the system admin."
+        return 1
+    fi
+}
+read_user_info(){
+          user=$1
+          local user_info=""
+           if grep -q "^$user:" "$credentials_file"; then
+            while IFS=: read -r userName hashed_password salt fullname role status; do
+            if [ "$userName" = "$user" ]; then
+                 user_info="$userName:$hashed_password:$salt:$fullname:$role:$status"
+                break
+            fi
+            done < "$credentials_file"
+            fi
+            echo "$user_info"
 }
 
 # Assigned to Claude
@@ -238,10 +265,10 @@ while true; do
                             fi
                           done < "$credentials_file"
                         choice_choosen="false"
-                    echo "$validated_user_role_and_status is found"
+                    #echo "$validated_user_role_and_status is found"
                     if [ "$validated_user_role_and_status" != "" ]; then
                         IFS=":" read -r role status <<< "$validated_user_role_and_status"
-                        echo "$role:$status"
+                        # echo "$role:$status"
                         while [ "$choice_choosen" = "false" ]; do
                         readUserInput "$user"
                         choice_choosen="false"
@@ -276,7 +303,28 @@ while true; do
                 elif [ "$input" = 6 ]; then
                  read -p "Enter username to delet the account: " user
                  if grep -q "^$user:" "$credentials_file"; then
-                    sed -i "" "/^$user:/d" "$credentials_file"
+                     user_info=$(read_user_info $user)
+                     IFS=":" read -r userName hashed_password salt fullname role status <<< "$user_info"
+                      is_admin_check=""
+                      is_admin_check=$(check_if_user_is_admin "$role" "delete")
+                      if [ "$is_admin_check" != "" ]; then
+                          echo $is_admin_check
+                      
+                      else 
+                        read -p "are you sure you want to delete $user's account? Enter y/yes and n/No " comfirm
+                        if [ "$comfirm" = 'y' ]; then
+                            IFS=":" read -r log_username log_password log_salt flog_ullname log_role <<< "$logged_in_user"
+                             TIMESTAMP=`date +%Y-%m-%d_%H-%M-%S`
+                             formerUserData="$userName:$hashed_password:$salt:$fullname:$role:0:$log_username:$TIMESTAMP" 
+                            sed -i "" "/^$user:/d" "$credentials_file"
+                            echo "Account is successfully deleted"
+                            echo "$formerUserData" >> "$archive_file"
+                        elif [ "$comfirm" = 'n' ]; then
+                            echo "Canceled deleting"
+                        else 
+                        print_error "Invalid choice"
+                        fi
+                    fi
                  else
                     print_error "Username does not exist"
                  fi
