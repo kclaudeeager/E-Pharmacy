@@ -46,7 +46,7 @@ class FileHandler{
         }          
         
         cout<<"Finished Reading "<<filename<< " File........."<<endl;
-
+         prodsFile.close();
         return prodList;
     };
 
@@ -69,7 +69,8 @@ class FileHandler{
             jsonFile<<"["<<endl;
             jsonFile<< p.toJson()<<endl;
             jsonFile<<"]"<<endl;
-
+            jsonFile.close();
+            input_file.close();
             return;
 
         }
@@ -92,7 +93,9 @@ class FileHandler{
             jsonFile<< pList.at(i).toJson()<<endl;
         }
     }
-    jsonFile<<"]"<<endl;
+      jsonFile<<"]"<<endl;
+        jsonFile.close();
+        input_file.close();
     }
 
     void removeProduct(string name) {
