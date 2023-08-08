@@ -1,6 +1,21 @@
 [
 {"code":"","name":"parastamol","brand":"GI","description":"Best one","dosage_instruction":"1/1/1","price":200.000000,"quantity":50,"category":"pain killer","requires_prescription":0},
-{"code":"","name":"none","brand":"none","description":"shit","dosage_instruction":"no way","price":450.000000,"quantity":12,"category":"hum","requires_prescription":1},
-{"code":"","name":"test","brand":"test brand","description":"not now","dosage_instruction":"1/2/3","price":67.000000,"quantity":45,"category":"drug","requires_prescription":1},
-{"code":"","name":"ppp","brand":"bbbb","description":"dddd","dosage_instruction":"jkhsh","price":560.000000,"quantity":45,"category":"ccc","requires_prescription":1}
+{"code":"","name":"pcm","brand":"emzo","description":"for pain","dosage_instruction":"1/1/1","price":230.000000,"quantity":10,"category":"drug","requires_prescription":0},
+{"code":"","name":"hhh","brand":"]kjjkk","description":"jj","dosage_instruction":"hhh","price":23.000000,"quantity":262,"category":"hh","requires_prescription":1},
+{"code":"","name":"bch","brand":"emz","description":"biotics","dosage_instruction":"1/2/2","price":200.320007,"quantity":20,"category":"drug","requires_prescription":1},
+{"code":"","name":"hv","brand":"sd","description":"fsdf","dosage_instruction":"ds","price":323.000000,"quantity":232,"category":"sdfs","requires_prescription":1},
+{"code":"","name":"parastamol","brand":"GI","description":"Best one","dosage_instruction":"1/1/1","price":200.000000,"quantity":50,"category":"pain killer","requires_prescription":0},
+{"code":"","name":"hhh","brand":"]kjjkk","description":"jj","dosage_instruction":"hhh","price":23.000000,"quantity":262,"category":"hh","requires_prescription":1},
+{"code":"","name":"bch","brand":"emz","description":"biotics","dosage_instruction":"1/2/2","price":200.320007,"quantity":20,"category":"drug","requires_prescription":1},
+{"code":"","name":"hv","brand":"sd","description":"fsdf","dosage_instruction":"ds","price":323.000000,"quantity":232,"category":"sdfs","requires_prescription":1},
+{"code":"","name":"julius","brand":"emzo","description":"for pain","dosage_instruction":"drug","price":230.000000,"quantity":10,"category":"drug","requires_prescription":1},
+{"code":"","name":"parastamol","brand":"GI","description":"Best one","dosage_instruction":"1/1/1","price":200.000000,"quantity":50,"category":"pain killer","requires_prescription":0},
+{"code":"","name":"pcm","brand":"emzo","description":"for pain","dosage_instruction":"1/1/1","price":230.000000,"quantity":10,"category":"drug","requires_prescription":0},
+{"code":"","name":"hhh","brand":"]kjjkk","description":"jj","dosage_instruction":"hhh","price":23.000000,"quantity":262,"category":"hh","requires_prescription":1},
+{"code":"","name":"bch","brand":"emz","description":"biotics","dosage_instruction":"1/2/2","price":200.320007,"quantity":20,"category":"drug","requires_prescription":1},
+{"code":"","name":"parastamol","brand":"GI","description":"Best one","dosage_instruction":"1/1/1","price":200.000000,"quantity":50,"category":"pain killer","requires_prescription":0},
+{"code":"","name":"hhh","brand":"]kjjkk","description":"jj","dosage_instruction":"hhh","price":23.000000,"quantity":262,"category":"hh","requires_prescription":1},
+{"code":"","name":"bch","brand":"emz","description":"biotics","dosage_instruction":"1/2/2","price":200.320007,"quantity":20,"category":"drug","requires_prescription":1},
+{"code":"","name":"julius","brand":"emzo","description":"for pain","dosage_instruction":"drug","price":230.000000,"quantity":10,"category":"drug","requires_prescription":1},
+{"code":"","name":"hva","brand":"sd","description":"fsdf","dosage_instruction":"sdfs","price":323.000000,"quantity":232,"category":"sdfs","requires_prescription":1}
 ]

@@ -8,7 +8,6 @@ private:
 public:
      int getMenu()
     {
-
         // TODO Add code to display Menu
         // Menu should have
         // Add Product
@@ -58,6 +57,15 @@ public:
        search.showSearchResult(products);
      }
     // TODO Add code for Updating a product
+    void updateProduct(){
+        string prodName;
+        cout<<"Enter the name of product you want: ";
+        cin>>prodName;
+        FileHandler file;
+        file.updateProduct(prodName);
+     }
+
+    // TODO Add code for deleting a product
     void deleteProduct(){
         string productName;
         cout<<"Enter the name product you want to delete: ";
@@ -66,7 +74,6 @@ public:
         file.removeProduct(productName);
 
     }
-    // TODO Add code for deleting a product
 };
 
 int main()
@@ -97,7 +104,8 @@ int main()
                 prodManager.searchProduct("brand");
                 break;
             case 5:
-                cout<<"Update Product";
+                cout<<"Update Product"<<endl;
+                prodManager.updateProduct();
                 break;
             case 6:
                 prodManager.deleteProduct();
@@ -107,6 +115,5 @@ int main()
                 break;
         }
     }
-
     return 0;
 }

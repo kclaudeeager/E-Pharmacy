@@ -36,6 +36,38 @@ class Product{
         return brand;
     }
 
+    void setName(string newName ){
+        name = newName;
+    };
+
+    void setQuantity(string newQty ){
+        name = newQty;
+    };
+
+    void setBrand(string newBrand){
+        brand = newBrand;
+    };
+
+    void setDescription(string newDesc){
+        description = newDesc;
+    }
+
+    void setPrice (float newPrice){
+        price = newPrice;
+    }
+
+    void setDosageInt(string newDosage){
+        dosageInstruction = newDosage;
+    }
+
+    void setCategory(string newCategory){
+        dosageInstruction = newCategory;
+    }
+
+    void setPrescription(int ans){
+        requires_prescription = ans;
+    }
+
     string getDecription(){
         //TODO Add code that return the Product Description
         return description;
@@ -61,11 +93,10 @@ class Product{
         return price;
     }
 
-    bool getRequiresPrescription(){
+    int getRequiresPrescription(){
         //TODO Add code that return Product Requires Prescription status
         return requires_prescription;
     }
-
 
     string generateUniqueCode()
     {
@@ -88,6 +119,8 @@ class Product{
         return uniqueCode;
     };
 
+
+
     static string promptTextField(string promptText){
 
         // TODO Add code to prompt user for input for any Product string field
@@ -107,7 +140,6 @@ class Product{
         cout<<promptText<<endl;
         float inputFloat;
         cin>>inputFloat;
-
         return inputFloat;
     }
 
@@ -163,8 +195,6 @@ class Product{
 
     string toJson()
     {
-
-        
         std::stringstream productInJsonStream;
       // TODO Add code for converting a product to json form from the private declared attributes.
       // The Output should look like:
@@ -182,8 +212,6 @@ class Product{
         return productInJsonStream.str();
     };
 
-
-    
     void productFromJson(string txt)
     {
         //TODO Add code to convert a json string product to product object
