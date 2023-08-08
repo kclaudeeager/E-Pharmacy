@@ -54,8 +54,7 @@ class FileHandler{
         pList = readJsonFile();
 
         pList.push_back(p);
-
-         // Check if the file exists.
+          //Check if the file exists.
         ifstream input_file(filename);
 
         if (!input_file.good()) {
