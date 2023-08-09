@@ -1,3 +1,5 @@
+import org.json.simple.JSONObject;
+
 public class Medication {
 
    private String ID;
@@ -6,6 +8,18 @@ public class Medication {
    private String dosage;
    private int quantity;
    private Boolean processedStatus;
+
+   public JSONObject toJson() {
+      JSONObject jsonObject = new JSONObject();
+      jsonObject.put("ID", ID);
+      jsonObject.put("name", name);
+      jsonObject.put("details", details);
+      jsonObject.put("dosage", dosage);
+      jsonObject.put("quantity", quantity);
+      jsonObject.put("processedStatus", processedStatus);
+
+      return jsonObject;
+   }
    public Medication() {
 	   this.processedStatus = false;
    }
@@ -21,11 +35,24 @@ public class Medication {
    // TODO: Add code to help you to create object/instance for this class in different way
 
 
-   public Medication(String medicationID, String medicationName,String dosage, int quantity) {
+   public Medication(String medicationID, String medicationName,String dosage, int quantity, String details) {
       this.ID = medicationID;
       this.name =medicationName;
       this.quantity = quantity;
       this.dosage=dosage;
+      this.details = details;
+   }
+
+   @Override
+   public String toString() {
+      return "Medication{" +
+              "ID='" + ID + '\'' +
+              ", name='" + name + '\'' +
+              ", details='" + details + '\'' +
+              ", dosage='" + dosage + '\'' +
+              ", quantity=" + quantity +
+              ", processedStatus=" + processedStatus +
+              '}';
    }
 
    public Medication(String ID, String name, String details, String dosage, int quantity, Boolean processedStatus) {
@@ -87,7 +114,4 @@ public class Medication {
       this.processedStatus = processedStatus;
    }
 
-   public String toString() {
-      return this.ID + "," + this.name + "," + this.quantity + "," + this.processedStatus;
-   }
 }

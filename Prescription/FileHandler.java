@@ -1,10 +1,7 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
+import java.io.*;
 
 import org.json.simple.JSONArray;
+import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 
@@ -30,7 +27,6 @@ public class FileHandler {
     }
 
     // TODO:  Add missing code to be able to handle file
-
     public void writeJSONArrayToFile(JSONArray jsonArray) throws IOException {
         try (FileWriter fileWriter = new FileWriter(filePath)) {
             fileWriter.write(jsonArray.toJSONString());
