@@ -18,13 +18,20 @@ public:
         // Delete Product
         int chosen=-1;
         while(chosen<0 || chosen>6){
-             cout<<"Select your option"<<endl<< " 1:Add product \n 2:Search product by name\n 3:Search Product By Category \n 4:Search Product By Brand\n 5:Update Product \n 6:Delete Product\n and 0 to quit\n";
+            prompt("Welcome to the E-Pharmacy Store.\nSelect any of the option to get started.");
+             cout<<"Menu\n1: Add product \n2: Search product by name\n3: Search Product By Category \n4: Search Product By Brand\n5: Update Product \n6: Delete Product\nand 0 to quit\n---------------------------------------------------\n";
              cout<<"Enter your choice: ";
              cin>>chosen;
              if(chosen<0 || chosen>6)
                  cout<<"Invalid choice. please choose between 1..6 \n";
         }
         return  chosen;
+    }
+
+    void prompt (string info ){
+        cout<<"==================================================="<<endl;
+        cout<<info<<endl;
+        cout<<"==================================================="<<endl;
     }
 
     void addProduct()
@@ -36,7 +43,6 @@ public:
          cout<<prod.toJson()<<endl;
          prod.productFromJson(productJson);
          //cout<<"Product name: "+prod.getName()+", code: "+prod.getCode();
-
          FileHandler fHandler;
          fHandler.saveToJsonFile(prod);
 
