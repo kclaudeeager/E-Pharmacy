@@ -3,8 +3,10 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.json.simple.parser.ParseException;
 import org.json.simple.JSONArray;
@@ -22,33 +24,27 @@ public class PrescriptionManagement {
 	   BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
        int choice = -1, numMedications;
        Prescription prescription = new Prescription();
-	   
 
-      while(true) {
         	 
          while(true) {
 
             // TODO: Add code to display the menu and get the number(choice) a user slected
-            
-            
+             System.out.println("choose what you need to do from the following choices:");
+             System.out.println(" 1: Add prescription\n 2: View prescriptions and\n 3: Process prescription");
+             System.out.print("Enter your choice: ");
+             choice = reader.read();
             switch (choice) {
                case 1:
             	   
                     // TODO: Add code to get Prescription ID, Customer ID,  Doctor's Name
                     // Don't forget to add code to save these information in the prescription
 
-                   
-                   prescription.setDate(LocalDate.now());
+                   numMedications = getIntPrompt("Enter the number of medications to add:",reader);
 
-
-                   System.out.print("Enter the number of medications to add: ");
-                   numMedications = Integer.parseInt(reader.readLine());
-                   
                    ArrayList<Medication> medications = new ArrayList<>();
-                   String medicationName = null, medicationDetails = null, dosage = null, medicationID = null;
+                   String  dosage = null, medicationID = null;
                    int quantity = 0;
-
-
+                   String medicationName,medicationDetails;
                    // TODO: Add code to display available products/medications before adding them on the prescription
                    String medicationsFilePath = "products.json";
 
@@ -58,16 +54,17 @@ public class PrescriptionManagement {
                        System.out.println("Enter details for Medication " + i + ":");
                        
                         // TODO: Add code to get Medication ID, Name, Details, Dosage and Quantity
-
-
-                       Medication medication = new Medication(medicationID, medicationName, medicationDetails, dosage, quantity);
+                       medicationName = getStringPrompt("Enter medication name:",reader);
+                       medicationDetails = getStringPrompt("Enter medication details:",reader);
+                       dosage = getStringPrompt("Enter medecine dosage:",reader);
+                       Medication medication = new Medication();
                        medications.add(medication);
                     }
                    
                     // TODO: Add code to save all medications inserted by the user on the prescription
 
 
-
+                   prescription.setDate(LocalDate.now());
                    prescription.addPrescription(prescription);
                    
                    break;
@@ -116,10 +113,23 @@ public class PrescriptionManagement {
          }
          
          
-      }
+
    }
-   
-   
+
+    private static String generateId(int size){
+        byte[] array = new byte[size]; // length is bounded by 7
+        new Random().nextBytes(array);
+        return new String(array, StandardCharsets.UTF_8);
+    }
+    private static String getStringPrompt(String prompt,BufferedReader reader) throws IOException {
+        System.out.println(prompt);
+        return reader.readLine();
+    }
+    private static Integer getIntPrompt(String prompt, BufferedReader reader) throws IOException {
+        System.out.println(prompt);
+        return reader.read();
+    }
+
    
    public static void displayMedications(String filePath) throws FileNotFoundException, IOException, ParseException {
 	   

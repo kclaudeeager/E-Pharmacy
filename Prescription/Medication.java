@@ -6,7 +6,6 @@ public class Medication {
    private String dosage;
    private int quantity;
    private Boolean processedStatus;
-
    public Medication() {
 	   this.processedStatus = false;
    }
@@ -18,11 +17,27 @@ public class Medication {
       this.processedStatus = false;
    }
 
-   public Medication(String medicationID, String medicationName, String medicationDetails, String dosage, int quantity) {
-
-   }
 
    // TODO: Add code to help you to create object/instance for this class in different way
+
+
+   public Medication(String medicationID, String medicationName,String dosage, int quantity) {
+      this.ID = medicationID;
+      this.name =medicationName;
+      this.quantity = quantity;
+      this.dosage=dosage;
+   }
+
+   public Medication(String ID, String name, String details, String dosage, int quantity, Boolean processedStatus) {
+      this.ID = ID;
+      this.name = name;
+      this.details = details;
+      this.dosage = dosage;
+      this.quantity = quantity;
+      this.processedStatus = processedStatus;
+
+   }
+   // TODO: Add code to help you to access or modify data members for this class
 
    public String getID() {
       return ID;
@@ -71,10 +86,6 @@ public class Medication {
    public void setProcessedStatus(Boolean processedStatus) {
       this.processedStatus = processedStatus;
    }
-
-
-   // TODO: Add code to help you to access or modify data members for this class
-
 
    public String toString() {
       return this.ID + "," + this.name + "," + this.quantity + "," + this.processedStatus;

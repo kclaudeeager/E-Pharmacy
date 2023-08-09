@@ -1,6 +1,9 @@
 import java.io.IOException;
+import java.nio.charset.Charset;
+import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
@@ -112,11 +115,10 @@ public class Prescription {
 
 	    public void addPrescription(Prescription prescription) throws IOException, ParseException {
 	        JSONArray existingPrescriptions = fileHandler.readJSONArrayFromFile();
-
 			// TODO: Add code to add prescription in the file
 
 	        existingPrescriptions.add(prescriptionObject);
-
+		    setPrescriptionList(existingPrescriptions);
 	        fileHandler.writeJSONArrayToFile(existingPrescriptions);
 	    }
 	   
@@ -167,10 +169,13 @@ public class Prescription {
 					// TODO: Add code to get medication ID, name and quantity
 					// medication quantity should be casted to int
                     // also medication ID and name should be casted to String
-					String medicationID= medication.get("medicationID").toString();
-					String medicationName = medication.get("medicationName").toString();
+					String medicationID= medication.get("id").toString();
+					String medicationName = medication.get("name").toString();
 					Integer quantity = Integer.parseInt(medication.get("quantity").toString());
-                    medications.add(new Medication(medicationID, medicationName, quantity));
+					boolean processedStatus = Boolean.parseBoolean(medication.get("processedStatus").toString());
+					String details = medication.get("details").toString();
+					String dosage = medication.get("dosage").toString();
+					medications.add(new Medication(medicationID,medicationName,details,dosage,quantity,processedStatus));
                 }
 
                 prescriptions.add(new Prescription(prescriptionID,customerID, doctorName, dateToPrint, medications));
