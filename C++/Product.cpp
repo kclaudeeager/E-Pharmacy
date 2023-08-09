@@ -141,10 +141,16 @@ class Product{
         // TODO Add code to prompt user for input for any Product Numeric field
         // method takes text to display e.g: "Enter Product Name:"
         // it prompts a user and return user input in form of text. Text can be made by multiple words.
-
-        cout<<promptText<<": ";
+        cout << promptText << ": ";
         float inputFloat;
-        cin>>inputFloat;
+        cin >> inputFloat;
+
+        while (cin.fail() || inputFloat < 0) {
+            cin.clear();  // Clear the error state
+            cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
+            cout << promptText << ": ";
+            cin >> inputFloat;
+        }
         return inputFloat;
     }
 
