@@ -9,7 +9,9 @@
 using namespace std;
 using namespace std::chrono;
 
-
+enum ans {
+    julius
+};
 
 class Product{
 
@@ -129,7 +131,7 @@ class Product{
         // TODO Add code to prompt user for input for any Product string field
         // method takes text to display e.g: "Enter Product Name:"
         // it prompts a user and return user input in form of text. Text can be made by multiple words.
-        cout<<promptText<<endl;
+        cout<<promptText<<": ";
         string inputText;
         getline(cin >> std::ws, inputText);
         return inputText;
@@ -140,7 +142,7 @@ class Product{
         // method takes text to display e.g: "Enter Product Name:"
         // it prompts a user and return user input in form of text. Text can be made by multiple words.
 
-        cout<<promptText<<endl;
+        cout<<promptText<<": ";
         float inputFloat;
         cin>>inputFloat;
         return inputFloat;
@@ -152,24 +154,59 @@ class Product{
         // User can type 1 or 0. 
         // it prompts a user and return user input in form of boolean. 
         int userChoise=-1;
-        while(userChoise == -1){
-        cout<<"Does this product require prescription? answer 1 for yes, 0 for no"<<endl;
-        cin>>userChoise;
-        switch (userChoise)
-        {
-        case 1:
-           return true; 
-            break;
-        case 0:
-          return false;
-          break;
-        
-        default:
-            cout<<"Choice not supported"<<endl;
-            break;
+        bool ans = false;
+        bool asking = true;
+        string input;
+
+        while (userChoise != 1 && userChoise != 0) {
+            cout << "Does this product require prescription? Answer 1 for yes, 0 for no: ";
+
+            cin >> input;
+
+            if (input == "1") {
+                userChoise = 1;
+                ans = true;
+            } else if (input == "0") {
+                userChoise = 0;
+                ans = false;
+            } else {
+                cout << "Invalid input. Please enter 1 or 0." << endl;
+                promptRequirePrescription();
+            }
+            return ans;
         }
-        }
-        return false;
+
+//        while(asking) {
+//            cout << "Does this product require prescription? answer 1 for yes, 0 for no" << ": first";
+//            cin >> userChoise;
+//
+//            if (!(cin >> userChoise)) {
+//                // If input was not an integer
+//                cin.clear(); // Clear the error state
+//                cin.ignore(numeric_limits<streamsize>::max(), '\n'); // Ignore the invalid input
+//                cout << "Invalid input. Please enter an integer (1 for yes or 0 for no)." << ": ";
+//                cin >> userChoise;
+//                ans = userChoise == 1;
+//                asking = false;
+//            }else if( userChoise < 0 || userChoise >> 1){
+//                cout << "Invalid input. Please enter an integer (1 for yes or 0 for no)." << ": ";
+//                cin >> userChoise;
+//                ans = userChoise == 1;
+//                asking = false;
+//            }
+//            else if (userChoise == 1) {
+//                ans = true;
+//                asking = false;
+//            }else if(userChoise == 0) {
+//                ans = false;
+//                asking = false;
+//            }else{
+//                cout << "Does this product require prescription? answer 1 for yes, 0 for no" << ": old";
+//                cin >> userChoise;
+//                ans = userChoise == 1;
+//                asking = false;
+//            };
+//        }
     }
 
     void createProduct()
@@ -185,11 +222,14 @@ class Product{
         // TODO Add code that calls promptRequirePrescription() method and prompt user for entering product requires presc and update the requiresprescription field.
 
         // Add code to generate Unique code for product using generateUniqueCode method
-        name = promptTextField("enter product name");
-        brand =  promptTextField("enter product brand");
-        description =  promptTextField("enter product description");
-        category =  promptTextField("enter product category");
-        dosageInstruction = promptTextField("enter product dosage instractions");
+        cout<<"---------------------------------------------------"<<endl;
+        cout<<"Provide answers to the prompt below to add a product"<<endl;
+        cout<<"---------------------------------------------------"<<endl;
+        name = promptTextField("Enter product name");
+        brand =  promptTextField("Enter product brand");
+        description =  promptTextField("Enter product description");
+        category =  promptTextField("Enter product category");
+        dosageInstruction = promptTextField("Enter product dosage instractions");
         quantity = int(promptNumberField("Enter the quantity"));
         price = promptNumberField("Enter the price");
         requires_prescription = promptRequirePrescription();
