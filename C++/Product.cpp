@@ -145,7 +145,7 @@ class Product{
         float inputFloat;
         cin >> inputFloat;
 
-        while (cin.fail() || inputFloat < 0) {
+        while (cin.fail() || inputFloat < 0) {// c.fail() wil generate an error state
             cin.clear();  // Clear the error state
             cin.ignore(numeric_limits<streamsize>::max(), '\n');  // Clear the input buffer
             cout << promptText << ": ";
@@ -166,9 +166,7 @@ class Product{
 
         while (userChoise != 1 && userChoise != 0) {
             cout << "Does this product require prescription? Answer 1 for yes, 0 for no: ";
-
             cin >> input;
-
             if (input == "1") {
                 userChoise = 1;
                 ans = true;

@@ -72,20 +72,16 @@ class FileHandler{
             jsonFile.close();
             input_file.close();
             return;
-
         }
-
         // Delete the file.
     int ret = remove(filename.c_str());
     if (ret != 0) {
         std::cout << "Error deleting file: " << strerror(errno) << "\n";
         return ;
     }
-
     ofstream jsonFile(filename);
     jsonFile<<"["<<endl;
     for(int i=0; i<pList.size(); i++){
-
         if(i< pList.size() -1){
             jsonFile<< pList.at(i).toJson()<<","<<endl;
         }
