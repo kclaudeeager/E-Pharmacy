@@ -38,8 +38,6 @@ public class Prescription {
 
 	   }
 
-
-
 	public Prescription(String _prescriptionID, String _customerID, String _doctorName, ArrayList<Medication> _medication)
 	   {
 	       prescriptionID = _prescriptionID;
@@ -217,6 +215,5 @@ public class Prescription {
 				fileHandler.writeJSONArrayToFile(existingPrescriptions);
 			}
 		}
-			
 }
 
