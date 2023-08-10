@@ -1,29 +1,27 @@
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.UUID;
 
 import org.json.simple.parser.ParseException;
 import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import java.awt.Desktop;
 
 import org.json.simple.parser.JSONParser;
 
 public class PrescriptionManagement {
 
-    FileHandler fileHandler;
-
-   public static void main(String[] args) throws IOException, ParseException,NumberFormatException {
+   public static void main(String[] args) throws NumberFormatException {
 
        try{
            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
            int choice = -1, numMedications=1;
            Prescription prescription = new Prescription();
+           String customerId = generateId();
 
            while(true) {
 
@@ -52,21 +50,27 @@ public class PrescriptionManagement {
                            medicationName = getStringPrompt("Enter medication name:",reader);
                            medicationDetails = getStringPrompt("Enter medication details:",reader);
                            dosage = getStringPrompt("Enter medecine dosage:",reader);
-                           medicationID=generateId(7);
+                           medicationID=generateId();
+                           quantity = getIntPrompt("Enter quatity",reader);
                            Medication medication = new Medication(medicationID,medicationName,dosage,quantity,medicationDetails);
+                           medication.setProcessedStatus(false);
                            medications.add(medication);
                        }
-
+                       String doctorName = getStringPrompt("Enter doctor name",reader);
+                       String fileLocation = getStringPrompt("Enter prescription file location",reader);
+                       prescription.setDoctorName(doctorName);
+                       prescription.setPrescriptionFileLocation(fileLocation);
+                       prescription.setCustomerID(customerId);
                        // TODO: Add code to save all medications inserted by the user on the prescription
                        prescription.setDate(LocalDate.now());
-                       prescription.setPrescriptionID(generateId(7));
+                       prescription.setPrescriptionID(generateId());
                        prescription.setMedications(medications);
                        prescription.addPrescription();
                        break;
                    case 2:
                        // TODO: Add code to retrieve all prescriptions in the file
                        // Prescriptions must be returned in the array
-                       ArrayList<Prescription> prescriptions = new ArrayList<>();
+                       ArrayList<Prescription> prescriptions = Prescription.viewPrescription();
 
                        if(prescriptions.size()==0) {
                            System.out.println("No precriptions available\n");
@@ -87,6 +91,43 @@ public class PrescriptionManagement {
 
                                System.out.print("\n");
                                System.out.println("*****************************************************************");
+
+                               System.out.println("Do you want to open prescription file? ");
+
+                               int userChoice = getIntPrompt("Enter 1 for yes, 2 for no",reader);
+
+                               switch (userChoice){
+                                   case 1:
+                                   {
+                                       File file = new File(p.getPrescriptionFileLocation());
+                                       if(!Desktop.isDesktopSupported())
+                                       {
+                                           System.err.println("not supported");
+                                       }
+                                       else {
+                                           System.out.println("Opening file...");
+                                           try {
+                                               if (file.exists()) {
+                                                   Desktop.getDesktop().open(file);
+                                               } else {
+                                                   URI uri = new URI(p.getPrescriptionFileLocation());
+                                                   Desktop.getDesktop().browse(uri);
+                                               }
+                                               System.out.println("File opened successfully!");
+                                           } catch (Exception e) {
+                                               e.printStackTrace();
+                                           }
+                                       }
+                               }
+                               break;
+                                   case 2:
+                                       System.out.println("Opening file is canceled");
+                                       break;
+                                   default:
+                                       System.err.println("Choice not found");
+                                       break;
+                               }
+
                            }
 
                            System.out.println("");
@@ -106,23 +147,21 @@ public class PrescriptionManagement {
 
 
            }
-       } catch (NumberFormatException e) {
-           throw new NumberFormatException("Invalid number");
-       } catch (IOException e) {
-           throw new RuntimeException(e);
-       } catch (ParseException e) {
-           throw new RuntimeException(e);
        } catch (Exception e) {
-           throw new RuntimeException(e);
+           throw new NumberFormatException("Invalid number");
        }
 
 
    }
 
     private static String generateId(int size){
-        byte[] array = new byte[size]; // length is bounded by 7
+        byte[] array = new byte[size];
         new Random().nextBytes(array);
         return new String(array, StandardCharsets.UTF_8);
+    }
+    public static String generateId(){
+       String uuid = UUID.randomUUID().toString();
+       return uuid.substring(0,8);
     }
     private static String getStringPrompt(String prompt,BufferedReader reader) throws IOException {
         System.out.println(prompt);
