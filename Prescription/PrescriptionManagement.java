@@ -4,6 +4,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.UUID;
 
 import org.json.simple.parser.ParseException;
@@ -26,7 +27,7 @@ public class PrescriptionManagement {
 
                // TODO: Add code to display the menu and get the number(choice) a user slected
                System.out.println("choose what you need to do from the following choices:");
-               System.out.println(" 1: Add prescription\n 2: View prescriptions and\n 3: Process prescription");
+               System.out.println(" 1: Add prescription\n 2: View prescriptions and\n 3: Process prescription \n 4. Search Prescription \n 5. Exit application");
                System.out.print("Enter your choice: ");
                choice = Integer.parseInt(reader.readLine());
                switch (choice) {
@@ -40,7 +41,6 @@ public class PrescriptionManagement {
                        int quantity = 0;
                        String medicationName, medicationDetails;
                        // TODO: Add code to display available products/medications before adding them on the prescription
-
                        for (int i = 1; i <= numMedications; i++) {
 
                            System.out.println("Enter details for Medication " + i + ":");
@@ -128,19 +128,43 @@ public class PrescriptionManagement {
 
 
                    case 4 -> {
+                       break;
+                   case 3:
+                       // TODO: Add code to get the ID of the prescription you want to delete
+                       prescription.deletePrescription();
+                       break;
+                   case 4:
+                       //		get all list from the file
+                       Scanner input = new Scanner(System.in);
+                       int userInput = 0;
+                       System.out.println("=========================================");
+                       System.out.println("Select the field your want to search with:");
+                       System.out.println("=========================================");
+                       while (userInput < 1 || userInput > 2 ){
+                           System.out.println("You can search by: \n 1. Doctor's name \n 2. Medication name");
+                           System.out.println("----------------------------");
+                           System.out.println("Enter your choice 1 or 2: ");
+                           userInput = input.nextInt();
+                           System.out.println("----------------------------");
+                           // search for product
+                       }
+                      ArrayList< Prescription> resultList = prescription.searchPrescription(userInput);
+                       if(resultList.size() <= 0){
+                           System.out.println("Not match found");
+                           System.out.println("==============================");
+                       }
+
+                        break;
+                   case 5:
                        System.out.println("Exiting the Precription Management section...");
                        System.exit(0);
                    }
                    default -> System.out.println("Invalid choice. Please try again.");
                }
-
-
            }
        } catch (Exception e) {
            throw new NumberFormatException("Invalid number");
        }
-
-
    }
 
     private static String generateId(int size){
