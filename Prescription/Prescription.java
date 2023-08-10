@@ -19,7 +19,7 @@ public class Prescription {
 	   private ArrayList<Medication> medications;
 	   private LocalDate date;
 	   private static JSONArray prescriptionList;
-	   private static FileHandler fileHandler;
+	   private static final FileHandler fileHandler = new FileHandler();
 
 
 
@@ -75,8 +75,6 @@ public class Prescription {
 
 	public Prescription() {
 		   prescriptionList = new JSONArray();
-		   fileHandler = new FileHandler();
-
 	   }
 
 	public Prescription(String _prescriptionID, String _customerID, String _doctorName, ArrayList<Medication> _medication)
@@ -86,7 +84,6 @@ public class Prescription {
 	       doctorName = _doctorName;
 	       medications = _medication;
 	       date = LocalDate.now();
-		   fileHandler = new FileHandler();
 	   }
 
 
@@ -100,7 +97,6 @@ public class Prescription {
 		doctorName = _doctorName;
 		medications = _medication;
 		this.date=date;
-		fileHandler = new FileHandler();
 	}
 
 	public void setPrescriptionID(String prescriptionID) {
@@ -123,9 +119,6 @@ public class Prescription {
 		Prescription.prescriptionList = prescriptionList;
 	}
 
-	public void setFileHandler(FileHandler fileHandler) {
-		this.fileHandler = fileHandler;
-	}
 
 
 // TODO: Add code to help you to access or modify data members for this class
@@ -165,16 +158,6 @@ public class Prescription {
 		// While adding the prescription in the file, please follow the format shown below
 		// Format for the prescription: {"DoctorName":"Yves","PrescriptionID":"TA3","Medications":[{"quantity":2,"processedStatus":false,"name":"IBUPROFEN","id":"IB7"}],"CustomerID":"GR","Date":"2023-08-07"}
 
-	    public void addPrescription() throws Exception {
-	        JSONArray existingPrescriptions = fileHandler.readJSONArrayFromFile();
-			System.out.println(existingPrescriptions.toJSONString());
-			// TODO: Add code to add prescription in the file
-	        existingPrescriptions.add(this.toJson());
-		    setPrescriptionList(existingPrescriptions);
-	        fileHandler.writeJSONArrayToFile(existingPrescriptions);
-	    }
-
-	   
 		// TODO: Add code needed to be able to get all medications on the prescription  
 		// TODO: You must return an array of medications!
 
@@ -192,70 +175,8 @@ public class Prescription {
 		// TODO: Add code to help you viewing all prescriptions in the file
 		// You must return an array of prescriptions
 
-	   	public static ArrayList<Prescription> viewPrescription() throws IOException, ParseException {
-			// TODO: Add code to help you reading from the prescriptions.json file
-
-	        JSONArray jsonArray = fileHandler.readJSONArrayFromFile();
-
-	        // TODO: Add code to help you creating an array of prescriptions
-			ArrayList<Prescription> prescriptions = new ArrayList<>();
 
 
-	        for (Object obj : jsonArray) {
-	            JSONObject jsonObject = (JSONObject) obj;
-                
-                String doctorName = (String) jsonObject.get("doctorName");
-                String prescriptionID = (String) jsonObject.get("prescriptionID");
-                String customerID = (String) jsonObject.get("customerID");
-                String date = (String) jsonObject.get("date");
-				String prescriptionFileLocation = (String) jsonObject.get("prescription_file_location") ;
-                LocalDate dateToPrint = LocalDate.parse(date);
-                ArrayList<Medication> medications = new ArrayList<>();
-                
-                JSONArray medicationsArray = (JSONArray) jsonObject.get("medications");
-
-                for (Object medObj : medicationsArray) {
-                    JSONObject medication = (JSONObject) medObj;
-
-					// TODO: Add code to get medication ID, name and quantity
-					// medication quantity should be casted to int
-                    // also medication ID and name should be casted to String
-					String medicationID= medication.get("ID").toString();
-					String medicationName = medication.get("name").toString();
-					Integer quantity = Integer.parseInt(medication.get("quantity").toString());
-					boolean processedStatus = Boolean.parseBoolean(medication.get("processedStatus").toString());
-					String details = medication.get("details").toString();
-					String dosage = medication.get("dosage").toString();
-					medications.add(new Medication(medicationID,medicationName,details,dosage,quantity,processedStatus));
-                }
-
-                prescriptions.add(new Prescription(prescriptionID,customerID, doctorName, dateToPrint, medications,prescriptionFileLocation));
-
-            }
-            return prescriptions;
-	    }
-
-		// TODO: Add code to help you deleting a specific prescription
-		public void deletePrescription() throws IOException, ParseException {
-			// TODO: Add code to help you reading from the prescriptions.json file
-		   JSONArray existingPrescriptions = fileHandler.readJSONArrayFromFile();
-	
-			int indexToDelete = -1;
-			for (int i = 0; i < existingPrescriptions.size(); i++) {
-				JSONObject jsonObject = (JSONObject)existingPrescriptions.get(i);
-				String existingPrescriptionID = (String) jsonObject.get("PrescriptionID");
-				// TODO: Add code to check if the prescription you want to delete is similar to one exists
-				if (Objects.equals(existingPrescriptionID, this.prescriptionID)) {
-					indexToDelete = i;
-					break;
-				}
-			}
-	
-			if (indexToDelete != -1) {
-				existingPrescriptions.remove(indexToDelete);
-				fileHandler.writeJSONArrayToFile(existingPrescriptions);
-			}
-		}
 		
 	public void addPrescription() throws Exception {
 		JSONArray existingPrescriptions = fileHandler.readJSONArrayFromFile();
@@ -269,15 +190,6 @@ public class Prescription {
 
 	// TODO: Add code needed to be able to get all medications on the prescription
 	// TODO: You must return an array of medications!
-
-	private JSONArray  getMedicationsOnPrescription(Prescription prescription) {
-		JSONArray jsonArray = new JSONArray();
-
-
-		// TODO: Add code to get medications on the prescription
-		jsonArray.addAll(prescription.medications);
-		return jsonArray;
-	}
 
 
 	// TODO: Add code to help you viewing all prescriptions in the file
@@ -334,7 +246,7 @@ public class Prescription {
 		int indexToDelete = -1;
 		for (int i = 0; i < existingPrescriptions.size(); i++) {
 			JSONObject jsonObject = (JSONObject)existingPrescriptions.get(i);
-			String existingPrescriptionID = (String) jsonObject.get("PrescriptionID");
+			String existingPrescriptionID = (String) jsonObject.get("prescriptionID");
 			// TODO: Add code to check if the prescription you want to delete is similar to one exists
 			if (Objects.equals(existingPrescriptionID, this.prescriptionID)) {
 				indexToDelete = i;

@@ -27,7 +27,7 @@ public class PrescriptionManagement {
 
                // TODO: Add code to display the menu and get the number(choice) a user slected
                System.out.println("choose what you need to do from the following choices:");
-               System.out.println(" 1: Add prescription\n 2: View prescriptions and\n 3: Process prescription \n 4. Search Prescription \n 5. Exit application");
+               System.out.println(" 1: Add prescription\n 2: View prescriptions and\n 3: Delete prescription \n 4. Search Prescription \n 5. Exit application");
                System.out.print("Enter your choice: ");
                choice = Integer.parseInt(reader.readLine());
                switch (choice) {
@@ -122,48 +122,52 @@ public class PrescriptionManagement {
                    }
                    case 3 ->{
                        // TODO: Add code to get the ID of the prescription you want to delete
-                       //Prescription.deletePrescription();
-
-                   }
-
-
-                   case 4 -> {
-                       break;
-                   case 3:
-                       // TODO: Add code to get the ID of the prescription you want to delete
-                       prescription.deletePrescription();
-                       break;
-                   case 4:
-                       //		get all list from the file
-                       Scanner input = new Scanner(System.in);
-                       int userInput = 0;
-                       System.out.println("=========================================");
-                       System.out.println("Select the field your want to search with:");
-                       System.out.println("=========================================");
-                       while (userInput < 1 || userInput > 2 ){
-                           System.out.println("You can search by: \n 1. Doctor's name \n 2. Medication name");
-                           System.out.println("----------------------------");
-                           System.out.println("Enter your choice 1 or 2: ");
-                           userInput = input.nextInt();
-                           System.out.println("----------------------------");
-                           // search for product
-                       }
-                      ArrayList< Prescription> resultList = prescription.searchPrescription(userInput);
-                       if(resultList.size() <= 0){
+                       System.out.println("You can search by: \n 1. Doctor's name \n 2. Medication name");
+                       System.out.println("----------------------------");
+                       int userChoice = getIntPrompt("Enter your choice 1 or 2: ",reader);
+                       ArrayList<Prescription> resultList = Prescription.searchPrescription(userChoice);
+                       if (resultList.size() == 0) {
                            System.out.println("Not match found");
                            System.out.println("==============================");
                        }
 
-                        break;
-                   case 5:
+//          
+                       if(resultList.size()==1){
+
+                           resultList.get(0).deletePrescription();
+                       }
+                   }
+
+                   case 4 -> {
+                       //		get all list from the file
+                       int userInput = 0;
+                       System.out.println("=========================================");
+                       System.out.println("Select the field your want to search with:");
+                       System.out.println("=========================================");
+                       while (userInput < 1 || userInput > 2) {
+                           System.out.println("You can search by: \n 1. Doctor's name \n 2. Medication name");
+                           System.out.println("----------------------------");
+                           userInput = getIntPrompt("Enter your choice 1 or 2: ",reader);
+                           System.out.println("----------------------------");
+                           // search for product
+                       }
+                       ArrayList<Prescription> resultList = Prescription.searchPrescription(userInput);
+                       if (resultList.size() == 0) {
+                           System.out.println("Not match found");
+                           System.out.println("==============================");
+                       }
+                   }
+
+                   case 5 ->{
                        System.out.println("Exiting the Precription Management section...");
                        System.exit(0);
                    }
+
                    default -> System.out.println("Invalid choice. Please try again.");
                }
            }
        } catch (Exception e) {
-           throw new NumberFormatException("Invalid number");
+           throw new NumberFormatException(""+e.getMessage());
        }
    }
 
@@ -188,15 +192,8 @@ public class PrescriptionManagement {
    
    public static void displayMedications(String filePath) throws FileNotFoundException, IOException, ParseException {
 	   
-	      JSONParser parser = new JSONParser();
-	      try(FileReader fileReader = new FileReader(filePath)){
-	          if (fileReader.read() == -1) {
-
-              }
-	          else {
-	              fileReader.close();
-	              JSONArray jsonArray = (JSONArray) parser.parse(new FileReader(filePath));
-	              
+                  FileHandler fileHandler = new FileHandler(filePath);
+	              JSONArray jsonArray = fileHandler.readJSONArrayFromFile();
                   System.out.println("---------------------------------------------------------------------------------------");
                   System.out.println("|\t"  + "\t\t  "  + "\t\t\t\t");
                   System.out.println("|\t" + "\t\t"  +  "Available Medications" + "\t\t");
@@ -219,8 +216,6 @@ public class PrescriptionManagement {
 
 	              
 	          }  
-	      }
-	   
-   } 
+
 
 }
