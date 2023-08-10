@@ -17,7 +17,6 @@ public class Medication {
       jsonObject.put("dosage", dosage);
       jsonObject.put("quantity", quantity);
       jsonObject.put("processedStatus", processedStatus);
-
       return jsonObject;
    }
    public Medication() {

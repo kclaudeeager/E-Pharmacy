@@ -12,6 +12,13 @@ public class FileHandler {
 
     // TODO:  Add missing code to be able to handle file
 
+    public FileHandler(){
+        filePath = "prescriptions.json";
+    }
+    public FileHandler(String filePath){
+        this.filePath=filePath;
+    }
+
     public JSONArray readJSONArrayFromFile() throws IOException, ParseException {
         JSONParser parser = new JSONParser();
         try (FileReader fileReader = new FileReader(filePath)) {

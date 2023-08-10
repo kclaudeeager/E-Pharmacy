@@ -21,43 +21,42 @@ public class PrescriptionManagement {
        try{
            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
            int choice = -1, numMedications=1;
-           Prescription prescription = new Prescription();
            String customerId = generateId();
 
            while(true) {
 
                // TODO: Add code to display the menu and get the number(choice) a user slected
                System.out.println("choose what you need to do from the following choices:");
-               System.out.println(" 1: Add prescription\n 2: View prescriptions and\n 3: Process prescription \n 4. Search Prescription \n 5. Exit application");
+               System.out.println(" 1: Add prescription\n 2: View prescriptions and\n 3: Delete prescription \n 4. Search Prescription \n 5. Exit application");
                System.out.print("Enter your choice: ");
                choice = Integer.parseInt(reader.readLine());
                switch (choice) {
-                   case 1:
+                   case 1 -> {
                        // TODO: Add code to get Prescription ID, Customer ID,  Doctor's Name
                        // Don't forget to add code to save these information in the prescription
-                       numMedications = getIntPrompt("Enter the number of medications to add:",reader);
-
+                       Prescription prescription = new Prescription();
+                       numMedications = getIntPrompt("Enter the number of medications to add:", reader);
                        ArrayList<Medication> medications = new ArrayList<>();
-                       String  dosage = null, medicationID = null;
+                       String dosage = null, medicationID = null;
                        int quantity = 0;
-                       String medicationName,medicationDetails;
+                       String medicationName, medicationDetails;
                        // TODO: Add code to display available products/medications before adding them on the prescription
                        for (int i = 1; i <= numMedications; i++) {
 
                            System.out.println("Enter details for Medication " + i + ":");
 
                            // TODO: Add code to get Medication ID, Name, Details, Dosage and Quantity
-                           medicationName = getStringPrompt("Enter medication name:",reader);
-                           medicationDetails = getStringPrompt("Enter medication details:",reader);
-                           dosage = getStringPrompt("Enter medecine dosage:",reader);
-                           medicationID=generateId();
-                           quantity = getIntPrompt("Enter quatity",reader);
-                           Medication medication = new Medication(medicationID,medicationName,dosage,quantity,medicationDetails);
+                           medicationName = getStringPrompt("Enter medication name:", reader);
+                           medicationDetails = getStringPrompt("Enter medication details:", reader);
+                           dosage = getStringPrompt("Enter medecine dosage:", reader);
+                           medicationID = generateId();
+                           quantity = getIntPrompt("Enter quatity", reader);
+                           Medication medication = new Medication(medicationID, medicationName, dosage, quantity, medicationDetails);
                            medication.setProcessedStatus(false);
                            medications.add(medication);
                        }
-                       String doctorName = getStringPrompt("Enter doctor name",reader);
-                       String fileLocation = getStringPrompt("Enter prescription file location",reader);
+                       String doctorName = getStringPrompt("Enter doctor name", reader);
+                       String fileLocation = getStringPrompt("Enter prescription file location", reader);
                        prescription.setDoctorName(doctorName);
                        prescription.setPrescriptionFileLocation(fileLocation);
                        prescription.setCustomerID(customerId);
@@ -66,27 +65,23 @@ public class PrescriptionManagement {
                        prescription.setPrescriptionID(generateId());
                        prescription.setMedications(medications);
                        prescription.addPrescription();
-                       break;
-                   case 2:
+                   }
+                   case 2 -> {
                        // TODO: Add code to retrieve all prescriptions in the file
                        // Prescriptions must be returned in the array
                        ArrayList<Prescription> prescriptions = Prescription.viewPrescription();
-
-                       if(prescriptions.size()==0) {
+                       if (prescriptions.size() == 0) {
                            System.out.println("No precriptions available\n");
-                       }
-                       else {
+                       } else {
                            System.out.println("| PrescriptionID |  DoctorName   |    CustomerID | \tDate\t | ");
                            System.out.println("******************************************************************");
 
-                           for(Prescription p: prescriptions)
-                           {
-                               System.out.println("|\t  "+ p.getPrescriptionID()+"\t\t"+ p.getDoctorName()+ "\t\t  " + p.getCustomerID()+"\t\t" + p.getDate());
+                           for (Prescription p : prescriptions) {
+                               System.out.println("|\t  " + p.getPrescriptionID() + "\t\t" + p.getDoctorName() + "\t\t  " + p.getCustomerID() + "\t\t" + p.getDate());
                                System.out.println("");
                                System.out.println("| MedicationID |  \tName    | \t Quantity | ");
-                               for(Medication med : p.getMedications())
-                               {
-                                   System.out.println("|\t  "+ med.getID()+"\t\t"+ med.getName()+ "\t\t " + med.getQuantity() );
+                               for (Medication med : p.getMedications()) {
+                                   System.out.println("|\t  " + med.getID() + "\t\t" + med.getName() + "\t\t " + med.getQuantity());
                                }
 
                                System.out.print("\n");
@@ -94,17 +89,14 @@ public class PrescriptionManagement {
 
                                System.out.println("Do you want to open prescription file? ");
 
-                               int userChoice = getIntPrompt("Enter 1 for yes, 2 for no",reader);
+                               int userChoice = getIntPrompt("Enter 1 for yes, 2 for no", reader);
 
-                               switch (userChoice){
-                                   case 1:
-                                   {
+                               switch (userChoice) {
+                                   case 1 -> {
                                        File file = new File(p.getPrescriptionFileLocation());
-                                       if(!Desktop.isDesktopSupported())
-                                       {
+                                       if (!Desktop.isDesktopSupported()) {
                                            System.err.println("not supported");
-                                       }
-                                       else {
+                                       } else {
                                            System.out.println("Opening file...");
                                            try {
                                                if (file.exists()) {
@@ -118,56 +110,64 @@ public class PrescriptionManagement {
                                                e.printStackTrace();
                                            }
                                        }
-                               }
-                               break;
-                                   case 2:
-                                       System.out.println("Opening file is canceled");
-                                       break;
-                                   default:
-                                       System.err.println("Choice not found");
-                                       break;
+                                   }
+                                   case 2 -> System.out.println("Opening file is canceled");
+                                   default -> System.err.println("Choice not found");
                                }
 
                            }
 
                            System.out.println("");
                        }
-                       break;
-                   case 3:
+                   }
+                   case 3 ->{
                        // TODO: Add code to get the ID of the prescription you want to delete
-                       prescription.deletePrescription();
-                       break;
-                   case 4:
-                       //		get all list from the file
-                       Scanner input = new Scanner(System.in);
-                       int userInput = 0;
-                       System.out.println("=========================================");
-                       System.out.println("Select the field your want to search with:");
-                       System.out.println("=========================================");
-                       while (userInput < 1 || userInput > 2 ){
-                           System.out.println("You can search by: \n 1. Doctor's name \n 2. Medication name");
-                           System.out.println("----------------------------");
-                           System.out.println("Enter your choice 1 or 2: ");
-                           userInput = input.nextInt();
-                           System.out.println("----------------------------");
-                           // search for product
-                       }
-                      ArrayList< Prescription> resultList = prescription.searchPrescription(userInput);
-                       if(resultList.size() <= 0){
+                       System.out.println("You can search by: \n 1. Doctor's name \n 2. Medication name");
+                       System.out.println("----------------------------");
+                       int userChoice = getIntPrompt("Enter your choice 1 or 2: ",reader);
+                       ArrayList<Prescription> resultList = Prescription.searchPrescription(userChoice);
+                       if (resultList.size() == 0) {
                            System.out.println("Not match found");
                            System.out.println("==============================");
                        }
 
-                        break;
-                   case 5:
+//          
+                       if(resultList.size()==1){
+
+                           resultList.get(0).deletePrescription();
+                       }
+                   }
+
+                   case 4 -> {
+                       //		get all list from the file
+                       int userInput = 0;
+                       System.out.println("=========================================");
+                       System.out.println("Select the field your want to search with:");
+                       System.out.println("=========================================");
+                       while (userInput < 1 || userInput > 2) {
+                           System.out.println("You can search by: \n 1. Doctor's name \n 2. Medication name");
+                           System.out.println("----------------------------");
+                           userInput = getIntPrompt("Enter your choice 1 or 2: ",reader);
+                           System.out.println("----------------------------");
+                           // search for product
+                       }
+                       ArrayList<Prescription> resultList = Prescription.searchPrescription(userInput);
+                       if (resultList.size() == 0) {
+                           System.out.println("Not match found");
+                           System.out.println("==============================");
+                       }
+                   }
+
+                   case 5 ->{
                        System.out.println("Exiting the Precription Management section...");
                        System.exit(0);
-                   default:
-                       System.out.println("Invalid choice. Please try again.");
+                   }
+
+                   default -> System.out.println("Invalid choice. Please try again.");
                }
            }
        } catch (Exception e) {
-           throw new NumberFormatException("Invalid number");
+           throw new NumberFormatException(""+e.getMessage());
        }
    }
 
@@ -192,15 +192,8 @@ public class PrescriptionManagement {
    
    public static void displayMedications(String filePath) throws FileNotFoundException, IOException, ParseException {
 	   
-	      JSONParser parser = new JSONParser();
-	      try(FileReader fileReader = new FileReader(filePath)){
-	          if (fileReader.read() == -1) {
-
-              }
-	          else {
-	              fileReader.close();
-	              JSONArray jsonArray = (JSONArray) parser.parse(new FileReader(filePath));
-	              
+                  FileHandler fileHandler = new FileHandler(filePath);
+	              JSONArray jsonArray = fileHandler.readJSONArrayFromFile();
                   System.out.println("---------------------------------------------------------------------------------------");
                   System.out.println("|\t"  + "\t\t  "  + "\t\t\t\t");
                   System.out.println("|\t" + "\t\t"  +  "Available Medications" + "\t\t");
@@ -223,8 +216,6 @@ public class PrescriptionManagement {
 
 	              
 	          }  
-	      }
-	   
-   } 
+
 
 }

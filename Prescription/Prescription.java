@@ -15,12 +15,11 @@ public class Prescription {
 	   private String prescriptionID;
 	   private String customerID;
 	   private String doctorName;
-
 	   private String prescriptionFileLocation;
 	   private ArrayList<Medication> medications;
 	   private LocalDate date;
 	   private static JSONArray prescriptionList;
-	   private static FileHandler fileHandler;
+	   private static final FileHandler fileHandler = new FileHandler();
 
 
 
@@ -57,6 +56,7 @@ public class Prescription {
 		this.prescriptionFileLocation = prescriptionFileLocation;
 	}
 
+
 	public JSONObject toJson() {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("prescriptionID", this.getPrescriptionID());
@@ -75,8 +75,6 @@ public class Prescription {
 
 	public Prescription() {
 		   prescriptionList = new JSONArray();
-		   fileHandler = new FileHandler();
-
 	   }
 
 	public Prescription(String _prescriptionID, String _customerID, String _doctorName, ArrayList<Medication> _medication)
@@ -86,7 +84,6 @@ public class Prescription {
 	       doctorName = _doctorName;
 	       medications = _medication;
 	       date = LocalDate.now();
-		   fileHandler = new FileHandler();
 	   }
 
 
@@ -100,7 +97,6 @@ public class Prescription {
 		doctorName = _doctorName;
 		medications = _medication;
 		this.date=date;
-		fileHandler = new FileHandler();
 	}
 
 	public void setPrescriptionID(String prescriptionID) {
@@ -123,9 +119,6 @@ public class Prescription {
 		Prescription.prescriptionList = prescriptionList;
 	}
 
-	public void setFileHandler(FileHandler fileHandler) {
-		this.fileHandler = fileHandler;
-	}
 
 
 // TODO: Add code to help you to access or modify data members for this class
@@ -162,9 +155,29 @@ public class Prescription {
 
 
 	// TODO: Add code needed to be able to add prescription in the file
-	// While adding the prescription in the file, please follow the format shown below
-	// Format for the prescription: {"DoctorName":"Yves","PrescriptionID":"TA3","Medications":[{"quantity":2,"processedStatus":false,"name":"IBUPROFEN","id":"IB7"}],"CustomerID":"GR","Date":"2023-08-07"}
+		// While adding the prescription in the file, please follow the format shown below
+		// Format for the prescription: {"DoctorName":"Yves","PrescriptionID":"TA3","Medications":[{"quantity":2,"processedStatus":false,"name":"IBUPROFEN","id":"IB7"}],"CustomerID":"GR","Date":"2023-08-07"}
 
+		// TODO: Add code needed to be able to get all medications on the prescription  
+		// TODO: You must return an array of medications!
+
+		private JSONArray  getMedicationsOnPrescription(Prescription prescription) {
+			JSONArray jsonArray = new JSONArray();
+
+			// TODO: Add code to get medications on the prescription
+			prescription.medications.forEach(medication -> {
+				jsonArray.add(medication.toJson());
+			});
+			return jsonArray;
+		}
+	    
+	   
+		// TODO: Add code to help you viewing all prescriptions in the file
+		// You must return an array of prescriptions
+
+
+
+		
 	public void addPrescription() throws Exception {
 		JSONArray existingPrescriptions = fileHandler.readJSONArrayFromFile();
 		System.out.println(existingPrescriptions.toJSONString());
@@ -177,15 +190,6 @@ public class Prescription {
 
 	// TODO: Add code needed to be able to get all medications on the prescription
 	// TODO: You must return an array of medications!
-
-	private JSONArray  getMedicationsOnPrescription(Prescription prescription) {
-		JSONArray jsonArray = new JSONArray();
-
-
-		// TODO: Add code to get medications on the prescription
-		jsonArray.addAll(prescription.medications);
-		return jsonArray;
-	}
 
 
 	// TODO: Add code to help you viewing all prescriptions in the file
@@ -242,7 +246,7 @@ public class Prescription {
 		int indexToDelete = -1;
 		for (int i = 0; i < existingPrescriptions.size(); i++) {
 			JSONObject jsonObject = (JSONObject)existingPrescriptions.get(i);
-			String existingPrescriptionID = (String) jsonObject.get("PrescriptionID");
+			String existingPrescriptionID = (String) jsonObject.get("prescriptionID");
 			// TODO: Add code to check if the prescription you want to delete is similar to one exists
 			if (Objects.equals(existingPrescriptionID, this.prescriptionID)) {
 				indexToDelete = i;
