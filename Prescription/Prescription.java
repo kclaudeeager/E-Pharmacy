@@ -12,7 +12,6 @@ public class Prescription {
 	   private String prescriptionID;
 	   private String customerID;
 	   private String doctorName;
-
 	   private String prescriptionFileLocation;
 	   private ArrayList<Medication> medications;
 	   private LocalDate date;
@@ -53,6 +52,7 @@ public class Prescription {
 	public void setPrescriptionFileLocation(String prescriptionFileLocation) {
 		this.prescriptionFileLocation = prescriptionFileLocation;
 	}
+
 
 	public JSONObject toJson() {
 		JSONObject jsonObject = new JSONObject();
@@ -177,10 +177,11 @@ public class Prescription {
 
 		private JSONArray  getMedicationsOnPrescription(Prescription prescription) {
 			JSONArray jsonArray = new JSONArray();
-			
 
 			// TODO: Add code to get medications on the prescription
-			jsonArray.addAll(prescription.medications);
+			prescription.medications.forEach(medication -> {
+				jsonArray.add(medication.toJson());
+			});
 			return jsonArray;
 		}
 	    
@@ -235,7 +236,6 @@ public class Prescription {
 		public void deletePrescription() throws IOException, ParseException {
 			// TODO: Add code to help you reading from the prescriptions.json file
            JSONArray existingPrescriptions = fileHandler.readJSONArrayFromFile();
-
 			int indexToDelete = -1;
 			for (int i = 0; i < existingPrescriptions.size(); i++) {
 				JSONObject jsonObject = (JSONObject)existingPrescriptions.get(i);
