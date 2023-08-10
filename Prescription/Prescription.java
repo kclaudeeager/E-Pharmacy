@@ -12,16 +12,54 @@ public class Prescription {
 	   private String prescriptionID;
 	   private String customerID;
 	   private String doctorName;
+
+	   private String prescriptionFileLocation;
 	   private ArrayList<Medication> medications;
 	   private LocalDate date;
 	   private static JSONArray prescriptionList;
-	   private FileHandler fileHandler;
+	   private static FileHandler fileHandler;
+
+
+
+	public Prescription(String prescriptionID, String customerID, String doctorName, LocalDate dateToPrint, ArrayList<Medication> medications, String prescriptionFileLocation) {
+		this.prescriptionID = prescriptionID;
+		this.customerID = customerID;
+		this.doctorName = doctorName;
+		this.prescriptionFileLocation = prescriptionFileLocation;
+		this.medications = medications;
+		this.date = dateToPrint;
+	}
+
+	public void setCustomerID(String customerID) {
+		this.customerID = customerID;
+	}
+
+	public String getPrescriptionFileLocation() {
+		return prescriptionFileLocation;
+	}
+
+	@Override
+	public String toString() {
+		return "Prescription{" +
+				"prescriptionID='" + prescriptionID + '\'' +
+				", customerID='" + customerID + '\'' +
+				", doctorName='" + doctorName + '\'' +
+				", prescriptionFileLocation='" + prescriptionFileLocation + '\'' +
+				", medications=" + medications +
+				", date=" + date +
+				'}';
+	}
+
+	public void setPrescriptionFileLocation(String prescriptionFileLocation) {
+		this.prescriptionFileLocation = prescriptionFileLocation;
+	}
 
 	public JSONObject toJson() {
 		JSONObject jsonObject = new JSONObject();
 		jsonObject.put("prescriptionID", this.getPrescriptionID());
 		jsonObject.put("customerID", this.getCustomerID());
 		jsonObject.put("doctorName", this.getDoctorName());
+		jsonObject.put("prescription_file_location",this.prescriptionFileLocation);
 		JSONArray medicationsArray = new JSONArray();
 		for (Medication medication : this.medications) {
 			medicationsArray.add(medication.toJson());
@@ -150,11 +188,10 @@ public class Prescription {
 		// TODO: Add code to help you viewing all prescriptions in the file
 		// You must return an array of prescriptions
 
-	   	public ArrayList<Prescription> viewPrescription() throws IOException, ParseException {
+	   	public static ArrayList<Prescription> viewPrescription() throws IOException, ParseException {
 			// TODO: Add code to help you reading from the prescriptions.json file
 
 	        JSONArray jsonArray = fileHandler.readJSONArrayFromFile();
-
 
 	        // TODO: Add code to help you creating an array of prescriptions
 			ArrayList<Prescription> prescriptions = new ArrayList<>();
@@ -163,15 +200,15 @@ public class Prescription {
 	        for (Object obj : jsonArray) {
 	            JSONObject jsonObject = (JSONObject) obj;
                 
-                String doctorName = (String) jsonObject.get("DoctorName");
-                String prescriptionID = (String) jsonObject.get("PrescriptionID");
-                String customerID = (String) jsonObject.get("CustomerID");
-                String date = (String) jsonObject.get("Date");
+                String doctorName = (String) jsonObject.get("doctorName");
+                String prescriptionID = (String) jsonObject.get("prescriptionID");
+                String customerID = (String) jsonObject.get("customerID");
+                String date = (String) jsonObject.get("date");
+				String prescriptionFileLocation = (String) jsonObject.get("prescription_file_location") ;
                 LocalDate dateToPrint = LocalDate.parse(date);
-                
                 ArrayList<Medication> medications = new ArrayList<>();
                 
-                JSONArray medicationsArray = (JSONArray) jsonObject.get("Medications");
+                JSONArray medicationsArray = (JSONArray) jsonObject.get("medications");
 
                 for (Object medObj : medicationsArray) {
                     JSONObject medication = (JSONObject) medObj;
@@ -179,7 +216,7 @@ public class Prescription {
 					// TODO: Add code to get medication ID, name and quantity
 					// medication quantity should be casted to int
                     // also medication ID and name should be casted to String
-					String medicationID= medication.get("id").toString();
+					String medicationID= medication.get("ID").toString();
 					String medicationName = medication.get("name").toString();
 					Integer quantity = Integer.parseInt(medication.get("quantity").toString());
 					boolean processedStatus = Boolean.parseBoolean(medication.get("processedStatus").toString());
@@ -188,7 +225,7 @@ public class Prescription {
 					medications.add(new Medication(medicationID,medicationName,details,dosage,quantity,processedStatus));
                 }
 
-                prescriptions.add(new Prescription(prescriptionID,customerID, doctorName, dateToPrint, medications));
+                prescriptions.add(new Prescription(prescriptionID,customerID, doctorName, dateToPrint, medications,prescriptionFileLocation));
 
             }
             return prescriptions;
