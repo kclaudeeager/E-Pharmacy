@@ -1,28 +1,25 @@
+import org.json.simple.parser.ParseException;
+
+import java.awt.*;
 import java.io.*;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Random;
-import java.util.Scanner;
 import java.util.UUID;
-
-import org.json.simple.parser.ParseException;
-import org.json.simple.JSONArray;
-import org.json.simple.JSONObject;
-import java.awt.Desktop;
-
-import org.json.simple.parser.JSONParser;
 
 public class PrescriptionManagement {
 
-   public static void main(String[] args) throws NumberFormatException {
+
+   public static void main(String[] args) throws NumberFormatException, IOException {
 
        try{
            BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
-           int choice = -1, numMedications=1;
+           int choice, numMedications;
            String customerId = generateId();
-
+           ArrayList<Medication> availableMedications = Medication.getAvailableMedications("products.json");
+           displayMedications(availableMedications);
            while(true) {
 
                // TODO: Add code to display the menu and get the number(choice) a user slected
@@ -37,23 +34,32 @@ public class PrescriptionManagement {
                        Prescription prescription = new Prescription();
                        numMedications = getIntPrompt("Enter the number of medications to add:", reader);
                        ArrayList<Medication> medications = new ArrayList<>();
-                       String dosage = null, medicationID = null;
-                       int quantity = 0;
-                       String medicationName, medicationDetails;
+                       String medicationName;
                        // TODO: Add code to display available products/medications before adding them on the prescription
+
                        for (int i = 1; i <= numMedications; i++) {
 
                            System.out.println("Enter details for Medication " + i + ":");
 
                            // TODO: Add code to get Medication ID, Name, Details, Dosage and Quantity
-                           medicationName = getStringPrompt("Enter medication name:", reader);
-                           medicationDetails = getStringPrompt("Enter medication details:", reader);
-                           dosage = getStringPrompt("Enter medecine dosage:", reader);
-                           medicationID = generateId();
-                           quantity = getIntPrompt("Enter quatity", reader);
-                           Medication medication = new Medication(medicationID, medicationName, dosage, quantity, medicationDetails);
-                           medication.setProcessedStatus(false);
-                           medications.add(medication);
+                           System.out.println("Choose how you want to search.\n 1 by name\n 2 by brand\n 3 by category\n");
+                           int searchMethod = getIntPrompt("Enter your search choice",reader);
+                           String searchBy = Medication.getSearchChoice(searchMethod);
+                           medicationName = getStringPrompt("Enter medication "+ searchBy+" :", reader);
+                           ArrayList<Medication> matchingMedications = Medication.searchMedications(availableMedications,searchBy,medicationName);
+                           for (int j=0; j<matchingMedications.size();j++){
+                              System.out.println("Enter "+(j+1)+" for "+matchingMedications.get(j).toJson());
+                          }
+                           int chosenMedication = getIntPrompt("Enter your choice",reader);
+                           if(chosenMedication <= 0 || chosenMedication>matchingMedications.size()){
+                               System.err.println("Invalid choice");
+                           }
+                           else {
+                               Medication medication = matchingMedications.get(chosenMedication-1);
+                               medication.setProcessedStatus(false);
+                               medications.add(medication);
+                           }
+//
                        }
                        String doctorName = getStringPrompt("Enter doctor name", reader);
                        String fileLocation = getStringPrompt("Enter prescription file location", reader);
@@ -78,7 +84,6 @@ public class PrescriptionManagement {
 
                            for (Prescription p : prescriptions) {
                                System.out.println("|\t  " + p.getPrescriptionID() + "\t\t" + p.getDoctorName() + "\t\t  " + p.getCustomerID() + "\t\t" + p.getDate());
-                               System.out.println("");
                                System.out.println("| MedicationID |  \tName    | \t Quantity | ");
                                for (Medication med : p.getMedications()) {
                                    System.out.println("|\t  " + med.getID() + "\t\t" + med.getName() + "\t\t " + med.getQuantity());
@@ -131,7 +136,7 @@ public class PrescriptionManagement {
                            System.out.println("==============================");
                        }
 
-//          
+//
                        if(resultList.size()==1){
 
                            resultList.get(0).deletePrescription();
@@ -167,8 +172,9 @@ public class PrescriptionManagement {
                }
            }
        } catch (Exception e) {
-           throw new NumberFormatException(""+e.getMessage());
+           System.err.println("Exception: "+e.getMessage());
        }
+
    }
 
     private static String generateId(int size){
@@ -190,31 +196,17 @@ public class PrescriptionManagement {
     }
 
    
-   public static void displayMedications(String filePath) throws FileNotFoundException, IOException, ParseException {
-	   
-                  FileHandler fileHandler = new FileHandler(filePath);
-	              JSONArray jsonArray = fileHandler.readJSONArrayFromFile();
+            public static void displayMedications(ArrayList<Medication> availableMedications) {
+
                   System.out.println("---------------------------------------------------------------------------------------");
                   System.out.println("|\t"  + "\t\t  "  + "\t\t\t\t");
                   System.out.println("|\t" + "\t\t"  +  "Available Medications" + "\t\t");
                   System.out.println("|\t"  + "\t\t  "  + "\t\t\t\t");
                   System.out.println("---------------------------------------------------------------------------------------");
-                  System.out.println("| Medication ID |  Medication Name   |    Medication Price ||    Medication Quantity |");
+                  //System.out.println("| Medication ID |  Medication Name   |    Medication Price ||    Medication Quantity |   | Details    |");
                   System.out.println("---------------------------------------------------------------------------------------");
-                  
-	              for (Object obj: jsonArray) {
-	                  JSONObject jsonObject = (JSONObject) obj;
-	                  
-                    // TODO: Add code to get medication ID (it's named as code from medications/products file), name, price and quantity
-                    // medication ID, name, price and quantity should be casted to String
-
-                      
-                      //System.out.println("|\t" + medicationID + "\t\t" + medicationName + "\t\t  " + medicationPrice + "\t\t\t  " + medicationQuantity + "\t\t");
-	                  
-	              }
+                  availableMedications.forEach(medication -> System.out.println(medication.Description()));
                   System.out.println("---------------------------------------------------------------------------------------");
-
-	              
 	          }  
 
 

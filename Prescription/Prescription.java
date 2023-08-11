@@ -274,7 +274,7 @@ public class Prescription {
 			System.out.println("Enter the name of the doctor: ");
 			name = reader.nextLine();
 			for (Prescription p : prescriptionsList){
-				if (p.getDoctorName().contains(name)){
+				if (p.getDoctorName().toLowerCase().contains(name.toLowerCase())){
 					foundList.add(p);
 				}
 			}
@@ -286,7 +286,7 @@ public class Prescription {
 			name = reader.nextLine();
 			for (Prescription p : prescriptionsList){
 				for(Medication m: p.getMedications()){
-					if (m.getName().contains(name)){
+					if (m.getName().toLowerCase().contains(name.toLowerCase())){
 						foundList.add(p);
 					}
 				}
@@ -300,7 +300,7 @@ public class Prescription {
 			System.out.println("Doctor's name: " + p.getDoctorName());
 			System.out.println("Prescription of Dr." + p.getDoctorName() + " are shown below.");
 			System.out.println("---------------------------------------------------");
-			if (p.getMedications().size() <= 0){
+			if (p.getMedications().size() == 0){
 				System.out.println("No medication has been given for this prescription.");
 			}else{
 				for (Medication m : p.getMedications()){
