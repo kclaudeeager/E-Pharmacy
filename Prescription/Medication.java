@@ -1,4 +1,10 @@
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
+
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.stream.Collectors;
 
 public class Medication {
 
@@ -7,7 +13,68 @@ public class Medication {
    private String details;
    private String dosage;
    private int quantity;
+
+   private String category;
+   private double price;
+   private String brand;
+
+   public String getCategory() {
+      return category;
+   }
+
+   public void setCategory(String category) {
+      this.category = category;
+   }
+
+   public double getPrice() {
+      return price;
+   }
+
+   public void setPrice(double price) {
+      this.price = price;
+   }
+
+   public Medication(String ID, String name, String details, String dosage, int quantity, String category, double price,String brand) {
+      this.ID = ID;
+      this.name = name;
+      this.details = details;
+      this.dosage = dosage;
+      this.quantity = quantity;
+      this.category = category;
+      this.price = price;
+      this.processedStatus = false;
+      this.brand=brand;
+   }
+
    private Boolean processedStatus;
+   //{"code":"PN9J","name":"Panadol","brand":"ChengPharma","description":"For temperature control","dosage_instruction":"2/3 per day","price":"590","quantity":"1000","category":"Flu"}
+
+   @Override
+   public String toString() {
+      return "Medication{" +
+              "ID='" + ID + '\'' +
+              ", name='" + name + '\'' +
+              ", details='" + details + '\'' +
+              ", dosage='" + dosage + '\'' +
+              ", quantity=" + quantity +
+              ", category='" + category + '\'' +
+              ", price=" + price +
+              ", brand='" + brand + '\'' +
+              ", processedStatus=" + processedStatus +
+              '}';
+   }
+   public String Description(){
+      return "Medication{" +
+              "code='" + ID + '\'' +
+              ", name='" + name + '\'' +
+              ", details='" + details + '\'' +
+              ", dosage='" + dosage + '\'' +
+              ", quantity=" + quantity +
+              ", category='" + category + '\'' +
+              ", price=" + price +
+              ", brand='" + brand +
+              '}';
+   }
 
    public JSONObject toJson() {
       JSONObject jsonObject = new JSONObject();
@@ -17,7 +84,63 @@ public class Medication {
       jsonObject.put("dosage", dosage);
       jsonObject.put("quantity", quantity);
       jsonObject.put("processedStatus", processedStatus);
+      jsonObject.put("category",category);
+      jsonObject.put("price",price);
       return jsonObject;
+   }
+
+   public static ArrayList<Medication> getAvailableMedications(String filePath) throws IOException, ParseException {
+      FileHandler fileHandler = new FileHandler(filePath);
+      JSONArray jsonArray = fileHandler.readJSONArrayFromFile();
+      ArrayList<Medication> availableMedications = new ArrayList<>();
+      for (Object obj: jsonArray) {
+         JSONObject jsonObject = (JSONObject) obj;
+
+         // TODO: Add code to get medication ID (it's named as code from medications/products file), name, price and quantity
+         String medicationID = jsonObject.get("code").toString();
+         String medicationName = jsonObject.get("name").toString();
+         String medicationPrice = jsonObject.get("price").toString();
+         String medicationQuantity = jsonObject.get("quantity").toString();
+         String medicationDetails = jsonObject.get("description").toString();
+         String medicationDosage = jsonObject.get("dosage_instruction").toString();
+         String medicationCategory = jsonObject.get("category").toString();
+         String medicationBrand = jsonObject.get("brand").toString();
+         Medication medication = new Medication(medicationID,medicationName,medicationDetails,medicationDosage,Integer.parseInt(medicationQuantity),medicationCategory,Double.parseDouble(medicationPrice),medicationBrand) ;
+         availableMedications.add(medication);
+      }
+      return availableMedications;
+   }
+
+   public static ArrayList<Medication> searchMedications(ArrayList<Medication> allMedications,String by,String text){
+      //TODO: Search medication based on by and written text
+      ArrayList<Medication> matchingList = new ArrayList<>();
+      switch (by){
+         case "name" ->{
+            matchingList.addAll(allMedications.stream().filter(medication -> medication.name.toLowerCase().contains(text.toLowerCase())).toList());
+         }
+         case "brand" ->{
+            matchingList.addAll(allMedications.stream().filter(medication -> medication.brand.toLowerCase().contains(text.toLowerCase())).toList());
+         }
+         case "category" ->{
+            matchingList.addAll(allMedications.stream().filter(medication -> medication.category.toLowerCase().contains(text.toLowerCase())).toList());
+         }
+      }
+      return  matchingList;
+   }
+   public static String getSearchChoice(int choice){
+
+      switch (choice){
+         case 2 ->{
+            return "brand";
+         }
+         case 3 ->{
+            return "category";
+         }
+         default -> {
+            return "name";
+         }
+      }
+
    }
    public Medication() {
 	   this.processedStatus = false;
@@ -40,18 +163,6 @@ public class Medication {
       this.quantity = quantity;
       this.dosage=dosage;
       this.details = details;
-   }
-
-   @Override
-   public String toString() {
-      return "Medication{" +
-              "ID='" + ID + '\'' +
-              ", name='" + name + '\'' +
-              ", details='" + details + '\'' +
-              ", dosage='" + dosage + '\'' +
-              ", quantity=" + quantity +
-              ", processedStatus=" + processedStatus +
-              '}';
    }
 
    public Medication(String ID, String name, String details, String dosage, int quantity, Boolean processedStatus) {
