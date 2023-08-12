@@ -1,10 +1,11 @@
-import org.json.simple.parser.ParseException;
-
 import java.awt.*;
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.nio.charset.StandardCharsets;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
 import java.util.UUID;
@@ -93,6 +94,8 @@ public class PrescriptionManagement {
                                System.err.println("Invalid choice");
                            } else {
                                Medication medication = matchingMedications.get(chosenMedication-1);
+                               int quantity = getIntPrompt("Enter the quantity:",reader);
+                               medication.setQuantity(quantity);
                                medication.setProcessedStatus(false);
                                medications.add(medication);
                            }
@@ -106,7 +109,7 @@ public class PrescriptionManagement {
                        prescription.setPrescriptionFileLocation(fileLocation);
                        prescription.setCustomerID(customerId);
                        // TODO: Add code to save all medications inserted by the user on the prescription
-                       prescription.setDate(LocalDate.now());
+                       prescription.setDate(LocalDateTime.now());
                        prescription.setPrescriptionID(generateId());
                        prescription.setMedications(medications);
                        prescription.addPrescription();
@@ -176,77 +179,80 @@ public class PrescriptionManagement {
                        }
 
 //
-                       if(resultList.size()==1){
+                        if (resultList.size() == 1) {
 
-                           resultList.get(0).deletePrescription();
-                       }
-                   }
+                            resultList.get(0).deletePrescription();
+                        }
+                    }
 
-                   case 4 -> {
-                       //		get all list from the file
-                       int userInput = 0;
-                       System.out.println("=========================================");
-                       System.out.println("Select the field your want to search with:");
-                       System.out.println("=========================================");
-                       while (userInput < 1 || userInput > 2) {
-                           System.out.println("You can search by: \n 1. Doctor's name \n 2. Medication name");
-                           System.out.println("----------------------------");
-                           userInput = getIntPrompt("Enter your choice 1 or 2: ",reader);
-                           System.out.println("----------------------------");
-                           // search for product
-                       }
-                       ArrayList<Prescription> resultList = Prescription.searchPrescription(userInput);
-                       if (resultList.size() == 0) {
-                           System.out.println("Not match found");
-                           System.out.println("==============================");
-                       }
-                   }
+                    case 4 -> {
+                        //		get all list from the file
+                        int userInput = 0;
+                        System.out.println("=========================================");
+                        System.out.println("Select the field your want to search with:");
+                        System.out.println("=========================================");
+                        while (userInput < 1 || userInput > 2) {
+                            System.out.println("You can search by: \n 1. Doctor's name \n 2. Medication name");
+                            System.out.println("----------------------------");
+                            userInput = getIntPrompt("Enter your choice 1 or 2: ", reader);
+                            System.out.println("----------------------------");
+                            // search for product
+                        }
+                        ArrayList<Prescription> resultList = Prescription.searchPrescription(userInput);
+                        if (resultList.size() == 0) {
+                            System.out.println("Not match found");
+                            System.out.println("==============================");
+                        }
+                    }
 
-                   case 5 ->{
-                       System.out.println("Exiting the Precription Management section...");
-                       System.exit(0);
-                   }
+                    case 5 -> {
+                        System.out.println("Exiting the Precription Management section...");
+                        System.exit(0);
+                    }
 
-                   default -> System.out.println("Invalid choice. Please try again.");
-               }
-           }
-       } catch (Exception e) {
-           System.err.println("Exception: "+e.getMessage());
-       }
+                    default -> System.out.println("Invalid choice. Please try again.");
+                }
+            }
+        } catch (Exception e) {
+            System.err.println("Exception: " + e.getMessage());
+        }
 
-   }
+    }
 
-    private static String generateId(int size){
+    private static String generateId(int size) {
         byte[] array = new byte[size];
         new Random().nextBytes(array);
         return new String(array, StandardCharsets.UTF_8);
     }
-    public static String generateId(){
-       String uuid = UUID.randomUUID().toString();
-       return uuid.substring(0,8);
+
+    public static String generateId() {
+        String uuid = UUID.randomUUID().toString();
+        return uuid.substring(0, 8);
     }
-    private static String getStringPrompt(String prompt,BufferedReader reader) throws IOException {
+
+    private static String getStringPrompt(String prompt, BufferedReader reader) throws IOException {
         System.out.println(prompt);
         return reader.readLine();
     }
+
     private static Integer getIntPrompt(String prompt, BufferedReader reader) throws IOException {
         System.out.println(prompt);
         return Integer.valueOf(reader.readLine());
     }
 
-   
-            public static void displayMedications(ArrayList<Medication> availableMedications) {
 
-                  System.out.println("---------------------------------------------------------------------------------------");
-                  System.out.println("|\t"  + "\t\t  "  + "\t\t\t\t");
-                  System.out.println("|\t" + "\t\t"  +  "Available Medications" + "\t\t");
-                  System.out.println("|\t"  + "\t\t  "  + "\t\t\t\t");
-                  System.out.println("---------------------------------------------------------------------------------------");
-                  //System.out.println("| Medication ID |  Medication Name   |    Medication Price ||    Medication Quantity |   | Details    |");
-                  System.out.println("---------------------------------------------------------------------------------------");
-                  availableMedications.forEach(medication -> System.out.println(medication.Description()));
-                  System.out.println("---------------------------------------------------------------------------------------");
-	          }  
+    public static void displayMedications(ArrayList<Medication> availableMedications) {
+
+        System.out.println("---------------------------------------------------------------------------------------");
+        System.out.println("|\t" + "\t\t  " + "\t\t\t\t");
+        System.out.println("|\t" + "\t\t" + "Available Medications" + "\t\t");
+        System.out.println("|\t" + "\t\t  " + "\t\t\t\t");
+        System.out.println("---------------------------------------------------------------------------------------");
+        //System.out.println("| Medication ID |  Medication Name   |    Medication Price ||    Medication Quantity |   | Details    |");
+        System.out.println("---------------------------------------------------------------------------------------");
+        availableMedications.forEach(medication -> System.out.println(medication.Description()));
+        System.out.println("---------------------------------------------------------------------------------------");
+    }
 
 
 }
