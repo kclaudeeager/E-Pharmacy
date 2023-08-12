@@ -73,6 +73,8 @@ public class Prescription {
 		return jsonObject;
 	}
 
+
+
 	public Prescription() {
 		   prescriptionList = new JSONArray();
 	   }
@@ -85,8 +87,6 @@ public class Prescription {
 	       medications = _medication;
 	       date = LocalDate.now();
 	   }
-
-
 
 	// TODO: Add code to help you to create object/instance for this class in different way
 
@@ -175,9 +175,6 @@ public class Prescription {
 		// TODO: Add code to help you viewing all prescriptions in the file
 		// You must return an array of prescriptions
 
-
-
-		
 	public void addPrescription() throws Exception {
 		JSONArray existingPrescriptions = fileHandler.readJSONArrayFromFile();
 		System.out.println(existingPrescriptions.toJSONString());
@@ -316,6 +313,7 @@ public class Prescription {
 						"|" + cutAndPadLeftAlign(String.valueOf(m.getQuantity())) +
 						"|" + cutAndPadLeftAlign(m.getProcessedStatus() ? "yes" : "no")
 				);
+				System.out.println("==============================================");
 			}
 			}
 		}
