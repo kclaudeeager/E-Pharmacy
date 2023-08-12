@@ -178,23 +178,26 @@ public class PrescriptionManagement {
                             System.out.println("==============================");
                         }
                         int index = 1;
+
                         for (Prescription p : resultList){
                             System.out.println("ID: " + index++);
                             System.out.println("Doctor's name: " + p.getDoctorName());
                             System.out.println("Prescription of Dr." + p.getDoctorName() + " are shown below.");
                             System.out.println("--------------------------------------------");
                             displayMedications(p.getMedications());
-                            if (p.getMedications().size() != 0){
-                                int option;
-                                option =getIntPrompt("Enter doctor's ID: ",reader);
-                                while (option <= 0 || option > resultList.size()){
-                                    option =getIntPrompt("Enter doctor's ID: ",reader);
-                                }
 
-                                resultList.get(option - 1).deletePrescription();
-                                System.out.println("Prescription deleted successfully");
-                            }
                         }
+
+                        int option = 0;
+                        option =getIntPrompt("Enter doctor's ID: ",reader);
+                        while (option <= 0 || option > resultList.size()){
+                            option =getIntPrompt("Enter doctor's ID: ",reader);
+                        }
+
+                        resultList.get(option - 1).deletePrescription();
+                        System.out.println("Prescription deleted successfully");
+
+
 
                     }
 
@@ -209,6 +212,7 @@ public class PrescriptionManagement {
                             System.out.println("----------------------------");
                             userInput = getIntPrompt("Enter your choice 1 or 2: ", reader);
                             System.out.println("----------------------------");
+
                             // search for product
                         }
                         ArrayList<Prescription> resultList = Prescription.searchPrescription(userInput);
