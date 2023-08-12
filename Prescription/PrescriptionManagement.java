@@ -1,4 +1,5 @@
 import java.awt.*;
+import java.awt.desktop.SystemSleepEvent;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
@@ -8,6 +9,7 @@ import java.nio.charset.StandardCharsets;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Scanner;
 import java.util.UUID;
 
 public class PrescriptionManagement {
@@ -176,11 +178,51 @@ public class PrescriptionManagement {
                            System.out.println("Not match found");
                            System.out.println("==============================");
                        }
+                        int index = 1;
+                       for (Prescription p : resultList){
+                           System.out.println("ID: " + index++);
+                           System.out.println("Doctor's name: " + p.getDoctorName());
+                           System.out.println("Prescription of Dr." + p.getDoctorName() + " are shown below.");
+                           System.out.println("--------------------------------------------");
+                           if (p.getMedications().size() == 0){
+                               System.out.println("No medication has been given for this prescription.");
+                           }else{
+                               for (Medication m : p.getMedications()){
+                                   System.out.println("|" + Prescription.cutAndPadLeftAlign("Name") +
+                                           "|" + Prescription.cutAndPadLeftAlign("Dosage") +
+                                           "|" + Prescription.cutAndPadLeftAlign("Quantity") +
+                                           "|" + Prescription.cutAndPadLeftAlign("Processed")
+                                   );
+                                   System.out.println("---------------------------------------------");
+                                   System.out.println(
+                                           "|" + Prescription.cutAndPadLeftAlign(m.getName()) +
+                                                   "|" + Prescription.cutAndPadLeftAlign(m.getDosage()) +
+                                                   "|" + Prescription.cutAndPadLeftAlign(String.valueOf(m.getQuantity())) +
+                                                   "|" + Prescription.cutAndPadLeftAlign(m.getProcessedStatus() ? "yes" : "no")
+                                   );
+                                   System.out.println("==============================================");
+                               }
+                               int option = 0;
+                               Scanner input = new Scanner(System.in);
+                               System.out.println("Enter doctor's ID: ");
+                               option = input.nextInt();
+                               while (option <= 0 || option > resultList.size()){
+                                   System.out.println("Enter doctor's ID: ");
+                                   option = input.nextInt();
+                               }
 
-                        if (resultList.size() == 1) {
+                               resultList.get(option - 1).deletePrescription();
+                               System.out.println("Prescription deleted successfully");
+                           }
+                       }
 
-                            resultList.get(0).deletePrescription();
-                        }
+
+//                       for (Prescription p : resultList){
+//                           System.out.println(p.getDoctorName() + " doctor's name");
+//                       }
+//                        if (resultList.size() == 1) {
+//                            resultList.get(0).deletePrescription();
+//                        }
                     }
 
                     case 4 -> {
@@ -200,6 +242,31 @@ public class PrescriptionManagement {
                         if (resultList.size() == 0) {
                             System.out.println("Not match found");
                             System.out.println("==============================");
+                        }else {
+                            for (Prescription p : resultList){
+                                System.out.println("Doctor's name: " + p.getDoctorName());
+                                System.out.println("Prescription of Dr." + p.getDoctorName() + " are shown below.");
+                                System.out.println("-----------------------------------------------");
+                                if (p.getMedications().size() == 0){
+                                    System.out.println("No medication has been given for this prescription.");
+                                }else{
+                                    for (Medication m : p.getMedications()){
+                                    System.out.println("|" + Prescription.cutAndPadLeftAlign("Name") +
+                                            "|" + Prescription.cutAndPadLeftAlign("Dosage") +
+                                            "|" + Prescription.cutAndPadLeftAlign("Quantity") +
+                                            "|" + Prescription.cutAndPadLeftAlign("Processed")
+                                    );
+                                    System.out.println("---------------------------------------------");
+                                    System.out.println(
+                                            "|" + Prescription.cutAndPadLeftAlign(m.getName()) +
+                                            "|" + Prescription.cutAndPadLeftAlign(m.getDosage()) +
+                                            "|" + Prescription.cutAndPadLeftAlign(String.valueOf(m.getQuantity())) +
+                                            "|" + Prescription.cutAndPadLeftAlign(m.getProcessedStatus() ? "yes" : "no")
+                                    );
+                                    System.out.println("==============================================");
+                                }
+                                }
+                            }
                         }
                     }
 
