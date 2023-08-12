@@ -36,5 +36,24 @@
       }
     ],
     "customerID": "31af5639"
+  },
+  {
+    "date": "2023-08-12 12:22:47",
+    "prescription_file_location": "https:\/\/github.com\/kclaudeeager\/E-Pharmacy",
+    "prescriptionID": "2e3cbef8",
+    "doctorName": "Kagoyire",
+    "medications": [
+      {
+        "dosage": "2\/3 per day",
+        "quantity": 14,
+        "processedStatus": false,
+        "price": 590.0,
+        "name": "Panadol",
+        "details": "For temperature control",
+        "ID": "PN9J",
+        "category": "Flu"
+      }
+    ],
+    "customerID": "163eedba"
   }
 ]

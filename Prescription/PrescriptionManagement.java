@@ -94,6 +94,8 @@ public class PrescriptionManagement {
                                System.err.println("Invalid choice");
                            } else {
                                Medication medication = matchingMedications.get(chosenMedication-1);
+                               int quantity = getIntPrompt("Enter the quantity:",reader);
+                               medication.setQuantity(quantity);
                                medication.setProcessedStatus(false);
                                medications.add(medication);
                            }
@@ -107,7 +109,7 @@ public class PrescriptionManagement {
                        prescription.setPrescriptionFileLocation(fileLocation);
                        prescription.setCustomerID(customerId);
                        // TODO: Add code to save all medications inserted by the user on the prescription
-                       prescription.setDate(LocalDate.now());
+                       prescription.setDate(LocalDateTime.now());
                        prescription.setPrescriptionID(generateId());
                        prescription.setMedications(medications);
                        prescription.addPrescription();
