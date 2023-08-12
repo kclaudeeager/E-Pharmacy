@@ -4,7 +4,6 @@ import org.json.simple.parser.ParseException;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.stream.Collectors;
 
 public class Medication {
 
@@ -115,15 +114,10 @@ public class Medication {
       //TODO: Search medication based on by and written text
       ArrayList<Medication> matchingList = new ArrayList<>();
       switch (by){
-         case "name" ->{
-            matchingList.addAll(allMedications.stream().filter(medication -> medication.name.toLowerCase().contains(text.toLowerCase())).toList());
-         }
-         case "brand" ->{
-            matchingList.addAll(allMedications.stream().filter(medication -> medication.brand.toLowerCase().contains(text.toLowerCase())).toList());
-         }
-         case "category" ->{
-            matchingList.addAll(allMedications.stream().filter(medication -> medication.category.toLowerCase().contains(text.toLowerCase())).toList());
-         }
+         case "name" -> matchingList.addAll(allMedications.stream().filter(medication -> medication.name.toLowerCase().contains(text.toLowerCase())).toList());
+         case "brand" -> matchingList.addAll(allMedications.stream().filter(medication -> medication.brand.toLowerCase().contains(text.toLowerCase())).toList());
+         case "category" -> matchingList.addAll(allMedications.stream().filter(medication -> medication.category.toLowerCase().contains(text.toLowerCase())).toList());
+         default -> System.err.println("Invalid choice");
       }
       return  matchingList;
    }

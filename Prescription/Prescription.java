@@ -2,10 +2,9 @@ import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 
-import javax.print.attribute.standard.Media;
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.Scanner;
@@ -17,13 +16,13 @@ public class Prescription {
 	   private String doctorName;
 	   private String prescriptionFileLocation;
 	   private ArrayList<Medication> medications;
-	   private LocalDate date;
+	   private LocalDateTime date;
 	   private static JSONArray prescriptionList;
 	   private static final FileHandler fileHandler = new FileHandler();
 
 
 
-	public Prescription(String prescriptionID, String customerID, String doctorName, LocalDate dateToPrint, ArrayList<Medication> medications, String prescriptionFileLocation) {
+	public Prescription(String prescriptionID, String customerID, String doctorName, LocalDateTime dateToPrint, ArrayList<Medication> medications, String prescriptionFileLocation) {
 		this.prescriptionID = prescriptionID;
 		this.customerID = customerID;
 		this.doctorName = doctorName;
@@ -67,12 +66,21 @@ public class Prescription {
 		for (Medication medication : this.medications) {
 			medicationsArray.add(medication.toJson());
 		}
+
 		jsonObject.put("medications", medicationsArray);
-		jsonObject.put("date", this.getDate().toString());
+		jsonObject.put("date", dateFormat(this.getDate()));
 
 		return jsonObject;
 	}
 
+	public static String dateFormat(LocalDateTime localDateTime){
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		return localDateTime.format(formatter);
+	}
+	public static LocalDateTime parseDate(String date){
+		DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+		return LocalDateTime.parse(date,formatter);
+	}
 	public Prescription() {
 		   prescriptionList = new JSONArray();
 	   }
@@ -83,14 +91,14 @@ public class Prescription {
 	       customerID = _customerID;
 	       doctorName = _doctorName;
 	       medications = _medication;
-	       date = LocalDate.now();
+	       date = LocalDateTime.now();
 	   }
 
 
 
 	// TODO: Add code to help you to create object/instance for this class in different way
 
-	public Prescription(String _prescriptionID, String _customerID, String _doctorName, LocalDate date,ArrayList<Medication> _medication)
+	public Prescription(String _prescriptionID, String _customerID, String _doctorName, LocalDateTime date,ArrayList<Medication> _medication)
 	{
 		prescriptionID = _prescriptionID;
 		customerID = _customerID;
@@ -111,7 +119,7 @@ public class Prescription {
 		this.medications = medications;
 	}
 
-	public void setDate(LocalDate date) {
+	public void setDate(LocalDateTime date) {
 		this.date = date;
 	}
 
@@ -139,7 +147,7 @@ public class Prescription {
 		return medications;
 	}
 
-	public LocalDate getDate() {
+	public LocalDateTime getDate() {
 		return date;
 	}
 
@@ -212,7 +220,7 @@ public class Prescription {
 			String customerID = (String) jsonObject.get("customerID");
 			String date = (String) jsonObject.get("date");
 			String prescriptionFileLocation = (String) jsonObject.get("prescription_file_location") ;
-			LocalDate dateToPrint = LocalDate.parse(date);
+			LocalDateTime dateToPrint = parseDate(date);
 			ArrayList<Medication> medications = new ArrayList<>();
 
 			JSONArray medicationsArray = (JSONArray) jsonObject.get("medications");
@@ -255,9 +263,19 @@ public class Prescription {
 		}
 
 		if (indexToDelete != -1) {
+			JSONObject prescriptionToDelete = (JSONObject) existingPrescriptions.get(indexToDelete);
+			saveArchive(prescriptionToDelete);
 			existingPrescriptions.remove(indexToDelete);
 			fileHandler.writeJSONArrayToFile(existingPrescriptions);
 		}
+	}
+
+	private void saveArchive(JSONObject deletedPrescription) throws IOException, ParseException {
+		FileHandler fHandler = new FileHandler("archived_prescriptions.json");
+		JSONArray existingPrescriptions = fHandler.readJSONArrayFromFile();
+		deletedPrescription.put("deletedAt", dateFormat(LocalDateTime.now()));
+		existingPrescriptions.add(deletedPrescription);
+		fHandler.writeJSONArrayToFile(existingPrescriptions);
 	}
 
 	// create function to search for prescription
