@@ -5,8 +5,13 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="fa80f995-a8ba-4696-b02d-fa4f93a9864c" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PrescriptionManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionManagement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/archived_prescriptions.json" beforeDir="false" afterPath="$PROJECT_DIR$/archived_prescriptions.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Prescription/Medication.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Prescription/Medication.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Prescription/Prescription.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Prescription/Prescription.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Prescription/PrescriptionManagement.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Prescription/PrescriptionManagement.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Prescription/prescriptions.json" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Prescription/prescriptions.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prescriptions.json" beforeDir="false" afterPath="$PROJECT_DIR$/prescriptions.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />

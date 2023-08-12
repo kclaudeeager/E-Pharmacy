@@ -47,7 +47,6 @@ public class PrescriptionManagement {
                            break;
                        }
 
-
                        ArrayList<Medication> medications = new ArrayList<>();
                        String medicationName;
                        // TODO: Add code to display available products/medications before adding them on the prescription
@@ -178,7 +177,6 @@ public class PrescriptionManagement {
                            System.out.println("==============================");
                        }
 
-//
                         if (resultList.size() == 1) {
 
                             resultList.get(0).deletePrescription();
