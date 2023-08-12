@@ -293,6 +293,7 @@ public class Prescription {
 			name = reader.nextLine();
 			for (Prescription p : prescriptionsList){
 				if (p.getDoctorName().toLowerCase().contains(name.toLowerCase())){
+					System.out.println("logged*****");
 					foundList.add(p);
 				}
 			}
