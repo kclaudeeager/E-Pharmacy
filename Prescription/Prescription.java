@@ -314,32 +314,31 @@ public class Prescription {
 
 		}
 
-		for (Prescription p : foundList){
-			System.out.println("Doctor's name: " + p.getDoctorName());
-			System.out.println("Prescription of Dr." + p.getDoctorName() + " are shown below.");
-			System.out.println("---------------------------------------------------");
-			if (p.getMedications().size() == 0){
-				System.out.println("No medication has been given for this prescription.");
-			}else{
-				for (Medication m : p.getMedications()){
-				System.out.println("|" + cutAndPadLeftAlign("Name") +
-						"|" + cutAndPadLeftAlign("Dosage") +
-						"|" + cutAndPadLeftAlign("Quantity") +
-						"|" + cutAndPadLeftAlign("Processed")
-				);
-				System.out.println("---------------------------------------------");
-				System.out.println(
-						"|" + cutAndPadLeftAlign(m.getName()) +
-						"|" + cutAndPadLeftAlign(m.getDosage()) +
-						"|" + cutAndPadLeftAlign(String.valueOf(m.getQuantity())) +
-						"|" + cutAndPadLeftAlign(m.getProcessedStatus() ? "yes" : "no")
-				);
-				System.out.println("==============================================");
-			}
-			}
-		}
+//		for (Prescription p : foundList){
+//			System.out.println("Doctor's name: " + p.getDoctorName());
+//			System.out.println("Prescription of Dr." + p.getDoctorName() + " are shown below.");
+//			System.out.println("---------------------------------------------------");
+//			if (p.getMedications().size() == 0){
+//				System.out.println("No medication has been given for this prescription.");
+//			}else{
+//				for (Medication m : p.getMedications()){
+//				System.out.println("|" + cutAndPadLeftAlign("Name") +
+//						"|" + cutAndPadLeftAlign("Dosage") +
+//						"|" + cutAndPadLeftAlign("Quantity") +
+//						"|" + cutAndPadLeftAlign("Processed")
+//				);
+//				System.out.println("---------------------------------------------");
+//				System.out.println(
+//						"|" + cutAndPadLeftAlign(m.getName()) +
+//						"|" + cutAndPadLeftAlign(m.getDosage()) +
+//						"|" + cutAndPadLeftAlign(String.valueOf(m.getQuantity())) +
+//						"|" + cutAndPadLeftAlign(m.getProcessedStatus() ? "yes" : "no")
+//				);
+//				System.out.println("==============================================");
+//			}
+//			}
+//		}
 
-		System.out.println("======================================------==");
 		return foundList;
 	}
 

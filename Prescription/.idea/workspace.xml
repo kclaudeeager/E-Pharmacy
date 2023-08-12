@@ -6,7 +6,12 @@
   <component name="ChangeListManager">
     <list default="true" id="fa80f995-a8ba-4696-b02d-fa4f93a9864c" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/Prescription.java" beforeDir="false" afterPath="$PROJECT_DIR$/Prescription.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/PrescriptionManagement.java" beforeDir="false" afterPath="$PROJECT_DIR$/PrescriptionManagement.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Prescription/PrescriptionManagement.class" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Prescription/PrescriptionManagement.class" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Prescription/archived_prescriptions.json" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Prescription/archived_prescriptions.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/out/production/Prescription/prescriptions.json" beforeDir="false" afterPath="$PROJECT_DIR$/out/production/Prescription/prescriptions.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/prescriptions.json" beforeDir="false" afterPath="$PROJECT_DIR$/prescriptions.json" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -40,19 +45,24 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent">{
-  &quot;keyToString&quot;: {
-    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
-    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
-    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
-    &quot;WebServerToolWindowFactoryState&quot;: &quot;false&quot;,
-    &quot;last_opened_file_path&quot;: &quot;/Users/claudekwizera/Documents/CMU/Programming assignments/E-Pharmacy/Prescription&quot;,
-    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
-    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
-    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
-    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.pluginManager&quot;
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
+    "WebServerToolWindowFactoryState": "false",
+    "last_opened_file_path": "/Users/claudekwizera/Documents/CMU/Programming assignments/E-Pharmacy/Prescription",
+    "project.structure.last.edited": "Modules",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "preferences.pluginManager"
+  },
+  "keyToStringList": {
+    "com.intellij.ide.scratch.ScratchImplUtil$2/New Scratch File": [
+      "JSON"
+    ]
   }
-}</component>
+}]]></component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="$PROJECT_DIR$" />
