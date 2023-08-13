@@ -4,6 +4,8 @@ import json
 from datetime import datetime
 
 from typing import List
+
+from . import Prescription
 from .sale import Sale
 
 
@@ -32,6 +34,14 @@ class BookRecords:
         # |      # | Date                | Customer   | Medication | Quantity | Purchase Price | Prescription |
         # |      1 | 2023-06-03 21:23:25 | doe        | Quinine    |        3 |       1400 RWF | PHA1         |
 
+        header = "|   # |       Date      | Customer | Medication | Quantity | Purchase Price | Prescription|"
+        header += "\n"
+        stringed_transactions = []
+        for index, transaction in enumerate(self.transactions, start=1):
+            stringed_transactions.append(stringify_transaction(index, transaction))
+
+        return header + "\n".join(stringed_transactions)
+
     def reportOnPrescriptions(self) -> str:
         """Reports on prescription sales.
 
@@ -44,6 +54,24 @@ class BookRecords:
 
         # TODO: output in the following format, the results:
         # |    # | Prescription ID | Total Price |
+        # |    1 | PHA1            |       1400 RWF |
+
+        header = "|    # | Prescription ID | Total Price |"
+        header += "\n"
+        stringed_transactions = []
+        processed_transactions_dicts = []
+
+        for index, transaction in enumerate(self.transactions, start=1):
+            processed_transactions_dict = process_transaction_on_prescription(transaction)
+            if processed_transactions_dict:
+                processed_transactions_dicts.append(processed_transactions_dict)
+
+        # Create a string representation for each prescription entry
+        for index, processed_transaction in enumerate(processed_transactions_dicts, start=1):
+            stringed_transaction = f"| {index:4d} | {processed_transaction['Prescription ID']:16s} | {processed_transaction['Total Price']:11.2f} RWF |"
+            stringed_transactions.append(stringed_transaction)
+
+        return header + "\n".join(stringed_transactions)
 
     def purchasesByUser(self, customerID: str):
         """Reports on the sales performed by a customer.
@@ -51,13 +79,9 @@ class BookRecords:
         Args:
             customerID: Username of the customer.
 
-        Returns: A string representation of the corresponding transactions
-
+        Returns: A string representation of the corresponding transactions.
         """
-        # TODO: Query the transactions to the `transactions` list below
-        transactions = None
-
-        return BookRecords(transactions).__str__()
+        return self.reportSales('customerID', customerID, "No purchases found for this customer.")
 
     def salesByAgent(self, salesperson: str):
         """Reports on the sales performed by a pharmacist.
@@ -65,14 +89,33 @@ class BookRecords:
         Args:
             salesperson: Username of the pharmacist.
 
-        Returns: A string representation of the corresponding transactions
-
+        Returns: A string representation of the corresponding transactions.
         """
-        # TODO: Query the transactions to the `transactions` list below
-        transactions = None
+        return self.reportSales('salesperson', salesperson, "No purchases found for this SalesPerson.")
 
-        # return the string representation
-        return BookRecords(transactions).__str__()
+    def reportSales(self, filter_key: str, filter_value: str, no_results_msg: str):
+        """Reports on the sales based on a specific filter either customer or salesPerson.
+
+        Args:
+            filter_key: Key to filter transactions (e.g., 'customerID', 'salesperson').
+            filter_value: Value to use for filtering.
+            no_results_msg: Message to return when no purchases are found.
+
+        Returns: A formatted string representation of the corresponding transactions.
+        """
+        transactions = [trans for trans in self.transactions if getattr(trans, filter_key) == filter_value]
+        if not transactions:
+            return no_results_msg
+
+        header = "|   # |       Date      | Medication | Quantity | Purchase Price | Prescription |"
+        header += "\n"
+        stringed_transactions = []
+
+        for index, transaction in enumerate(transactions, start=1):
+            stringed_transaction = f"| {index:4d} | {transaction.timestamp} | {transaction.name:10s} | {transaction.quantity:8d} | {transaction.price:13.2f} RWF | {transaction.prescriptionID:13s} |"
+            stringed_transactions.append(stringed_transaction)
+
+        return header + "\n".join(stringed_transactions)
 
     def topNSales(self, start: datetime = datetime.strptime('1970-01-02', '%Y-%m-%d'), end: datetime = datetime.now(),
                   n=10) -> str:
@@ -88,10 +131,29 @@ class BookRecords:
         """
         # TODO: Query the top transactions and save them to the variable `transactions` below
         transactions = None
-
-
         # return the string representation of the transactions.
-        return BookRecords(transactions).__str__()
+        transactions = [
+            transaction for transaction in self.transactions
+            if start.timestamp() <= transaction.timestamp <= end.timestamp()
+        ]
+        if not transactions:
+            return "No sales found."
+
+        top_transactions = sorted(
+            transactions,
+            key=lambda transaction: transaction.price * transaction.quantity, reverse=True
+        )[:n]
+
+        header = "|   # |       Date      | Medication | Quantity | Total Price | Prescription |"
+        header += "\n"
+        stringed_transactions = []
+
+        for index, transaction in enumerate(top_transactions, start=1):
+            total_price = transaction.price * transaction.quantity
+            stringed_transaction = f"| {index:4d} | {transaction.timestamp} | {transaction.name:10s} | {transaction.quantity:8d} | {total_price:11.2f} RWF | {transaction.prescriptionID:13s} |"
+            stringed_transactions.append(stringed_transaction)
+
+        return header + "\n".join(stringed_transactions)
 
     def totalTransactions(self) -> float:
         """Returns the total cost of the transactions considered.
@@ -124,3 +186,41 @@ class BookRecords:
             raise FileNotFoundError(f"Unable to load data from file: {infile}")
         except json.JSONDecodeError:
             raise ValueError(f"Error decoding JSON data in file: {infile}")
+
+
+def stringify_transaction(index, transaction):
+    """Returns a string representation of a transaction.
+
+    Args:
+        index (int): The index of the transaction
+        transaction (Sale): The transaction to be formatted
+
+    Returns: A string
+    """
+    # TODO: In the format below, return a representation of the transactions
+    # |# 1| 2023-06-03 21:23:25 | doe        | Quinine    |        3 |       1400 RWF | PHA1         |
+    return f"|# {index:4d} | {str(transaction.timestamp):19s} | {transaction.customerID:9s} | {transaction.name:10s} | {transaction.quantity:8d} | {transaction.price:13.2f} RWF | {transaction.prescriptionID:12s} |"
+
+
+def process_transaction_on_prescription(transaction):
+    """Process a transaction and return relevant data for the report.
+
+    Args:
+        transaction: The transaction to be processed.
+
+    Returns: A dictionary with processed data or an empty dictionary if not applicable.
+    """
+    processed_transaction = {}
+    prescription = Prescription.get("data/prescription.json", transaction.prescriptionID)
+
+    if prescription is not None:
+        total_processed_medications_amount = 0
+        for medication in prescription.medications:
+            if medication.get("ProcessedStatus", False):
+                total_processed_medications_amount += medication.get("price", 0)
+
+        if total_processed_medications_amount > 0:
+            processed_transaction["Prescription ID"] = transaction.prescriptionID
+            processed_transaction["Total Price"] = total_processed_medications_amount
+
+    return processed_transaction
