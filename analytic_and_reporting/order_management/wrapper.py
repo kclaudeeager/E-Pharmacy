@@ -58,7 +58,7 @@ class Wrapper:
         sale_id = str(uuid.uuid4())
         for product_code, quantity in cart.products.items():
             if quantity > 0:
-                product_info = self.stock.getProductByID(product_code)
+                product_info = self.stock.get_product_by_id(product_code)
                 sales_data.append(Sale(
                     name=product_info.name,
                     quantity=quantity,
