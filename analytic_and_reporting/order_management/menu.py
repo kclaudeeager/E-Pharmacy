@@ -50,3 +50,11 @@ class Menu:
     """
 
     # **CHALLENGE** (BONUS): Can you implement the menu to work as a USSD application? Implement and show your design
+    def startMenu(page):
+        print("************************************")
+        print("Order management and analytics menu")
+        print("[loc .]")
+        print("************************************")
+        print("1. Order management")
+        print("2. Get analytics")
+        print("0. Back")

@@ -37,3 +37,4 @@ if __name__ == '__main__':
                 prescription_file, stock_file)
 
     # TODO: Using a while loop, show the menu to the user and guide them through the app
+    menu.startMenu(".")
