@@ -1,10 +1,12 @@
-from .cart import Cart
-from .stock import Stock
-from .product import Product
-from .prescription import Prescription
+import json
+import uuid
 from datetime import datetime
 
-import json
+from . import Sale
+from .cart import Cart
+from .prescription import Prescription
+from .stock import Stock
+
 
 # Claude
 # would need to create a new object for each new order
@@ -29,6 +31,7 @@ class Wrapper:
         """Handles the checkout procedure of the program.
 
         Args:
+            customerID:
             cart: The cart to pay for
             prescription: the prescription that accompanies the order (default: None)
         """
@@ -37,14 +40,39 @@ class Wrapper:
         # (i.e., (1) there is a prescription that (2) matches the customer's ID, and (3) contains the medication
         # in the specified quantity).
         # Raise an exception if either of those conditions is unmet.
+        conditions_met = True if prescription is not None and prescription.CustomerID == customerID and len(
+            prescription.Medications) > 0 else False
+        if not conditions_met:
+            raise Exception("The prescription does not match the customer's ID or does not contain the medication.")
 
         # TODO: Get the current datetime and save a Sale information for each product sold with the following schema
-        # {"name": "<name>", "quantity": <quantity>, "price": <unit price>, "purchase_price": <total price>, "timestamp": <timestamp>,
-        # "customerID": <customer username>, "salesperson": <pharmacist username>}
+        #  {"name": "<name>", "quantity": <quantity>, "price": <unit price>, "purchase_price": <total price>,
+        #  "timestamp": <timestamp>, "customerID": <customer username>, "salesperson": <pharmacist username>}
 
         # TODO: Append the list to the current sales
 
         # TODO: Make sure that the sold products are marked as complete in the prescriptions.
+
+        current_datetime = datetime.datetime.now()
+        sales_data = []
+        sale_id = str(uuid.uuid4())
+        for product_code, quantity in cart.products.items():
+            if quantity > 0:
+                product_info = self.stock.get_product_by_id(product_code)
+                sales_data.append(Sale(
+                    name=product_info.name,
+                    quantity=quantity,
+                    price=product_info.price,
+                    purchase_price=product_info.price * quantity,
+                    timestamp=current_datetime,
+                    customerID=customerID,
+                    salesperson=self.agentID,
+                    id=sale_id,
+                    prescriptionID=prescription.PrescriptionID
+                ))
+                prescription.markComplete(product_info)
+
+        self.sales.extend(sales_data)
 
     def dump(self, outfile: str):
         """Dumps the current sales data to a file
@@ -55,3 +83,14 @@ class Wrapper:
         # TODO: Load the content, if any of the existing file
 
         # TODO: Update the content by appending the new entries to it, and save to the file
+        existing_sales = []
+        try:
+            with open(outfile, 'r') as f:
+                existing_sales = json.load(f)
+        except FileNotFoundError:
+            pass
+
+        updated_sales = existing_sales + [sale.__dict__ for sale in self.sales]
+        with open(outfile, 'w') as f:
+            json.dump(updated_sales, f, indent=4)
+            f.close()
