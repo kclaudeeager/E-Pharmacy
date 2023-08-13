@@ -35,7 +35,8 @@ class UserManagement:
 
         # TODO: Deal with the case where the file does not exist
         real_user = None
-        self.load()
+        user_management = self.load()
+        self.users = user_management.users
         try:
             with open(self.status_file, 'r') as f:
                 username = f.readline().strip()
@@ -68,6 +69,5 @@ class UserManagement:
         with open(infile, 'r') as f:
             users = [User(elements[0], elements[3], elements[4], bool(elements[5]))
                      for line in f.readlines() if (elements := line.strip().split(':'))]
+
             return UserManagement(users=users)
-
-

@@ -18,10 +18,13 @@ if __name__ == '__main__':
     prescription_file = 'data/prescriptions.json'
 
     # load the user management file
-    profiles = UserManagement.load(credentials_file)
+    user = UserManagement()
+
+
+   # profiles = UserManagement.load(credentials_file)
 
     # get the logged in user
-    pharmacist = profiles.get_logged_in_user()
+    pharmacist = user.get_logged_in_user()
     # make sure the logged in user is a pharmacist/salesperson
     assert pharmacist.role == 'salesperson', 'You are not allowed to access this feature.'
 
@@ -33,7 +36,7 @@ if __name__ == '__main__':
     books = BookRecords.load(sales_file)
 
     # create an instance of the menu
-    menu = Menu(stock, profiles, pharmacist, sales_file,
+    menu = Menu(stock, user, pharmacist, sales_file,
                 prescription_file, stock_file)
 
     # TODO: Using a while loop, show the menu to the user and guide them through the app
