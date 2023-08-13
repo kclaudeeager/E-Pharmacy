@@ -39,11 +39,7 @@ class Sale:
         # the quantity, timestamp, and the total cost in a nice way.
         view = (
             f"*********************************************************\n"
-<<<<<<< HEAD
             f"| Features             | Name/Value                     |\n"
-=======
-            f"| features             | Name/Value                     |\n"
->>>>>>> 5cacb19 (Designed a tabular format)
             f"*********************************************************\n"
             f"| Product              | {self.name:<30} |\n"
             f"| Unit Price           | {self.price:<30} |\n"
