@@ -1,3 +1,5 @@
+import json
+
 
 # Tuku
 class Product:
@@ -44,7 +46,7 @@ class Product:
         Returns: A JSON string.
         """
         # TODO: Implement the function
-        return NotImplemented
+        return json.dumps(self)
 
     def __str__(self) -> str:
         return self.name
