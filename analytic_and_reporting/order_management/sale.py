@@ -28,6 +28,7 @@ class Sale:
         self.prescriptionID = prescriptionID
 
     def __str__(self) -> str:
+        
         """Returns a string representation of a Sale object.
 
         Args: None
@@ -36,4 +37,15 @@ class Sale:
         """
         # TODO: Return a string that shows the product sold, its unit price
         # the quantity, timestamp, and the total cost in a nice way.
-        return (f"Product: {self.name}\n" f"Unit Price: {self.price}\n" f"Quantity: {self.quantity}\n" f"Timestamp: {self.timestamp}\n" f"Total Cost: {self.purchase_price}")
+        view = (
+            f"*********************************************************\n"
+            f"| features             | Name/Value                     |\n"
+            f"*********************************************************\n"
+            f"| Product              | {self.name:<30} |\n"
+            f"| Unit Price           | {self.price:<30} |\n"
+            f"| Quantity             | {self.quantity:<30} |\n"
+            f"| Timestamp            | {self.timestamp:<30} |\n"
+            f"| Total Cost           | {self.purchase_price:<30} |\n"
+            f"*********************************************************"
+        )
+        return view
