@@ -2,7 +2,7 @@ import json
 import uuid
 from datetime import datetime
 
-from . import Sale
+from .sale import Sale
 from .cart import Cart
 from .prescription import Prescription
 from .stock import Stock
