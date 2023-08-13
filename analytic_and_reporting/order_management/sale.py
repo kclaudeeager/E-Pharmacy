@@ -28,7 +28,6 @@ class Sale:
         self.prescriptionID = prescriptionID
 
     def __str__(self) -> str:
-        
         """Returns a string representation of a Sale object.
 
         Args: None
