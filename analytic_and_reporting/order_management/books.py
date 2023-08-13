@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import List
 from .sale import Sale
 
+
 # Claude
 
 
@@ -73,7 +74,8 @@ class BookRecords:
         # return the string representation
         return BookRecords(transactions).__str__()
 
-    def topNSales(self, start: datetime = datetime.strptime('1970-01-02', '%Y-%m-%d'), end: datetime = datetime.now(), n=10) -> str:
+    def topNSales(self, start: datetime = datetime.strptime('1970-01-02', '%Y-%m-%d'), end: datetime = datetime.now(),
+                  n=10) -> str:
         """Return the top n sales ordered by the total price of purchases.
 
         Args:
@@ -86,6 +88,7 @@ class BookRecords:
         """
         # TODO: Query the top transactions and save them to the variable `transactions` below
         transactions = None
+
 
         # return the string representation of the transactions.
         return BookRecords(transactions).__str__()
@@ -109,4 +112,15 @@ class BookRecords:
         """
         # TODO: Implement the function. Make sure to handle the cases where
         # the file does not exist.
-        return NotImplemented
+        try:
+            with open(infile, 'r') as f:
+                data = json.load(f)
+                transactions = []
+                for transaction in data:
+                    transactions.append(Sale.from_dict(transaction))
+                return BookRecords(transactions)
+
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Unable to load data from file: {infile}")
+        except json.JSONDecodeError:
+            raise ValueError(f"Error decoding JSON data in file: {infile}")

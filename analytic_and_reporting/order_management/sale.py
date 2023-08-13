@@ -37,3 +37,16 @@ class Sale:
         # TODO: Return a string that shows the product sold, its unit price
         # the quantity, timestamp, and the total cost in a nice way.
         pass
+
+    @classmethod
+    def from_dict(cls, transaction):
+        """Creates a Sale object from a dictionary.
+
+        Args:
+            transaction (dict): a dictionary containing the sale information
+
+        Returns:
+            A Sale object
+        """
+        # TODO: Create a Sale object from the dictionary
+        return cls(**transaction)
