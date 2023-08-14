@@ -49,4 +49,4 @@ class Product:
         return json.dumps(self)
 
     def __str__(self) -> str:
-        return self.name
+        return f"|{self.name:<15}|{self.brand:<15}|{self.quantity:<15}|{self.category[:15] + '...' :<15}|{self.description[:10]+ '...':<15}|{self.price:<15}"
