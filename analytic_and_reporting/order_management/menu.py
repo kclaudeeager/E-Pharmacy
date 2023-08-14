@@ -94,11 +94,11 @@ class Menu:
             print("1. Add to cart")
             print("2. Remove from cart")
             print("3. Clear cart")
-            print("2. Checkout")
+            print("4. Checkout")
             print("0. Back")
             choice = int(input("Enter your choice: "))
             print(choice, "choice")
-            cart = Cart(self.stock)
+            # cart = Cart(self.stock)
 
             if choice == 1:
                 # read the file
@@ -107,14 +107,17 @@ class Menu:
 
                 selectedProduct = self.stock.products[selectedInput]
 
-                cart.add(selectedProduct.code, selectedProduct.quantity)
+                self.cart.add(selectedProduct.code, selectedProduct.quantity)
 
             elif choice == 2:
                 self.displayCart()
                 selectedInput = self.askforChoice()
                 selectedProduct = self.stock.products[selectedInput]
-                cart.remove(selectedProduct.code)
-
+                self.cart.remove(selectedProduct.code)
+            elif choice == 3:
+                self.cart.clear()
+            elif choice == 0:
+                return
         except ValueError:
             print(MSG_WRONG_INPUT)
     #

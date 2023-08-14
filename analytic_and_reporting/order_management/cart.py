@@ -116,16 +116,25 @@ class Cart:
         Removes a specific product from the cart """
         cartList = json.loads(self.readFromFile(cartFile))
         # print(cartList[0]['code'], "the code")
-        print(type(code))
-        result = [item for item in cartList if item['code']
-                  != 'R8Ibu4fwETzZk5CUWsHwjfSMiVJV9jQMm']
+        existing = [item for item in cartList if item['code']
+                    == code]
+        if len(existing) == 0:
+            return
 
+        result = [item for item in cartList if item['code']
+                  != code]
         self.savetofile(cartFile, json.dumps(result))
         # TODO: Removes a product from the cart. safely fail if the product code is not found
 
     def clear(self):
         """Clears up the cart.
         """
+        res = str(
+            input(f"Are you want to empty your cart? \nPlease enter'y' or yes and 'n' for no : "))
+        if res == 'y':
+            cartList = json.loads(self.readFromFile(cartFile))
+            cartList.clear()
+            self.savetofile(cartFile, json.dumps(cartList))
 
     @ property
     def cost(self):
