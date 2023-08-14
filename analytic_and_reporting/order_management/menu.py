@@ -80,13 +80,16 @@ class Menu:
         try:
             selectedInput = int(
                 input("Enter the Id of the product or 0 to go back : "))
-            if selectedInput >= len(self.stock.products) or selectedInput == 0:
-                print("Please try again")
+            if selectedInput > len(self.stock.products):
+                print("ID doesn't exist")
+                return
+            elif selectedInput == 0:
                 return
             else:
                 return selectedInput
         except ValueError:
             print(MSG_WRONG_INPUT)
+        return selectedInput
 
     def orderMenu(self):
         try:
@@ -102,19 +105,24 @@ class Menu:
 
             if choice == 1:
                 # read the file
+                self.header("order.addtocart")
                 self.displayCart()
                 selectedInput = self.askforChoice()
-
+                print(type(selectedInput))
+                selectedInput -= 1
                 selectedProduct = self.stock.products[selectedInput]
 
                 self.cart.add(selectedProduct.code, selectedProduct.quantity)
 
             elif choice == 2:
+                self.header("order.removefromcart")
                 self.displayCart()
                 selectedInput = self.askforChoice()
+                selectedInput -= 1
                 selectedProduct = self.stock.products[selectedInput]
                 self.cart.remove(selectedProduct.code)
             elif choice == 3:
+                self.header("order.clearcart")
                 self.cart.clear()
             elif choice == 0:
                 return
