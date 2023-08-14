@@ -40,11 +40,11 @@ class Cart:
     def savetofile(self, filePath, arr: [dict]):
         with open(filePath, "w") as outputfile:
             outputfile.write(arr)
-        print("Saved to cart successfully")
+        print("Updated cart successfully")
 
     def readFromFile(self, filePath) -> [dict]:
         with open(filePath, "r") as outputfile:
-            return outputfile.readlines()
+            return outputfile.read()
 
     def __init__(self, stock: Stock) -> None:
         self.products = {}
@@ -114,6 +114,13 @@ class Cart:
     def remove(self, code):
         """
         Removes a specific product from the cart """
+        cartList = json.loads(self.readFromFile(cartFile))
+        # print(cartList[0]['code'], "the code")
+        print(type(code))
+        result = [item for item in cartList if item['code']
+                  != 'R8Ibu4fwETzZk5CUWsHwjfSMiVJV9jQMm']
+
+        self.savetofile(cartFile, json.dumps(result))
         # TODO: Removes a product from the cart. safely fail if the product code is not found
 
     def clear(self):

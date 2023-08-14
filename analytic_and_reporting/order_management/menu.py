@@ -58,6 +58,36 @@ class Menu:
         except ValueError:
             print(MSG_WRONG_INPUT)
 
+    # print cart
+    def displayCart(self):
+        stock = Stock.load("data/products.json")
+        if len(stock.products) == 0:
+            print("No product available")
+            return
+        print("--------------------------")
+        print("Avalable products in Cart")
+        print("--------------------------")
+        sampleHeader = ["id", "name", "brand",
+                        "quantity", "category", "desc", "price"]
+        self.tableHead(sampleHeader)
+        index = 0
+        for p in self.stock.products:
+            index += 1
+            print(f"|{index:<15}{p}")
+        print("---------------------------------------------------")
+
+    def askforChoice(self) -> int:
+        try:
+            selectedInput = int(
+                input("Enter the Id of the product or 0 to go back : "))
+            if selectedInput >= len(self.stock.products) or selectedInput == 0:
+                print("Please try again")
+                return
+            else:
+                return selectedInput
+        except ValueError:
+            print(MSG_WRONG_INPUT)
+
     def orderMenu(self):
         try:
             self.header("order")
@@ -68,37 +98,22 @@ class Menu:
             print("0. Back")
             choice = int(input("Enter your choice: "))
             print(choice, "choice")
+            cart = Cart(self.stock)
 
             if choice == 1:
                 # read the file
-                stock = Stock.load("data/products.json")
-                if len(stock.products) == 0:
-                    print("No product available")
-                    return
+                self.displayCart()
+                selectedInput = self.askforChoice()
 
-                sampleHeader = ["id", "name", "brand",
-                                "quantity", "category", "desc", "price"]
+                selectedProduct = self.stock.products[selectedInput]
 
-                print("")
-                print("Avalable products in Cart")
-                print("--------------------------")
-                self.tableHead(sampleHeader)
-                index = 0
-                for p in stock.products:
-                    index += 1
-                    print(f"|{index:<15}{p}")
-
-                print("---------------------------------------------------")
-                selectedInput = int(
-                    input("Enter the Id of the product or 0 to go back : "))
-
-                if selectedInput >= len(stock.products) or selectedInput == 0:
-                    print("Please try again")
-                    return
-
-                selectedProduct = stock.products[selectedInput]
-                cart = Cart(stock)
                 cart.add(selectedProduct.code, selectedProduct.quantity)
+
+            elif choice == 2:
+                self.displayCart()
+                selectedInput = self.askforChoice()
+                selectedProduct = self.stock.products[selectedInput]
+                cart.remove(selectedProduct.code)
 
         except ValueError:
             print(MSG_WRONG_INPUT)
