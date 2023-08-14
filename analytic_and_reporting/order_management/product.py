@@ -46,7 +46,20 @@ class Product:
         Returns: A JSON string.
         """
         # TODO: Implement the function
-        return json.dumps(self)
+        return json.dumps(self.to_dict(), indent=4)
 
     def __str__(self) -> str:
         return self.name
+
+    def to_dict(self):
+        return {
+            "code": self.code,
+            "name": self.name,
+            "brand": self.brand,
+            "description": self.description,
+            "quantity": self.quantity,
+            "price": self.price,
+            "dosage_instruction": self.dosage_instruction,
+            "requires_prescription": self.requires_prescription,
+            "category": self.category
+        }

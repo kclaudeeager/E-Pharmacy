@@ -20,8 +20,7 @@ if __name__ == '__main__':
     # load the user management file
     user = UserManagement()
 
-
-   # profiles = UserManagement.load(credentials_file)
+    # profiles = UserManagement.load(credentials_file)
 
     # get the logged in user
     pharmacist = user.get_logged_in_user()
@@ -30,7 +29,6 @@ if __name__ == '__main__':
 
     # load the resources that we need
     stock = Stock.load(stock_file)
-    cart = Cart(stock=stock)
 
     wrap = Wrapper(stock, pharmacist.username)
     books = BookRecords.load(sales_file)

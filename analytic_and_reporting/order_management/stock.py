@@ -72,6 +72,7 @@ class Stock:
                     line["price"], line["dosage_instruction"], line["requires_prescription"], line["category"]
                 )
                 stock.products.append(product)
+        return stock
 
     def __str__(self) -> str:
         """Returns a string representation of the stock
