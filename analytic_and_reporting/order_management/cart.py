@@ -3,7 +3,7 @@ from .stock import Stock
 import json
 import os
 
-# Deudone
+# Dieudonne
 
 productFile = "data/products.json"
 cartFile = "data/cart.json"
@@ -59,18 +59,23 @@ class Cart:
 
         Returns: None
         """
-        stock = Stock.load("data/products.json")
+        stock = self.stock
 
         # result = [item for item in stock.products if item.code == productCode]
         s: Product
         for item in stock.products:
             if item.code == productCode:
                 s = item
+        cart_product = self.returnProduct(productCode)
 
-        if s.quantity <= 0:
-            print("---------------------------------------------------")
-            print(f"Sorry, {s.name} is out of stock. Please try again.")
+        if quantity <= 0:
+            print("Please enter a valid quantity ")
             return
+        elif quantity > s.quantity:
+            print(f"Sorry, {s.name}'s quantity is out of stock. Please try again.")
+            return
+        else:
+            cart_product["quantity"] = quantity
 
         # write to the json file
         if os.path.isfile(cartFile):
@@ -79,13 +84,13 @@ class Cart:
                 json_data = json_file.read()
 
             existing_list = json.loads(json_data)
-            existing_list.append(self.returnProduct(productCode))
+            existing_list.append(cart_product)
             savedList = json.dumps(existing_list, indent=1)
             self.savetofile(cartFile, savedList)
 
         else:
             f = open("data/cart.json", "w")
-            print("doestn't exist")
+            print("doesn't exist")
             foundProduct = self.returnProduct(productCode)
             self.savetofile(cartFile, json.dumps([foundProduct]))
 
@@ -120,8 +125,7 @@ class Cart:
         """Clears up the cart.
         """
 
-    @ property
+    @property
     def cost(self):
         """Returns the total cost of the cart"""
         # TODO: implement the function
-

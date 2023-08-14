@@ -10,7 +10,35 @@
   "code": "R8Ibu4fwETzZk5CUWsHwjfSMiVJV9jQMm",
   "name": "Name 3",
   "brand": "brand 3",
-  "quantity": 88,
+  "quantity": 4,
+  "price": 1490.900024
+ },
+ {
+  "code": "VsCLBDbuOlAme7hX9nIsaQEoi9OsZ6oIP",
+  "name": "Name 2",
+  "brand": "Brand 2",
+  "quantity": 10,
+  "price": 0.9
+ },
+ {
+  "code": "VsCLBDbuOlAme7hX9nIsaQEoi9OsZ6oIP",
+  "name": "Name 2",
+  "brand": "Brand 2",
+  "quantity": 2,
+  "price": 0.9
+ },
+ {
+  "code": "VsCLBDbuOlAme7hX9nIsaQEoi9OsZ6oIP",
+  "name": "Name 2",
+  "brand": "Brand 2",
+  "quantity": 4,
+  "price": 0.9
+ },
+ {
+  "code": "R8Ibu4fwETzZk5CUWsHwjfSMiVJV9jQMm",
+  "name": "Name 3",
+  "brand": "brand 3",
+  "quantity": 70,
   "price": 1490.900024
  }
 ]
