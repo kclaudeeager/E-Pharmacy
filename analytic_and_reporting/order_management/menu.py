@@ -1,5 +1,5 @@
 from . import Stock, Cart, User, UserManagement, BookRecords, Wrapper, Prescription
-
+import json
 # Julius
 MSG_WRONG_INPUT = "Wrong input. Try again!"
 
@@ -7,7 +7,7 @@ MSG_WRONG_INPUT = "Wrong input. Try again!"
 class Menu:
     """Represents the menu class for the project
 
-    Attributes: 
+    Attributes:
         stock: stock variable
         profiles: user management module
         pharmacist: account of the salesperson
@@ -26,6 +26,83 @@ class Menu:
         self.prescriptions_file = prescriptions_file
         self.stock_file = stock_file
 
+    # def startMenu
+    def header(self, str):
+        if str == 1:
+            str == "order"
+        elif str == "2":
+            str == "analytics"
+        print("***********************************")
+        print("Order Management and analytic menu")
+        print(f"[loc: .{str}]")
+        print("***********************************")
+
+    # display head
+    def tableHead(self, titleList: list):
+        for x in titleList:
+            print(f"|{ x.capitalize():<15}", end="")
+        print("")
+        print("-------------------------------------------------------------------------------------------------------")
+    # starter Menu
+
+    def starterMenu(self):
+        try:
+            print("1. Order Management")
+            print("2. Get analytics")
+            print("0. Back")
+            choice = int(input("Enter your choice: "))
+            if choice == 1:
+                self.orderMenu()
+            elif choice == 2:
+                print("analytics input ")
+        except ValueError:
+            print(MSG_WRONG_INPUT)
+
+    def orderMenu(self):
+        try:
+            self.header("order")
+            print("1. Add to cart")
+            print("2. Remove from cart")
+            print("3. Clear cart")
+            print("2. Checkout")
+            print("0. Back")
+            choice = int(input("Enter your choice: "))
+            print(choice, "choice")
+
+            if choice == 1:
+                # read the file
+                stock = Stock.load("data/products.json")
+                if len(stock.products) == 0:
+                    print("No product available")
+                    return
+
+                sampleHeader = ["id", "name", "brand",
+                                "quantity", "category", "desc", "price"]
+
+                print("")
+                print("Avalable products in Cart")
+                print("--------------------------")
+                self.tableHead(sampleHeader)
+                index = 0
+                for p in stock.products:
+                    index += 1
+                    print(f"|{index:<15}{p}")
+
+                print("---------------------------------------------------")
+                selectedInput = int(
+                    input("Enter the Id of the product or 0 to go back : "))
+
+                if selectedInput >= len(stock.products) or selectedInput == 0:
+                    print("Please try again")
+                    return
+
+                selectedProduct = stock.products[selectedInput]
+                cart = Cart(stock)
+                cart.add(selectedProduct.code, selectedProduct.quantity)
+
+        except ValueError:
+            print(MSG_WRONG_INPUT)
+    #
     # TODO: Create all the necessary functions/method to create and manage the menu using the
     # available variables and all the attributes of the class
 

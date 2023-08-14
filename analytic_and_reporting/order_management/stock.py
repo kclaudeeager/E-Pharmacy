@@ -5,7 +5,7 @@ from .product import Product
 
 class Stock:
     """Represents the catalog of products
-    
+
     Attributes:
         products: the list of products
     """
@@ -15,7 +15,7 @@ class Stock:
 
     def update(self, code: int, change: int):
         """Update the quantity of a product by adding or removing
-        
+
         Args:
             code: identifier of the product
             change: the value by which the quantity should be updated (+1 adds 1, -2 removes 2 for example)
@@ -23,7 +23,8 @@ class Stock:
         # TODO: Make sure the product exists, and that by making the change, the value is still >= 0
 
         # TODO: Update the quantity
-        product_to_update = next((product for product in self.products if product.code == code), None)
+        product_to_update = next(
+            (product for product in self.products if product.code == code), None)
 
         if product_to_update is None:
             raise Exception("Product not found")
@@ -42,7 +43,7 @@ class Stock:
 
         Args:
             code: identifier of the product
-        
+
         Returns: the product's object
         """
         # TODO: Implement te function
@@ -58,8 +59,8 @@ class Stock:
     @staticmethod
     def load(infile: str):
         """Loads the stock from an existing file
-        
-        Args: 
+
+        Args:
             infile: input file to the function
         """
         # TODO: Implement the function
@@ -72,6 +73,7 @@ class Stock:
                     line["price"], line["dosage_instruction"], line["requires_prescription"], line["category"]
                 )
                 stock.products.append(product)
+            return stock
 
     def __str__(self) -> str:
         """Returns a string representation of the stock

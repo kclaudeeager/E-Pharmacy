@@ -14,7 +14,6 @@ from .sale import Sale
 
 class BookRecords:
     """A record of all the sales made through the application.
-
     Attributes:
         transactions: a list of the transactions
     """
@@ -38,7 +37,8 @@ class BookRecords:
         header += "\n"
         stringed_transactions = []
         for index, transaction in enumerate(self.transactions, start=1):
-            stringed_transactions.append(stringify_transaction(index, transaction))
+            stringed_transactions.append(
+                stringify_transaction(index, transaction))
 
         return header + "\n".join(stringed_transactions)
 
@@ -62,9 +62,11 @@ class BookRecords:
         processed_transactions_dicts = []
 
         for index, transaction in enumerate(self.transactions, start=1):
-            processed_transactions_dict = process_transaction_on_prescription(transaction)
+            processed_transactions_dict = process_transaction_on_prescription(
+                transaction)
             if processed_transactions_dict:
-                processed_transactions_dicts.append(processed_transactions_dict)
+                processed_transactions_dicts.append(
+                    processed_transactions_dict)
 
         # Create a string representation for each prescription entry
         for index, processed_transaction in enumerate(processed_transactions_dicts, start=1):
@@ -103,7 +105,8 @@ class BookRecords:
 
         Returns: A formatted string representation of the corresponding transactions.
         """
-        transactions = [trans for trans in self.transactions if getattr(trans, filter_key) == filter_value]
+        transactions = [trans for trans in self.transactions if getattr(
+            trans, filter_key) == filter_value]
         if not transactions:
             return no_results_msg
 
@@ -211,13 +214,15 @@ def process_transaction_on_prescription(transaction):
     Returns: A dictionary with processed data or an empty dictionary if not applicable.
     """
     processed_transaction = {}
-    prescription = Prescription.get("data/prescription.json", transaction.prescriptionID)
+    prescription = Prescription.get(
+        "data/prescription.json", transaction.prescriptionID)
 
     if prescription is not None:
         total_processed_medications_amount = 0
         for medication in prescription.medications:
             if medication.get("ProcessedStatus", False):
-                total_processed_medications_amount += medication.get("price", 0)
+                total_processed_medications_amount += medication.get(
+                    "price", 0)
 
         if total_processed_medications_amount > 0:
             processed_transaction["Prescription ID"] = transaction.prescriptionID

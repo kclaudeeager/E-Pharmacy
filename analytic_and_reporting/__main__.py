@@ -20,7 +20,6 @@ if __name__ == '__main__':
     # load the user management file
     user = UserManagement()
 
-
    # profiles = UserManagement.load(credentials_file)
 
     # get the logged in user
@@ -40,3 +39,11 @@ if __name__ == '__main__':
                 prescription_file, stock_file)
 
     # TODO: Using a while loop, show the menu to the user and guide them through the app
+    path = "."
+    menu.header(path)
+    # userChoice = int(input("Enter your choice: "))
+    try:
+        while True:
+            menu.starterMenu()
+    except ValueError:
+        print("Please enter a valid option:")
