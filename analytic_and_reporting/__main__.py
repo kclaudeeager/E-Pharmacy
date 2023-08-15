@@ -40,10 +40,10 @@ if __name__ == '__main__':
 
     # TODO: Using a while loop, show the menu to the user and guide them through the app
     path = "."
-    menu.header(path)
     # userChoice = int(input("Enter your choice: "))
     try:
         while True:
+            menu.header(path)
             menu.starterMenu()
     except ValueError:
         print("Please enter a valid option:")

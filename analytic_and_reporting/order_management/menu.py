@@ -3,6 +3,9 @@ import json
 # Julius
 MSG_WRONG_INPUT = "Wrong input. Try again!"
 
+productFile = "data/products.json"
+cartFile = "data/cart.json"
+
 
 class Menu:
     """Represents the menu class for the project
@@ -28,7 +31,8 @@ class Menu:
         self.stock_file = stock_file
 
     # def startMenu
-    def header(self, str):
+
+    def header(self, str="."):
         if str == 1:
             str == "order"
         elif str == "2":
@@ -55,18 +59,56 @@ class Menu:
             if choice == 1:
                 self.orderMenu()
             elif choice == 2:
-                print("analytics input ")
+                self.analyticMenu()
         except ValueError:
             print(MSG_WRONG_INPUT)
 
-    # print cart
-    def displayCart(self):
-        self.stock.load("data/products.json")
+    def readFromFile(self, filePath) -> [dict]:
+        with open(filePath, "r") as outputfile:
+            return outputfile.read()
+
+    def analyticMenu(self):
+        try:
+            book = BookRecords.load(self.records_file)
+            self.header("analytics")
+            print("1. Total income from purchases")
+            print("2. Prescription statistics")
+            print("3. Purchases for a user")
+            print("4. Sales by an agent")
+            print("5. Top sales")
+            print("0. Back")
+            choice = int(input("Enter your choice: "))
+            print(choice, "choice")
+            if choice == 1:
+                self.header(".analytics.sales")
+                result = book.totalTransactions()
+                print(f"Total sales made is {result}")
+            elif choice == 2:
+                self.header(".analytics.prescriptions")
+                print(book.reportOnPrescriptions())
+            elif choice == 3:
+                # display a tabl of purchase by user
+                self.header(".analytics.purchasebyuser")
+                self.displaySales()
+                book.purchasesByUser("John")
+                # print(existingSales, "existing Sales")
+            elif choice == 4:
+                # print a
+                self.header(".analytics.salesbyagent")
+            elif choice == 5:
+                book.topNSales()
+                self.header(".analytics.topsales")
+        except ValueError:
+            print(MSG_WRONG_INPUT)
+
+    # print productss
+    def displayProduct(self):
+        self.stock.load(self.stock_file)
         if len(self.stock.products) == 0:
             print("No product available")
             return
         print("--------------------------")
-        print("Avalable products in Cart")
+        print("Avalable products")
         print("--------------------------")
         sampleHeader = ["id", "name", "brand",
                         "quantity", "category", "desc", "price"]
@@ -83,14 +125,31 @@ class Menu:
                 input("Enter the Id of the product or 0 to go back : "))
             if selectedInput > len(self.stock.products):
                 print("ID doesn't exist")
-                return
             elif selectedInput == 0:
-                return
+                selectedInput == 0
             else:
                 return selectedInput
         except ValueError:
             print(MSG_WRONG_INPUT)
         return selectedInput
+
+    def displaySales(self):
+        salesArr = json.loads(self.readFromFile(self.records_file))
+        if len(salesArr) == 0:
+            print("No sales record")
+            return
+        print("--------------------------")
+        print("Sales record")
+        print("--------------------------")
+        sampleHeader = ["id", "name", "brand",
+                        "quantity", "category", "desc", "price"]
+        self.tableHead(salesArr[0].keys())
+        index = 0
+        for p in salesArr:
+            index += 1
+            print(
+                f"|{index:<15}|{p['name']:<15}|{p['quantity']:<15}|{p['price']:<15}|{p['purchase_price']:<15}|{p['timestamp']:<15}|")
+        print("---------------------------------------------------")
 
     def orderMenu(self):
         try:
@@ -107,26 +166,31 @@ class Menu:
             if choice == 1:
                 # read the file
                 self.header("order.addtocart")
-                self.displayCart()
+                self.displayProduct()
                 selectedInput = self.askforChoice()
-                print(type(selectedInput))
+                if selectedInput == 0:
+                    return
                 selectedInput -= 1
                 selectedProduct = self.stock.products[selectedInput]
-
                 self.cart.add(selectedProduct.code, selectedProduct.quantity)
-
             elif choice == 2:
                 self.header("order.removefromcart")
-                self.displayCart()
+                self.displayProduct()
                 selectedInput = self.askforChoice()
+                if selectedInput == 0:
+                    return
                 selectedInput -= 1
                 selectedProduct = self.stock.products[selectedInput]
                 self.cart.remove(selectedProduct.code)
             elif choice == 3:
                 self.header("order.clearcart")
                 self.cart.clear()
+            elif choice == 4:
+                self.header("order.checkout")
+                self.cart.cost
             elif choice == 0:
                 return
+
         except ValueError:
             print(MSG_WRONG_INPUT)
     #
