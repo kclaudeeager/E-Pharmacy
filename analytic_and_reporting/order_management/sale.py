@@ -28,6 +28,7 @@ class Sale:
         self.prescriptionID = prescriptionID
 
     def __str__(self) -> str:
+        
         """Returns a string representation of a Sale object.
 
         Args: None
@@ -36,17 +37,15 @@ class Sale:
         """
         # TODO: Return a string that shows the product sold, its unit price
         # the quantity, timestamp, and the total cost in a nice way.
-        pass
-
-    @classmethod
-    def from_dict(cls, transaction):
-        """Creates a Sale object from a dictionary.
-
-        Args:
-            transaction (dict): a dictionary containing the sale information
-
-        Returns:
-            A Sale object
-        """
-        # TODO: Create a Sale object from the dictionary
-        return cls(**transaction)
+        view = (
+            f"*********************************************************\n"
+            f"| Features             | Name/Value                     |\n"
+            f"*********************************************************\n"
+            f"| Product              | {self.name:<30} |\n"
+            f"| Unit Price           | {self.price:<30} |\n"
+            f"| Quantity             | {self.quantity:<30} |\n"
+            f"| Timestamp            | {self.timestamp:<30} |\n"
+            f"| Total Cost           | {self.purchase_price:<30} |\n"
+            f"*********************************************************"
+        )
+        return view
