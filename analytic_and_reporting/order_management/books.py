@@ -6,6 +6,7 @@ from datetime import datetime
 from typing import List
 
 from . import Prescription
+from .stock import Stock
 from .sale import Sale
 
 
@@ -62,6 +63,7 @@ class BookRecords:
         processed_transactions_dicts = []
 
         for index, transaction in enumerate(self.transactions, start=1):
+            # print("entered here")
             processed_transactions_dict = process_transaction_on_prescription(
                 transaction)
             if processed_transactions_dict:
@@ -165,6 +167,7 @@ class BookRecords:
 
         Returns: A floating number representing the total price
         """
+
         return sum([transaction.purchase_price for transaction in self.transactions])
 
     @classmethod
@@ -215,17 +218,22 @@ def process_transaction_on_prescription(transaction):
     """
     processed_transaction = {}
     prescription = Prescription.get(
-        "data/prescription.json", transaction.prescriptionID)
+        "data/prescriptions.json", transaction.prescriptionID)
+    # print(prescription, "prescription")
 
     if prescription is not None:
         total_processed_medications_amount = 0
-        for medication in prescription.medications:
-            if medication.get("ProcessedStatus", False):
-                total_processed_medications_amount += medication.get(
-                    "price", 0)
+        stock = Stock.load('data/products.json')
+        for medication in prescription['Medications']:
+            # if medication['ProcessedStatus'] ==
+            if medication.get("ProcessedStatus", True):
+                # print("logged In")
+                product = stock.get_product_by_id(medication.get('id'))
+                # print(product, "---product")
+                total_processed_medications_amount += product.price
 
         if total_processed_medications_amount > 0:
             processed_transaction["Prescription ID"] = transaction.prescriptionID
             processed_transaction["Total Price"] = total_processed_medications_amount
-
+        # print(processed_transaction, "dict")
     return processed_transaction
