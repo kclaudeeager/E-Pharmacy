@@ -16,7 +16,8 @@ class Menu:
         stock_file: path to the file containing the stock data
     """
 
-    def __init__(self, stock: Stock, profiles: UserManagement, pharmacist: User, records_file: str, prescriptions_file: str, stock_file: str) -> None:
+    def __init__(self, stock: Stock, profiles: UserManagement, pharmacist: User, records_file: str,
+                 prescriptions_file: str, stock_file: str) -> None:
         self.stock = stock
         self.profiles = profiles
         self.pharmacist = pharmacist

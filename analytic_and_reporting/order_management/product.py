@@ -19,7 +19,7 @@ class Product:
 
     def __init__(
             self,
-            code: int,
+            code: str,
             name: str,
             brand: str,
             description: str,
@@ -46,7 +46,20 @@ class Product:
         Returns: A JSON string.
         """
         # TODO: Implement the function
-        return json.dumps(self)
+        return json.dumps(self.to_dict(), indent=4)
 
     def __str__(self) -> str:
-        return f"|{self.name:<15}|{self.brand:<15}|{self.quantity:<15}|{self.category[:15] + '...' :<15}|{self.description[:10]+ '...':<15}|{self.price:<15}"
+        return self.name
+
+    def to_dict(self):
+        return {
+            "code": self.code,
+            "name": self.name,
+            "brand": self.brand,
+            "description": self.description,
+            "quantity": self.quantity,
+            "price": self.price,
+            "dosage_instruction": self.dosage_instruction,
+            "requires_prescription": self.requires_prescription,
+            "category": self.category
+        }
