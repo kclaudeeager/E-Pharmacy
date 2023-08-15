@@ -1,5 +1,6 @@
 from . import Stock, Cart, User, UserManagement, BookRecords, Wrapper, Prescription
 import json
+
 # Julius
 MSG_WRONG_INPUT = "Wrong input. Try again!"
 
@@ -16,7 +17,8 @@ class Menu:
         stock_file: path to the file containing the stock data
     """
 
-    def __init__(self, stock: Stock, profiles: UserManagement, pharmacist: User, records_file: str, prescriptions_file: str, stock_file: str) -> None:
+    def __init__(self, stock: Stock, profiles: UserManagement, pharmacist: User, records_file: str,
+                 prescriptions_file: str, stock_file: str) -> None:
         self.stock = stock
         self.profiles = profiles
         self.pharmacist = pharmacist
@@ -28,21 +30,23 @@ class Menu:
 
     # def startMenu
     def header(self, str):
+        string_to_show = ""
         if str == 1:
-            str == "order"
+            string_to_show = "order"
         elif str == "2":
-            str == "analytics"
+            string_to_show = "analytics"
         print("***********************************")
         print("Order Management and analytic menu")
-        print(f"[loc: .{str}]")
+        print(f"[loc: .{string_to_show}]")
         print("***********************************")
 
     # display head
     def tableHead(self, titleList: list):
         for x in titleList:
-            print(f"|{ x.capitalize():<15}", end="")
+            print(f"|{x.capitalize():<15}", end="")
         print("")
         print("-------------------------------------------------------------------------------------------------------")
+
     # starter Menu
 
     def starterMenu(self):
@@ -71,20 +75,19 @@ class Menu:
 
             if choice == 1:
                 # read the file
-                stock = Stock.load("data/products.json")
-                if len(stock.products) == 0:
+                if len(self.stock.products) == 0:
                     print("No product available")
                     return
 
                 sampleHeader = ["id", "name", "brand",
                                 "quantity", "category", "desc", "price"]
 
-                print("")
-                print("Avalable products in Cart")
+
+                print("Available products in Cart")
                 print("--------------------------")
                 self.tableHead(sampleHeader)
                 index = 0
-                for p in stock.products:
+                for p in self.stock.products:
                     index += 1
                     print(f"|{index:<15}{p}")
 
@@ -92,16 +95,30 @@ class Menu:
                 selectedInput = int(
                     input("Enter the Id of the product or 0 to go back : "))
 
-                if selectedInput >= len(stock.products) or selectedInput == 0:
+                if selectedInput > len(self.stock.products) or selectedInput == 0:
                     print("Please try again")
                     return
 
-                selectedProduct = stock.products[selectedInput]
-                cart = Cart(stock)
-                cart.add(selectedProduct.code, selectedProduct.quantity)
+                selectedProduct = self.stock.products[selectedInput-1]
+                cart = Cart(self.stock)
+                is_done = False
+                while not is_done:
+                    if selectedProduct.quantity <= 0:
+                        print(" quantity is out of stock")
+                        is_done = True
+                    user_quantity = int(input("Please enter a quantity: "))
+
+                    if user_quantity <= 0:
+                        print("Please enter a valid quantity ")
+                    elif user_quantity > selectedProduct.quantity:
+                        print(f"Sorry, {selectedProduct.name}'s quantity is out of stock. Please try again.")
+                    else:
+                        is_done = True
+                        cart.add(selectedProduct.code, user_quantity)
 
         except ValueError:
             print(MSG_WRONG_INPUT)
+
     #
     # TODO: Create all the necessary functions/method to create and manage the menu using the
     # available variables and all the attributes of the class
