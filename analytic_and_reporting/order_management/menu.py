@@ -1,6 +1,5 @@
 from . import Stock, Cart, User, UserManagement, BookRecords, Wrapper, Prescription
 import json
-
 # Julius
 MSG_WRONG_INPUT = "Wrong input. Try again!"
 
@@ -30,23 +29,21 @@ class Menu:
 
     # def startMenu
     def header(self, str):
-        string_to_show = ""
         if str == 1:
-            string_to_show = "order"
+            str == "order"
         elif str == "2":
-            string_to_show = "analytics"
+            str == "analytics"
         print("***********************************")
         print("Order Management and analytic menu")
-        print(f"[loc: .{string_to_show}]")
+        print(f"[loc: .{str}]")
         print("***********************************")
 
     # display head
     def tableHead(self, titleList: list):
         for x in titleList:
-            print(f"|{x.capitalize():<15}", end="")
+            print(f"|{ x.capitalize():<15}", end="")
         print("")
         print("-------------------------------------------------------------------------------------------------------")
-
     # starter Menu
 
     def starterMenu(self):
@@ -62,63 +59,76 @@ class Menu:
         except ValueError:
             print(MSG_WRONG_INPUT)
 
+    # print cart
+    def displayCart(self):
+        self.stock.load("data/products.json")
+        if len(self.stock.products) == 0:
+            print("No product available")
+            return
+        print("--------------------------")
+        print("Avalable products in Cart")
+        print("--------------------------")
+        sampleHeader = ["id", "name", "brand",
+                        "quantity", "category", "desc", "price"]
+        self.tableHead(sampleHeader)
+        index = 0
+        for p in self.stock.products:
+            index += 1
+            print(f"|{index:<15}{p}")
+        print("---------------------------------------------------")
+
+    def askforChoice(self) -> int:
+        try:
+            selectedInput = int(
+                input("Enter the Id of the product or 0 to go back : "))
+            if selectedInput > len(self.stock.products):
+                print("ID doesn't exist")
+                return
+            elif selectedInput == 0:
+                return
+            else:
+                return selectedInput
+        except ValueError:
+            print(MSG_WRONG_INPUT)
+        return selectedInput
+
     def orderMenu(self):
         try:
             self.header("order")
             print("1. Add to cart")
             print("2. Remove from cart")
             print("3. Clear cart")
-            print("2. Checkout")
+            print("4. Checkout")
             print("0. Back")
             choice = int(input("Enter your choice: "))
             print(choice, "choice")
+            # cart = Cart(self.stock)
 
             if choice == 1:
                 # read the file
-                if len(self.stock.products) == 0:
-                    print("No product available")
-                    return
+                self.header("order.addtocart")
+                self.displayCart()
+                selectedInput = self.askforChoice()
+                print(type(selectedInput))
+                selectedInput -= 1
+                selectedProduct = self.stock.products[selectedInput]
 
-                sampleHeader = ["id", "name", "brand",
-                                "quantity", "category", "desc", "price"]
+                self.cart.add(selectedProduct.code, selectedProduct.quantity)
 
-
-                print("Available products in Cart")
-                print("--------------------------")
-                self.tableHead(sampleHeader)
-                index = 0
-                for p in self.stock.products:
-                    index += 1
-                    print(f"|{index:<15}{p}")
-
-                print("---------------------------------------------------")
-                selectedInput = int(
-                    input("Enter the Id of the product or 0 to go back : "))
-
-                if selectedInput > len(self.stock.products) or selectedInput == 0:
-                    print("Please try again")
-                    return
-
-                selectedProduct = self.stock.products[selectedInput-1]
-                cart = Cart(self.stock)
-                is_done = False
-                while not is_done:
-                    if selectedProduct.quantity <= 0:
-                        print(" quantity is out of stock")
-                        is_done = True
-                    user_quantity = int(input("Please enter a quantity: "))
-
-                    if user_quantity <= 0:
-                        print("Please enter a valid quantity ")
-                    elif user_quantity > selectedProduct.quantity:
-                        print(f"Sorry, {selectedProduct.name}'s quantity is out of stock. Please try again.")
-                    else:
-                        is_done = True
-                        cart.add(selectedProduct.code, user_quantity)
-
+            elif choice == 2:
+                self.header("order.removefromcart")
+                self.displayCart()
+                selectedInput = self.askforChoice()
+                selectedInput -= 1
+                selectedProduct = self.stock.products[selectedInput]
+                self.cart.remove(selectedProduct.code)
+            elif choice == 3:
+                self.header("order.clearcart")
+                self.cart.clear()
+            elif choice == 0:
+                return
         except ValueError:
             print(MSG_WRONG_INPUT)
-
     #
     # TODO: Create all the necessary functions/method to create and manage the menu using the
     # available variables and all the attributes of the class
