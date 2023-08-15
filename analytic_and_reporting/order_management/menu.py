@@ -61,8 +61,8 @@ class Menu:
 
     # print cart
     def displayCart(self):
-        stock = Stock.load("data/products.json")
-        if len(stock.products) == 0:
+        self.stock.load("data/products.json")
+        if len(self.stock.products) == 0:
             print("No product available")
             return
         print("--------------------------")
