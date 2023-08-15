@@ -38,7 +38,7 @@ class Stock:
         self.products.append(product_to_update)
         return True
 
-    def get_product_by_id(self, code: int) -> Product:
+    def get_product_by_id(self, code: str) -> Product:
         """Gets a product by its ID
 
         Args:
@@ -46,6 +46,7 @@ class Stock:
 
         Returns: the product's object
         """
+        # print(code, "---code")
         # TODO: Implement te function
         return next((product for product in self.products if product.code == code), None)
 

@@ -13,7 +13,7 @@
         "quantity": 5,
         "name": "Asprin",
         "id": "MED2",
-        "ProcessedStatus": false
+        "ProcessedStatus": true
       }
     ],
     "CustomerID": "ebra",
