@@ -20,7 +20,7 @@ class Cart:
 
     def tableHead(self, titleList: list):
         for x in titleList:
-            print(f"|{ x.capitalize():<15}", end="")
+            print(f"|{x.capitalize():<15}", end="")
         print("")
         print("--------------------------------------------------------------------------------------------")
 
@@ -194,7 +194,7 @@ class Cart:
         """Clears up the cart.
         """
         res = str(
-            input(f"Are you want to empty your cart? \nPlease enter'y' or yes and 'n' for no : "))
+            input(f"Are you want to empty your cart? \nPlease enter 'y' or yes and 'n' for no : "))
         if res == 'y':
             cartList = json.loads(self.readFromFile(cartFile))
             cartList.clear()
@@ -234,6 +234,7 @@ class Cart:
                 print(
                     f"A payment of {total} has been made.")
                 print("Payment successful")
+
                 self.clear()
                 # self.remove()
             elif choice == 'n':
