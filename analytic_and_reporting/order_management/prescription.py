@@ -37,7 +37,6 @@ class Prescription:
              self.Medications), False)
         return found_product
 
-    @staticmethod
     def markComplete(self, product: Product):
         """Mark a product's sale complete in the prescriptions file
 

@@ -34,9 +34,9 @@ class Menu:
 
     def header(self, str="."):
         if str == 1:
-            str == "order"
+            str = "order"
         elif str == "2":
-            str == "analytics"
+            str = "analytics"
         print("***********************************")
         print("Order Management and analytic menu")
         print(f"[loc: .{str}]")
