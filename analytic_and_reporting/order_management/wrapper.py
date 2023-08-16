@@ -40,7 +40,8 @@ class Wrapper:
         # (i.e., (1) there is a prescription that (2) matches the customer's ID, and (3) contains the medication
         # in the specified quantity).
         # Raise an exception if either of those conditions is unmet.
-        all_medication_ids_in_prescription = [medication["id"] for medication in prescription.Medications]
+        all_medication_ids_in_prescription = [
+            medication["id"] for medication in prescription.Medications]
         are_required_prescription_and_are_in_prescription = all(
             product.code in all_medication_ids_in_prescription for product in cart.products
             if product.requires_prescription
@@ -49,9 +50,11 @@ class Wrapper:
         conditions_met = True if prescription is not None and prescription.CustomerID == customerID and len(
             prescription.Medications) > 0 else False
         if not conditions_met:
-            raise Exception("The prescription does not match the customer's ID or does not contain the medication.")
+            raise Exception(
+                "The prescription does not match the customer's ID or does not contain the medication.")
         if not are_required_prescription_and_are_in_prescription:
-            raise ValueError("Attempting to add a medication that was not prescribed")
+            raise ValueError(
+                "Attempting to add a medication that was not prescribed")
 
         # TODO: Get the current datetime and save a Sale information for each product sold with the following schema
         #  {"name": "<name>", "quantity": <quantity>, "price": <unit price>, "purchase_price": <total price>,

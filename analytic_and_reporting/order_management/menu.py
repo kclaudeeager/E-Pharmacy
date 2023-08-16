@@ -127,7 +127,7 @@ class Menu:
             if selectedInput > len(self.stock.products):
                 print("ID doesn't exist")
             elif selectedInput == 0:
-                 selectedInput = 0
+                selectedInput = 0
             else:
                 return selectedInput
         except ValueError:

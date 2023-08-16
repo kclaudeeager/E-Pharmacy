@@ -222,33 +222,31 @@ class Cart:
         """Returns the total cost of the cart"""
         # TODO: implement the function
         try:
+            totalCost = sum(
+                map(lambda x: x['price'], json.loads(self.readFromFile(cartFile))))
 
-            self.displayCart()
-            cartList = json.loads(self.readFromFile(cartFile))
+            # choice = str(
+            #     input("Would you like to checkout all products 'y' for yes and 'n' for no: "))
+            # total = sum(map(lambda x: x['price'], cartList))
+            # if choice == "y":
+            #     # print(f"You have a total of {total} in your cart.")
+            #     print(
+            #         f"A payment of {total} has been made.")
+            #     print("Payment successful")
+            #     self.clear()
+            #     # self.remove()
+            # elif choice == 'n':
+            #     selectedInput = self.askforChoice(cartList)
+            #     if selectedInput == 0:
+            #         print("Invalid input.")
+            #         return
 
-            choice = str(
-                input("Would you like to checkout all products 'y' for yes and 'n' for no: "))
-            total = sum(map(lambda x: x['price'], cartList))
-            if choice == "y":
-                # print(f"You have a total of {total} in your cart.")
-                print(
-                    f"A payment of {total} has been made.")
-                print("Payment successful")
-
-                self.clear()
-                # self.remove()
-            elif choice == 'n':
-                selectedInput = self.askforChoice(cartList)
-                if selectedInput == 0:
-                    print("Invalid input.")
-                    return
-
-                selectedProduct = cartList[selectedInput]
-                self.remove(selectedProduct['code'])
-                print(
-                    f"A payment of {selectedProduct['price'] * int(selectedProduct['quantity'])} has been made.")
-                print("Payment successful")
-                return
+            #     selectedProduct = cartList[selectedInput]
+            #     self.remove(selectedProduct['code'])
+            #     print(
+            #         f"A payment of {selectedProduct['price'] * int(selectedProduct['quantity'])} has been made.")
+            #     print("Payment successful")
+            return totalCost
         except ValueError:
             print(MSG_WRONG_INPUT)
         except IndexError:
