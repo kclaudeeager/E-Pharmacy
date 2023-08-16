@@ -1,5 +1,6 @@
 from . import Stock, Cart, User, UserManagement, BookRecords, Wrapper, Prescription
 import json
+import os
 # Julius
 MSG_WRONG_INPUT = "Wrong input. Try again!"
 
@@ -98,6 +99,7 @@ class Menu:
                 print(book.salesByAgent("AGT1"))
             elif choice == 5:
                 self.header(".analytics.topsales")
+
                 print(book.topNSales())
         except ValueError:
             print(MSG_WRONG_INPUT)
@@ -161,7 +163,7 @@ class Menu:
             print("4. Checkout")
             print("0. Back")
             choice = int(input("Enter your choice: "))
-            print(choice, "choice")
+            # print(choice, "choice")
             # cart = Cart(self.stock)
 
             if choice == 1:
@@ -187,8 +189,42 @@ class Menu:
                 self.header("order.clearcart")
                 self.cart.clear()
             elif choice == 4:
-                self.header("order.checkout")
-                self.cart.cost()
+                try:
+                    self.header("order.checkout")
+                    user = self.profiles.get_logged_in_user()
+
+                    prescriptionList = json.loads(
+                        self.readFromFile(self.prescriptions_file))
+
+                    head = ["id", "DoctorName", "PrescriptionID",
+                            "Medications", "CustomerID", "Date"]
+                    self.tableHead(head)
+                    index = 0
+                    for item in prescriptionList:
+                        index += 1
+                        print(
+                            f"|{index:<15}|{item['DoctorName']:<15}|{item['PrescriptionID']:<15}|{len(item['Medications']):<15}|{item['CustomerID']:<15}|{item['Date']:<15}")
+                    # self.tableHead(prescriptionList)
+                    selectedInput = int(
+                        input("Enter the Id of the prescrition or 0 to go back : "))
+
+                    if selectedInput > len(self.stock.products):
+                        print("ID doesn't exist")
+                        return
+
+                    if selectedInput == 0:
+                        return
+
+                    selectedPrescription = prescriptionList[selectedInput - 1]
+                    wrapper = Wrapper(
+                        self.stock.products, user.username)
+
+                    cart = Cart(self.stock.products)
+                    wrapper.checkout(cart, user.username, selectedPrescription)
+                except ValueError:
+                    print(MSG_WRONG_INPUT)
+                except IndexError:
+                    print(MSG_WRONG_INPUT)
             elif choice == 0:
                 return
 
