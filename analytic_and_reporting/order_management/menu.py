@@ -34,9 +34,9 @@ class Menu:
 
     def header(self, str="."):
         if str == 1:
-            str == "order"
+            str = "order"
         elif str == "2":
-            str == "analytics"
+            str = "analytics"
         print("***********************************")
         print("Order Management and analytic menu")
         print(f"[loc: .{str}]")
@@ -90,15 +90,15 @@ class Menu:
                 # display a tabl of purchase by user
                 self.header(".analytics.purchasebyuser")
                 self.displaySales()
-                book.purchasesByUser("John")
+                print(book.purchasesByUser("John"))
                 # print(existingSales, "existing Sales")
             elif choice == 4:
                 # print a
                 self.header(".analytics.salesbyagent")
-
+                print(book.salesByAgent("AGT1"))
             elif choice == 5:
-                book.topNSales()
                 self.header(".analytics.topsales")
+                print(book.topNSales())
         except ValueError:
             print(MSG_WRONG_INPUT)
 
@@ -109,7 +109,7 @@ class Menu:
             print("No product available")
             return
         print("--------------------------")
-        print("Avalable products")
+        print("Available products")
         print("--------------------------")
         sampleHeader = ["id", "name", "brand",
                         "quantity", "category", "desc", "price"]
@@ -127,7 +127,7 @@ class Menu:
             if selectedInput > len(self.stock.products):
                 print("ID doesn't exist")
             elif selectedInput == 0:
-                selectedInput == 0
+                selectedInput = 0
             else:
                 return selectedInput
         except ValueError:
@@ -188,7 +188,7 @@ class Menu:
                 self.cart.clear()
             elif choice == 4:
                 self.header("order.checkout")
-                self.cart.cost
+                self.cart.cost()
             elif choice == 0:
                 return
 

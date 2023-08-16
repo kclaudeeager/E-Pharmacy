@@ -112,12 +112,13 @@ class BookRecords:
         if not transactions:
             return no_results_msg
 
-        header = "|   # |       Date      | Medication | Quantity | Purchase Price | Prescription |"
+        header = "|   # |       Date   | Medication | Quantity | Purchase Price | Prescription |"
         header += "\n"
         stringed_transactions = []
 
         for index, transaction in enumerate(transactions, start=1):
-            stringed_transaction = f"| {index:4d} | {transaction.timestamp} | {transaction.name:10s} | {transaction.quantity:8d} | {transaction.price:13.2f} RWF | {transaction.prescriptionID:13s} |"
+            prescription_id = transaction.prescriptionID if transaction.prescriptionID is not None else ""
+            stringed_transaction = f"| {index:3d} | {datetime.fromtimestamp(transaction.timestamp).strftime('%d - %m - %y')} | {transaction.name:10s} | {transaction.quantity:8d} | {transaction.price:10.2f} RWF | {prescription_id:12s} |"
             stringed_transactions.append(stringed_transaction)
 
         return header + "\n".join(stringed_transactions)
@@ -149,13 +150,15 @@ class BookRecords:
             key=lambda transaction: transaction.price * transaction.quantity, reverse=True
         )[:n]
 
-        header = "|   # |       Date      | Medication | Quantity | Total Price | Prescription |"
+        header = "|   # |      Date    | Medication | Quantity |  Total Price   | Prescription |"
         header += "\n"
         stringed_transactions = []
 
         for index, transaction in enumerate(top_transactions, start=1):
             total_price = transaction.price * transaction.quantity
-            stringed_transaction = f"| {index:4d} | {transaction.timestamp} | {transaction.name:10s} | {transaction.quantity:8d} | {total_price:11.2f} RWF | {transaction.prescriptionID:13s} |"
+            if transaction.prescriptionID is None:
+                transaction.prescriptionID = ""
+            stringed_transaction = f"| {index:3d} | {datetime.fromtimestamp(transaction.timestamp).strftime('%d - %m - %y')} | {transaction.name:10s} | {transaction.quantity:8d} | {total_price:10.2f} RWF | {transaction.prescriptionID:12s} |"
             stringed_transactions.append(stringed_transaction)
 
         return header + "\n".join(stringed_transactions)
@@ -205,6 +208,8 @@ def stringify_transaction(index, transaction):
     """
     # TODO: In the format below, return a representation of the transactions
     # |# 1| 2023-06-03 21:23:25 | doe        | Quinine    |        3 |       1400 RWF | PHA1         |
+    if transaction.prescriptionID is None:
+        transaction.prescriptionID = ""
     return f"|# {index:4d} | {str(transaction.timestamp):19s} | {transaction.customerID:9s} | {transaction.name:10s} | {transaction.quantity:8d} | {transaction.price:13.2f} RWF | {transaction.prescriptionID:12s} |"
 
 

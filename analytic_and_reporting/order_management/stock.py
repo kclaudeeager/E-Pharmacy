@@ -36,6 +36,7 @@ class Stock:
         self.products.remove(product_to_update)
         product_to_update.quantity = new_quantity
         self.products.append(product_to_update)
+        self.dump("data/products.json")
         return True
 
     def get_product_by_id(self, code: str) -> Product:

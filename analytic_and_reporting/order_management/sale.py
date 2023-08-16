@@ -36,7 +36,17 @@ class Sale:
         """
         # TODO: Return a string that shows the product sold, its unit price
         # the quantity, timestamp, and the total cost in a nice way.
-        pass
+        return str({
+            'id': self.id,
+            'name': self.name,
+            'quantity': self.quantity,
+            'price': self.price,
+            'purchase_price': self.purchase_price,
+            'timestamp': self.timestamp,
+            'customerID': self.customerID,
+            'prescriptionID': self.prescriptionID,
+            'Salesperson': self.salesperson
+        })
 
     @classmethod
     def from_dict(cls, transaction):
