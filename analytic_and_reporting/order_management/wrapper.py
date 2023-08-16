@@ -43,7 +43,8 @@ class Wrapper:
         conditions_met = True if prescription is not None and prescription.CustomerID == customerID and len(
             prescription.Medications) > 0 else False
         if not conditions_met:
-            raise Exception("The prescription does not match the customer's ID or does not contain the medication.")
+            raise Exception(
+                "The prescription does not match the customer's ID or does not contain the medication.")
 
         # TODO: Get the current datetime and save a Sale information for each product sold with the following schema
         #  {"name": "<name>", "quantity": <quantity>, "price": <unit price>, "purchase_price": <total price>,

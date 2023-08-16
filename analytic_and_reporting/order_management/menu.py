@@ -95,6 +95,7 @@ class Menu:
             elif choice == 4:
                 # print a
                 self.header(".analytics.salesbyagent")
+
             elif choice == 5:
                 book.topNSales()
                 self.header(".analytics.topsales")
