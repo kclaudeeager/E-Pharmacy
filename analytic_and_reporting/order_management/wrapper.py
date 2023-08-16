@@ -10,8 +10,6 @@ from .stock import Stock
 
 # Claude
 # would need to create a new object for each new order
-
-
 class Wrapper:
     """
     Main class used to manage orders and carts.
@@ -41,20 +39,29 @@ class Wrapper:
         # in the specified quantity).
         # Raise an exception if either of those conditions is unmet.
         all_medication_ids_in_prescription = [
-            medication["id"] for medication in prescription.Medications]
+            medication["id"] for medication in prescription['Medications']]
         are_required_prescription_and_are_in_prescription = all(
             product.code in all_medication_ids_in_prescription for product in cart.products
             if product.requires_prescription
         )
 
-        conditions_met = True if prescription is not None and prescription.CustomerID == customerID and len(
+        conditions_met = True if prescription is not None and prescription['CustomerID'] == customerID and len(
             prescription.Medications) > 0 else False
         if not conditions_met:
-            raise Exception(
+            print(
+                "------------------------------------------------------------------------------------")
+            print(
                 "The prescription does not match the customer's ID or does not contain the medication.")
+            return
+            # raise Exception(
+            #     "The prescription does not match the customer's ID or does not contain the medication.")
         if not are_required_prescription_and_are_in_prescription:
-            raise ValueError(
-                "Attempting to add a medication that was not prescribed")
+            print(
+                "------------------------------------------------------------------------------------")
+            print("Attempting to add a medication that was not prescribed")
+            return
+            # raise ValueError(
+            #     "Attempting to add a medication that was not prescribed")
 
         # TODO: Get the current datetime and save a Sale information for each product sold with the following schema
         #  {"name": "<name>", "quantity": <quantity>, "price": <unit price>, "purchase_price": <total price>,
@@ -85,6 +92,7 @@ class Wrapper:
                 self.stock.update(product_code, change=quantity)
         self.sales.extend(sales_data)
         self.dump("data/sales.json")
+        print("Checkout successful")
 
     def dump(self, outfile: str):
         """Dumps the current sales data to a file

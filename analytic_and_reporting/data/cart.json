@@ -1,9 +1,1 @@
-[
-  {
-    "code": "u4CXQKHSET7S65FtIdwU5cVWQ8Qjh19Qo",
-    "name": "Name 3",
-    "brand": "brand 3",
-    "quantity": 1,
-    "price": 1490.900024
-  }
-]
+[{"quantity": 14, "name": "paracetamol", "id": "R8Ibu4fwETzZk5CUWsHwjfSMiVJV9jQMm", "ProcessedStatus": false}, {"quantity": 5, "name": "Asprin", "id": "MED2", "ProcessedStatus": true}, {"quantity": 10, "name": "Asprin", "id": "MED2", "ProcessedStatus": true}, {"quantity": 10, "name": "Asprin", "id": "MED2", "ProcessedStatus": true}]

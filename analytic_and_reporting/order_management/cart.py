@@ -2,6 +2,7 @@ from .product import Product
 from .stock import Stock
 import json
 import os
+from .prescription import Prescription
 
 # Dieudonne
 
@@ -87,74 +88,63 @@ class Cart:
 
         # result = [item for item in stock.products if item.code == productCode]
 
-        if not any(product.code == productCode for product in stock.products):
-            return
+        # if not any(product.code == productCode for product in stock.products):
+        #     return
 
         s: Product
         for item in stock.products:
             if item.code == productCode:
                 s = item
 
-        cart_product = self.returnProduct(productCode)
-
-        # ask for quantity
-        askQty = int(
-            input(f"How many quantity of {cart_product['name']} would you list to add: "))
-
-        if askQty > s.quantity:
+        # TODO: Make sure the quantity is valid (> 0 and <= to the quantity in the stock)
+        if quantity > s.quantity:
             print(
                 f"Sorry, the quantity you entered is more than the available stock.")
             return
-        elif s.quantity == 0:
+        elif quantity == 0:
             print(
-                f"Sorry, {s.name}'s quantity is out of stock. Please try again.")
+                f"Quantity must be more than or equal to 1.")
             return
-        elif askQty <= 0:
-            print(
-                f"Please a valid quantity.")
-            return
-
-        # cart_product["quantity"] = quantity
-
-        # check if the product already exists
-        updateList = []
-        for item in stock.products:
-            if item.code == productCode:
-                item.quantity -= askQty
-            updateList.append(item.to_dict())
-
-        # print(updatedList, )
-        # update the quantity in file
-        self.savetofile(productFile, json.dumps(updateList, indent=1))
-
-        # write to the json file
-        if os.path.isfile(cartFile):
-            # if the file exists
-            existing_list = json.loads(self.readFromFile(cartFile))
-            # print(existing_list, "existing list ")
-            if any(value['code'] == productCode for value in existing_list):
-                for item in existing_list:
-                    if item['code'] == productCode:
-                        item['quantity'] += askQty
-                self.savetofile(cartFile, json.dumps(existing_list, indent=1))
-            else:
-                existing_list.append(cart_product)
-                savedList = json.dumps(existing_list, indent=1)
-                self.savetofile(cartFile, savedList)
-
-        else:
-            foundProduct = self.returnProduct(productCode)
-            self.savetofile(cartFile, json.dumps([foundProduct]))
-
-        # f = open("data/cart.json", "r")
-        # f.write("[")
-        # f.write("Test")
-        # f.write("]")
-
-        # TODO: Make sure the quantity is valid (> 0 and <= to the quantity in the stock)
         # TODO: If the product was already in the cart, increment the quantity
+        # if file exist
+        if os.path.isfile(cartFile):
+            # if file is empty
+            existing_list = json.loads(
+                self.readFromFile("data/prescriptions.json"))
+            newArr = json.loads(self.readFromFile(cartFile))
+            print(newArr, "len")
+            for item in existing_list:
+                for i in item['Medications']:
+                    if productCode == i['id']:
+                        i['quantity'] += quantity
+                        newArr.append(i)
+                newArr.append(i)
+
+            self.savetofile(cartFile, json.dumps(newArr))
+            return
 
         # TODO: After the checks, add the product to the dictionary
+
+        # update the quantity in file
+
+        # write to the json file
+        # if os.path.isfile(cartFile):
+        #     # if the file exists
+        #     existing_list = json.loads(self.readFromFile(cartFile))
+        #     # print(existing_list, "existing list ")
+        #     if any(value['code'] == productCode for value in existing_list):
+        #         for item in existing_list:
+        #             if item['code'] == productCode:
+        #                 item['quantity'] += askQty
+        #         self.savetofile(cartFile, json.dumps(existing_list, indent=1))
+        #     else:
+        #         existing_list.append(cart_product)
+        #         savedList = json.dumps(existing_list, indent=1)
+        #         self.savetofile(cartFile, savedList)
+
+        # else:
+        #     foundProduct = self.returnProduct(productCode)
+        #     self.savetofile(cartFile, json.dumps([foundProduct]))
 
     def updateCartQty(self, code: str, qty: int):
         # search for product in the cart
@@ -224,28 +214,6 @@ class Cart:
         try:
             totalCost = sum(
                 map(lambda x: x['price'], json.loads(self.readFromFile(cartFile))))
-
-            # choice = str(
-            #     input("Would you like to checkout all products 'y' for yes and 'n' for no: "))
-            # total = sum(map(lambda x: x['price'], cartList))
-            # if choice == "y":
-            #     # print(f"You have a total of {total} in your cart.")
-            #     print(
-            #         f"A payment of {total} has been made.")
-            #     print("Payment successful")
-            #     self.clear()
-            #     # self.remove()
-            # elif choice == 'n':
-            #     selectedInput = self.askforChoice(cartList)
-            #     if selectedInput == 0:
-            #         print("Invalid input.")
-            #         return
-
-            #     selectedProduct = cartList[selectedInput]
-            #     self.remove(selectedProduct['code'])
-            #     print(
-            #         f"A payment of {selectedProduct['price'] * int(selectedProduct['quantity'])} has been made.")
-            #     print("Payment successful")
             return totalCost
         except ValueError:
             print(MSG_WRONG_INPUT)
