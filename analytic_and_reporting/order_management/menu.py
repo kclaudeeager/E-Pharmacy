@@ -121,6 +121,7 @@ class Menu:
             index += 1
             print(f"|{index:<15}{p}")
         print("---------------------------------------------------")
+    # ask for choice
 
     def askforChoice(self) -> int:
         try:
@@ -154,6 +155,20 @@ class Menu:
                 f"|{index:<15}|{p['name']:<15}|{p['quantity']:<15}|{p['price']:<15}|{p['purchase_price']:<15}|{p['timestamp']:<15}|")
         print("---------------------------------------------------")
 
+    def displayPrescription(self) -> list:
+        prescriptionList = json.loads(
+            self.readFromFile(self.prescriptions_file))
+
+        head = ["id", "DoctorName", "PrescriptionID",
+                "Medications", "CustomerID", "Date"]
+        self.tableHead(head)
+        index = 0
+        for item in prescriptionList:
+            index += 1
+            print(
+                f"|{index:<15}|{item['DoctorName']:<15}|{item['PrescriptionID']:<15}|{len(item['Medications']):<15}|{item['CustomerID']:<15}|{item['Date']:<15}")
+        return prescriptionList
+
     def orderMenu(self):
         try:
             self.header("order")
@@ -167,15 +182,39 @@ class Menu:
             # cart = Cart(self.stock)
 
             if choice == 1:
-                # read the file
-                self.header("order.addtocart")
-                self.displayProduct()
-                selectedInput = self.askforChoice()
-                if selectedInput == 0:
-                    return
-                selectedInput -= 1
-                selectedProduct = self.stock.products[selectedInput]
-                self.cart.add(selectedProduct.code, selectedProduct.quantity)
+                try:
+                    self.header("order.addtocart")
+                    # list prescription
+                    prescriptionList = self.displayPrescription()
+
+                    if len(prescriptionList) == 0:
+                        print("No prescription has been added. Please try again.")
+                        return
+                    # select a prescription
+                    selectedInput = int(
+                        input("Enter the Id of the prescrition or 0 to go back : "))
+
+                    if selectedInput > len(self.stock.products):
+                        print("ID doesn't exist")
+                        return
+
+                    if selectedInput == 0:
+                        return
+
+                    selectedPrescription = prescriptionList[selectedInput - 1]
+
+                    # check if the prescription has a medication
+                    if len(selectedPrescription['Medications']) == 0:
+                        print("No medication for this prescription")
+                        return
+                    # pass each medication to addcart
+                    for med in selectedPrescription['Medications']:
+                        self.cart.add(med['id'], med['quantity'])
+
+                except ValueError:
+                    print(MSG_WRONG_INPUT)
+                except IndexError:
+                    print(MSG_WRONG_INPUT)
             elif choice == 2:
                 self.header("order.removefromcart")
                 self.displayProduct()
@@ -191,19 +230,7 @@ class Menu:
             elif choice == 4:
                 try:
                     self.header("order.checkout")
-                    user = self.profiles.get_logged_in_user()
-
-                    prescriptionList = json.loads(
-                        self.readFromFile(self.prescriptions_file))
-
-                    head = ["id", "DoctorName", "PrescriptionID",
-                            "Medications", "CustomerID", "Date"]
-                    self.tableHead(head)
-                    index = 0
-                    for item in prescriptionList:
-                        index += 1
-                        print(
-                            f"|{index:<15}|{item['DoctorName']:<15}|{item['PrescriptionID']:<15}|{len(item['Medications']):<15}|{item['CustomerID']:<15}|{item['Date']:<15}")
+                    prescriptionList = self.displayPrescription()
                     # self.tableHead(prescriptionList)
                     selectedInput = int(
                         input("Enter the Id of the prescrition or 0 to go back : "))

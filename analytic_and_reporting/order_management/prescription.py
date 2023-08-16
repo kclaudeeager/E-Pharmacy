@@ -83,3 +83,10 @@ class Prescription:
         with open(infile, "r") as f:
             data = json.load(f)
         return next((prescription for prescription in data if prescription["PrescriptionID"] == code), None)
+
+    def readFromFile(self, filePath) -> [dict]:
+        with open(filePath, "r") as outputfile:
+            return outputfile.read()
+
+    def medication(self, id: str) -> list:
+        return self.Medications
