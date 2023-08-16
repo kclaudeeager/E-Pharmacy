@@ -202,13 +202,14 @@ class Menu:
                         return
 
                     selectedPrescription = prescriptionList[selectedInput - 1]
-
+                    print(selectedPrescription, "pres")
                     # check if the prescription has a medication
                     if len(selectedPrescription['Medications']) == 0:
                         print("No medication for this prescription")
                         return
                     # pass each medication to addcart
                     for med in selectedPrescription['Medications']:
+                        print("print")
                         self.cart.add(med['id'], med['quantity'])
 
                 except ValueError:

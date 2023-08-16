@@ -112,39 +112,19 @@ class Cart:
             existing_list = json.loads(
                 self.readFromFile("data/prescriptions.json"))
             newArr = json.loads(self.readFromFile(cartFile))
-            print(newArr, "len")
+            # print(newArr, "len")
             for item in existing_list:
                 for i in item['Medications']:
                     if productCode == i['id']:
                         i['quantity'] += quantity
                         newArr.append(i)
-                newArr.append(i)
 
-            self.savetofile(cartFile, json.dumps(newArr))
+            self.savetofile(cartFile, json.dumps(newArr, indent=1))
             return
 
         # TODO: After the checks, add the product to the dictionary
 
         # update the quantity in file
-
-        # write to the json file
-        # if os.path.isfile(cartFile):
-        #     # if the file exists
-        #     existing_list = json.loads(self.readFromFile(cartFile))
-        #     # print(existing_list, "existing list ")
-        #     if any(value['code'] == productCode for value in existing_list):
-        #         for item in existing_list:
-        #             if item['code'] == productCode:
-        #                 item['quantity'] += askQty
-        #         self.savetofile(cartFile, json.dumps(existing_list, indent=1))
-        #     else:
-        #         existing_list.append(cart_product)
-        #         savedList = json.dumps(existing_list, indent=1)
-        #         self.savetofile(cartFile, savedList)
-
-        # else:
-        #     foundProduct = self.returnProduct(productCode)
-        #     self.savetofile(cartFile, json.dumps([foundProduct]))
 
     def updateCartQty(self, code: str, qty: int):
         # search for product in the cart
