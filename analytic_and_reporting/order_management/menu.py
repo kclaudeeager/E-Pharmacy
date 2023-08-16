@@ -232,6 +232,7 @@ class Menu:
                     self.header("order.checkout")
                     prescriptionList = self.displayPrescription()
                     # self.tableHead(prescriptionList)
+                    user = self.profiles.get_logged_in_user()
                     selectedInput = int(
                         input("Enter the Id of the prescrition or 0 to go back : "))
 
